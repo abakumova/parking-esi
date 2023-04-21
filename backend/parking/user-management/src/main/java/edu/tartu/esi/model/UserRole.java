@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class UserRole {
 
     @Id
-    private Long id;
+    private int id;
 
     @NotBlank
     @Size(max = 20)

@@ -22,7 +22,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private UserRoleEnum userRoleEnum;
+    private UserRoleEnum userRole;
 
     @NotBlank
     @Size(max = 50)

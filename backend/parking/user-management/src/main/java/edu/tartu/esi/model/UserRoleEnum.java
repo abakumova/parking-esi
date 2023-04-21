@@ -2,16 +2,18 @@ package edu.tartu.esi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public enum UserRoleEnum {
     USER("User", 1),
     LANDLORD("Landlord", 2),
     ADMIN("Admin", 3);
 
     private String roleName;
-    private long roleId;
+    private int roleId;
 
     public static UserRoleEnum getRoleByName(String roleName) {
         if (roleName.equals(USER.getRoleName())) {

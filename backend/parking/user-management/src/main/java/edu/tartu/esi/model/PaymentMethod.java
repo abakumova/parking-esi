@@ -22,7 +22,7 @@ public class PaymentMethod {
     private String id;
     private String cardNumber;
     private LocalDate expirationDate;
-    private int cvv;
+    private String cvv;
     private String cardHolderName;
     private String iban;
 }

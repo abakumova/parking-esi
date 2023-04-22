@@ -17,6 +17,7 @@
     <modules>
         <module>discovery-server</module>
         <module>user-management</module>
+        <module>location-service</module>
     </modules>
 
     <properties>

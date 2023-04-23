@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocationController {
 
     @Autowired
-    private LocationService locationService;
+    private GoogleMapsService googleMapsService;
 
     @GetMapping("/{partialAddress}")
     public ResponseEntity<String> getFullAddress(@PathVariable String partialAddress) {
         try {
-            String fullAddress = locationService.getFullAddress(partialAddress);
+            String fullAddress = googleMapsService.getFullAddress(partialAddress);
             return ResponseEntity.ok(fullAddress);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred while retrieving the full address.");

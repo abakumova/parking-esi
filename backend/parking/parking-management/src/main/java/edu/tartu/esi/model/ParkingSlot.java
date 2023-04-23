@@ -32,9 +32,6 @@ public class ParkingSlot {
 
     @NotBlank
     @OneToMany
-    @JoinColumn(name = "")
+    @JoinColumn(name = "parking_restrictions_id")
     private List<ParkingRestriction> parkingRestrictions;
-
-
-
 }

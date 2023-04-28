@@ -1,4 +1,4 @@
-package edu.tartu.esi;
+package edu.tartu.esi.mapper;
 
 
 import org.mapstruct.*;

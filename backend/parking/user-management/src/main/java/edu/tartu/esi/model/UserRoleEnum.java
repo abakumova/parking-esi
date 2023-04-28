@@ -1,36 +1,51 @@
 package edu.tartu.esi.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static edu.tartu.esi.model.UserPermission.*;
+
+//@Getter
+//@AllArgsConstructor
+//@NoArgsConstructor
 public enum UserRoleEnum {
-    USER("User", 1),
-    LANDLORD("Landlord", 2),
-    ADMIN("Admin", 3);
 
-    private String roleName;
-    private int roleId;
+    USER(Set.of(READ_OWN_DATA, WRITE_OWN_DATA)),
+    LANDLORD(Set.of(READ_OWN_DATA, WRITE_OWN_DATA)),
+    ADMIN(Set.of(READ_OWN_DATA, WRITE_OWN_DATA, READ_USERS_DATA, WRITE_USERS_DATA, READ_LANDLORDS_DATA, WRITE_LANDLORDS_DATA));
+    private final Set<UserPermission> permissions;
 
-    public static UserRoleEnum getRoleByName(String roleName) {
-        if (roleName.equals(USER.getRoleName())) {
-            return USER;
-        } else if (roleName.equals(LANDLORD.getRoleName())) {
-            return LANDLORD;
-        } else {
-            return ADMIN;
-        }
+    UserRoleEnum(Set<UserPermission> permissions) {
+        this.permissions = permissions;
     }
 
-    public static UserRoleEnum getRoleById(int roleId) {
-        return switch (roleId) {
-            case 1 -> USER;
-            case 2 -> LANDLORD;
-            case 3 -> ADMIN;
-            default -> throw new IllegalStateException("Unexpected value: " + roleId);
-        };
+    public Set<UserPermission> getPermissions() {
+        return permissions;
+    }
+
+    public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
+        Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
+                .map(UserPermission::getPermission)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
+        permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        return permissions;
+    }
+
+    @JsonCreator
+    public static UserRoleEnum forValue(String value) {
+        return valueOf(value.toUpperCase());
+    }
+
+    @JsonValue
+    public String toValue() {
+        return this.name();
     }
 }

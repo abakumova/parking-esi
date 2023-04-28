@@ -1,13 +1,12 @@
 package edu.tartu.esi.service;
 
-import edu.tartu.esi.UserMapper;
 import edu.tartu.esi.dto.PaginatedResponseDto;
 import edu.tartu.esi.dto.UserDto;
 import edu.tartu.esi.exception.EmailAlreadyExistsException;
 import edu.tartu.esi.exception.UserNotFoundException;
+import edu.tartu.esi.mapper.UserMapper;
 import edu.tartu.esi.model.User;
 import edu.tartu.esi.repository.UserRepository;
-import edu.tartu.esi.repository.UserRoleRepository;
 import edu.tartu.esi.search.GenericSearchDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -31,7 +31,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    private UserRoleRepository roleRepository;
     private final UserMapper userMapper;
 
     private final KafkaTemplate<String, UserDto> kafkaTemplate;
@@ -63,6 +62,11 @@ public class UserService {
         User user = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(format("User with id = %s wasn't found", id)));
         return userMapper.toDto(user);
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        log.info("-- fetchUser by Email");
+        return userRepository.findUserByEmail(email);
     }
 
     public PaginatedResponseDto<UserDto> getUsers(GenericSearchDto<UserDto> searchDto) {

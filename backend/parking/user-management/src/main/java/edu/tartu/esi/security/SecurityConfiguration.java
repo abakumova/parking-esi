@@ -1,6 +1,7 @@
 package edu.tartu.esi.security;
 
 import edu.tartu.esi.security.jwt.JwtAuthFilter;
+import edu.tartu.esi.security.jwt.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,9 @@ public class SecurityConfiguration {
 
     @Autowired
     private JwtAuthFilter authFilter;
+
+    @Autowired
+    JwtProperties jwtProperties;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -67,22 +71,6 @@ public class SecurityConfiguration {
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .addFilter(new JwtAuthFilter(authenticationManager(),
-//                        jwtProperties,
-//                        secretKey,
-//                        "/api/getToken"))
-//                .addFilterAfter(new JwtAuthFilter(jwtProperties, secretKey), JwtAuthFilter.class)
-//                .authorizeRequests()
-//                .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/swagger-ui/index.html**", "/webjars/**", "/actuator/health").permitAll()
-//                .anyRequest()
-//                .authenticated();
-//    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

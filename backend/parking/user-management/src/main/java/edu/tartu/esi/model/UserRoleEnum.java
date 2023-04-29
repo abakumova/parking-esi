@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,14 +30,14 @@ public enum UserRoleEnum {
         return permissions;
     }
 
-    public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
-        Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
-                .map(UserPermission::getPermission)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toSet());
-        permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
-        return permissions;
-    }
+//    public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
+//        Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
+//                .map(UserPermission::getPermission)
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toSet());
+//        permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+//        return permissions;
+//    }
 
     @JsonCreator
     public static UserRoleEnum forValue(String value) {

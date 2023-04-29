@@ -25,11 +25,16 @@
             <version>2.2.9</version>
             <scope>compile</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springdoc</groupId>-->
+<!--            <artifactId>springdoc-openapi-common</artifactId>-->
+<!--            <version>1.7.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-common</artifactId>
+            <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.7.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

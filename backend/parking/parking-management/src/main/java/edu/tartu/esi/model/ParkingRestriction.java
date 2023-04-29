@@ -23,13 +23,16 @@ public class ParkingRestriction {
     private String id;
 
     @NotNull
+    private String parkingSlotId;
+
+    @NotNull
     private LocalDateTime from;
 
     @NotNull
     private LocalDateTime until;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_categories_id")
     private CarCategory category;
 

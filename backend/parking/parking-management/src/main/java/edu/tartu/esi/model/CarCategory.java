@@ -1,8 +1,6 @@
 package edu.tartu.esi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +18,7 @@ import javax.validation.constraints.Size;
 public class CarCategory {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private int id;
 
     @NotBlank

@@ -42,7 +42,7 @@ public class User {
     private String password;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 }

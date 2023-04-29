@@ -1,5 +1,6 @@
-package edu.tartu.esi.security;
+package edu.tartu.esi.security.jwt;
 
+import edu.tartu.esi.security.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +13,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.esi.authservice.config.MyUserDetailsService;
-
 import java.io.IOException;
 
 @Component
@@ -23,7 +22,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Override
     // The doFilter method of the Filter is called by the container each time a request/response pair is passed through the chain due to a client request for a resource at the end of the chain.

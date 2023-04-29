@@ -1,8 +1,6 @@
 package edu.tartu.esi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +17,7 @@ import java.time.LocalDate;
 public class PaymentMethod {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String cardNumber;
     private LocalDate expirationDate;

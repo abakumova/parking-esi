@@ -1,6 +1,7 @@
-package edu.tartu.esi;
+package edu.tartu.esi.security;
 
-import edu.tartu.esi.security.JwtAuthFilter;
+import edu.tartu.esi.security.jwt.JwtAuthFilter;
+import edu.tartu.esi.security.jwt.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,10 +29,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig {
+public class SecurityConfiguration {
+
 
     @Autowired
     private JwtAuthFilter authFilter;
+
+    @Autowired
+    JwtProperties jwtProperties;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,7 +45,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new MyUserDetailsService();
+        return new UserDetailsServiceImpl();
     }
 
     @Bean
@@ -48,16 +53,21 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/public", "/api/auth/signup", "/api/auth/authenticate").permitAll()
-                        .requestMatchers("/api/auth/admin").hasAuthority("ADMIN")
-                        .requestMatchers("/api/auth/user").hasAuthority("USER")
-                        .anyRequest().authenticated())
-                .sessionManagement()
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/api/auth/public", "/api/auth/signup", "/api/auth/authenticate").permitAll()
+//                        .requestMatchers("/api/auth/admin").hasAuthority("ADMIN")
+//                        .requestMatchers("/api/auth/user").hasAuthority("USER")
+//                        .anyRequest().authenticated())
 
+                // Enabling the session manager to control the session
+                .sessionManagement()
+                // .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                // .STATELESS prevents the request from being saved in the session.
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                // Defining our authenticationProvider
                 .authenticationProvider(authenticationProvider())
+                // We are telling Spring Boot to check authFilter first, then, check the UsernamePasswordAuthenticationFilter
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -75,12 +85,13 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    // You need this to deactivate the cors issue
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //or add * to allow all origins
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8083")); //or add * to allow all origins
         configuration.setAllowCredentials(true);
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); //to set allowed http methods
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setExposedHeaders(Arrays.asList("custom-header1", "custom-header2"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

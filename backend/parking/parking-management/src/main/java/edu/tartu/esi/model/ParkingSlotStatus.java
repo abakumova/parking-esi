@@ -19,7 +19,7 @@ public class ParkingSlotStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private int id;
+    private String id;
 
     @NotBlank
     @Size(max = 20)

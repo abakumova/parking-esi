@@ -20,8 +20,8 @@ public class ParkingRestrictionDto {
     @Id
     private String id;
     private String parkingSlotId;
-    private LocalDateTime from;
-    private LocalDateTime until;
+    private LocalDateTime timeFrom;
+    private LocalDateTime timeUntil;
     private CarCategory category;
     private String code;
 }

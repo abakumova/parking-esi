@@ -26,10 +26,10 @@ public class ParkingRestriction {
     private String parkingSlotId;
 
     @NotNull
-    private LocalDateTime from;
+    private LocalDateTime timeFrom;
 
     @NotNull
-    private LocalDateTime until;
+    private LocalDateTime timeUntil;
 
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)

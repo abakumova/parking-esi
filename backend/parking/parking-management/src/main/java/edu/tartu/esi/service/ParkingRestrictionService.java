@@ -28,8 +28,8 @@ public class ParkingRestrictionService {
         ParkingRestriction parkingRestriction = ParkingRestriction.builder()
                 .id(parkingRestrictionDto.getId())
                 .parkingSlotId(parkingRestrictionDto.getParkingSlotId())
-                .from(parkingRestrictionDto.getFrom())
-                .until(parkingRestrictionDto.getUntil())
+                .timeFrom(parkingRestrictionDto.getTimeFrom())
+                .timeUntil(parkingRestrictionDto.getTimeUntil())
                 .category(parkingRestrictionDto.getCategory())
                 .code(parkingRestrictionDto.getCode())
                 .build();
@@ -49,8 +49,8 @@ public class ParkingRestrictionService {
         ParkingRestriction parkingRestriction = ParkingRestriction.builder()
                 .id(id)
                 .parkingSlotId(parkingRestrictionDto.getParkingSlotId())
-                .from(parkingRestrictionDto.getFrom())
-                .until(parkingRestrictionDto.getUntil())
+                .timeFrom(parkingRestrictionDto.getTimeFrom())
+                .timeUntil(parkingRestrictionDto.getTimeUntil())
                 .category(parkingRestrictionDto.getCategory())
                 .code(parkingRestrictionDto.getCode())
                 .build();

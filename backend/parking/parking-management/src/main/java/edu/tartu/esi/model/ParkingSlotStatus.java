@@ -1,8 +1,6 @@
 package edu.tartu.esi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +18,8 @@ import javax.validation.constraints.Size;
 public class ParkingSlotStatus {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @NotBlank
     @Size(max = 20)

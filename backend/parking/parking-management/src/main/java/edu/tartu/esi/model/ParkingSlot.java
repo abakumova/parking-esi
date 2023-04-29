@@ -31,10 +31,7 @@ public class ParkingSlot {
     private String price;
 
     @NotBlank
-    @OneToMany
-    @JoinColumn(name = "")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parking_restrictions_id")
     private List<ParkingRestriction> parkingRestrictions;
-
-
-
 }

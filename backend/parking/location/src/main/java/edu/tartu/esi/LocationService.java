@@ -26,7 +26,6 @@ public class LocationService {
     public void processAddress(String address) {
         try {
             GeocodingResult[] results = GeocodingApi.geocode(geoApiContext, address).await();
-
             if (results.length > 0) {
                 GeocodingResult result = results[0];
                 String city = null;
@@ -54,8 +53,7 @@ public class LocationService {
                             result.geometry.location.lat,
                             result.geometry.location.lng
                     );
-
-//                    kafkaTemplate.send(kafkaTopic, locationEvent);
+                    kafkaTemplate.send(kafkaTopic, locationEvent);
                 }
             }
         } catch (Exception e) {

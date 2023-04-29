@@ -12,7 +12,7 @@ public class Config {
     @Bean
     public GeoApiContext geoApiContext() {
         return new GeoApiContext.Builder()
-                .apiKey("your-api-key")
+                .apiKey("API")
                 .build();
     }
 

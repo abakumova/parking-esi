@@ -34,4 +34,7 @@ public class ParkingSlot {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "parking_restrictions_id")
     private List<ParkingRestriction> parkingRestrictions;
+
+    @Embedded
+    private Location location;
 }

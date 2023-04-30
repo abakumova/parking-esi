@@ -26,7 +26,7 @@ public class LocationService {
     }
 
     // Implement the method to process the address and publish the location event
-    public void processAddress(String address) {
+    public LocationMessage processAddress(String address) {
         try {
             GeocodingResult[] results = GeocodingApi.geocode(geoApiContext, address).await();
             if (results.length > 0) {
@@ -59,10 +59,12 @@ public class LocationService {
                     log.warn("-- Message {}", locationMessage);
                     log.warn("-- Topic {}", kafkaTopic);
                     kafkaTemplate.send(kafkaTopic, locationMessage);
+                    return locationMessage;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

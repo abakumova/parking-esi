@@ -33,6 +33,7 @@ public class ParkingSlotService {
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
                 .parkingRestrictions(parkingSlotDto.getParkingRestrictions())
+                .location(parkingSlotDto.getLocation())
                 .build();
         parkingSlotRepository.save(parkingSlot);
         log.info("Parking Slot {} is added to the Database", parkingSlot.getId());
@@ -52,6 +53,7 @@ public class ParkingSlotService {
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
                 .parkingRestrictions(parkingSlotDto.getParkingRestrictions())
+                .location(parkingSlotDto.getLocation())
                 .build();
         parkingSlotRepository.save(parkingSlot);
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());

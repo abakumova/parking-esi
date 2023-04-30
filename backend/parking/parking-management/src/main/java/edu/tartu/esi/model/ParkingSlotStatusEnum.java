@@ -11,7 +11,8 @@ public enum ParkingSlotStatusEnum {
     CREATED("Created", 1),
     AVAILABLE("Available", 2),
     BOOKED("Booked", 3),
-    DENIED("Denied", 4);
+    DENIED("Denied", 4),
+    CLOSED("Closed", 5);
 
 
     private String parkingStatusName;
@@ -24,6 +25,8 @@ public enum ParkingSlotStatusEnum {
             return AVAILABLE;
         } else if (parkingSlotStatusName.equals(BOOKED.getParkingStatusName())) {
             return BOOKED;
+        } else if (parkingSlotStatusName.equals(CLOSED.getParkingStatusName())) {
+            return CLOSED;
         } else {
             return DENIED;
         }
@@ -35,6 +38,7 @@ public enum ParkingSlotStatusEnum {
             case 2 -> AVAILABLE;
             case 3 -> BOOKED;
             case 4 -> DENIED;
+            case 5 -> CLOSED;
             default -> throw new IllegalStateException("Unexpected value: " + parkingStatusId);
         };
     }

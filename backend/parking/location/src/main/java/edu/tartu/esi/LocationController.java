@@ -18,12 +18,12 @@ public class LocationController {
     }
 
     @GetMapping("/location")
-    public ResponseEntity<String> processAddress(@RequestParam String address) {
+    public ResponseEntity<LocationMessage> processAddress(@RequestParam String address) {
         try {
-            locationService.processAddress(address);
-            return new ResponseEntity<>("Address processed successfully", HttpStatus.OK);
+            LocationMessage locationMessage = locationService.processAddress(address);
+            return ResponseEntity.ok().body(locationMessage);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error processing address: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return (ResponseEntity<LocationMessage>) ResponseEntity.badRequest();
         }
     }
 }

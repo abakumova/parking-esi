@@ -24,7 +24,7 @@ public class ParkingRestrictionService {
     private final ParkingRestrictionMapper parkingRestrictionMapper;
 
     public void createParkingRestriction(ParkingRestrictionDto parkingRestrictionDto) {
-        assertParkingRestrictionDto(parkingRestrictionDto, "Can't create a parking slot info when parking slot is null");
+        assertParkingRestrictionDto(parkingRestrictionDto, "Can't create a parking restriction info when parking restriction is null");
         ParkingRestriction parkingRestriction = ParkingRestriction.builder()
                 .id(parkingRestrictionDto.getId())
                 .parkingSlotId(parkingRestrictionDto.getParkingSlotId())

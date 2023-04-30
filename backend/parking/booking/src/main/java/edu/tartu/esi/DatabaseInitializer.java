@@ -20,7 +20,7 @@ public class DatabaseInitializer {
         String url = "jdbc:postgresql://localhost:5432/";
         String username = "postgres";
         String password = "postgres";
-        String databaseName = "parking_management_db";
+        String databaseName = "booking_db";
 
         DataSource dataSource = new DriverManagerDataSource(url, username, password);
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

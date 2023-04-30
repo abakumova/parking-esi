@@ -18,6 +18,7 @@
         <module>discovery-server</module>
         <module>user-management</module>
         <module>location</module>
+        <module>parking-management</module>
     </modules>
 
     <properties>

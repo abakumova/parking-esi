@@ -1,5 +1,8 @@
-package edu.tartu.esi;
+package edu.tartu.esi.kafka;
 
+import edu.tartu.esi.dto.PaymentDto;
+import edu.tartu.esi.kafka.message.UserRequestMessage;
+import edu.tartu.esi.kafka.message.UserResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,11 +15,11 @@ import org.springframework.stereotype.Service;
 public class KafkaConsumerService {
 
     private final KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate;
-    private final KafkaTemplate<Object, PaymentDTO> paymentDtoKafkaTemplate;
+    private final KafkaTemplate<Object, PaymentDto> paymentDtoKafkaTemplate;
     @Value("${kafka.topics.payment}")
     private String paymentTopic;
 
-    public KafkaConsumerService(KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate, KafkaTemplate<Object, PaymentDTO> paymentDtoKafkaTemplate) {
+    public KafkaConsumerService(KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate, KafkaTemplate<Object, PaymentDto> paymentDtoKafkaTemplate) {
         this.userRequestKafkaTemplate = userRequestKafkaTemplate;
         this.paymentDtoKafkaTemplate = paymentDtoKafkaTemplate;
     }

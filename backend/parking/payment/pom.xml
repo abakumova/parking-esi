@@ -2,20 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>edu.tartu.esi</groupId>
-    <artifactId>payment-microservice</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
-
-    <name>payment-microservice</name>
-    <description>Payment microservice for handling payments</description>
-
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <artifactId>parking</artifactId>
+        <groupId>edu.tartu.esi</groupId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
+    <artifactId>payment</artifactId>
+    <description>Payment Service</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -54,6 +47,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
         </dependency>
     </dependencies>
 

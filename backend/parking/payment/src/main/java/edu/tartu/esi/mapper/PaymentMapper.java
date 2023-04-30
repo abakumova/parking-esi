@@ -1,12 +1,14 @@
-package edu.tartu.esi;
+package edu.tartu.esi.mapper;
 
+import edu.tartu.esi.dto.PaymentDto;
+import edu.tartu.esi.model.Payment;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentMapper {
 
-    public PaymentDTO toDto(Payment payment) {
-        PaymentDTO dto = new PaymentDTO();
+    public PaymentDto toDto(Payment payment) {
+        PaymentDto dto = new PaymentDto();
         dto.setId(payment.getId());
         dto.setPayerId(payment.getPayerId());
         dto.setReceiverId(payment.getReceiverId());
@@ -17,7 +19,7 @@ public class PaymentMapper {
         return dto;
     }
 
-    public Payment fromDto(PaymentDTO dto) {
+    public Payment fromDto(PaymentDto dto) {
         Payment payment = new Payment();
         payment.setId(dto.getId());
         payment.setPayerId(dto.getPayerId());

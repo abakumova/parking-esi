@@ -1,11 +1,11 @@
-package edu.tartu.esi;
+package edu.tartu.esi.dto;
 
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class PaymentMethodDTO {
+public class PaymentMethodDto {
 
     private String id;
     private String cardNumber;

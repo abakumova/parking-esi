@@ -1,4 +1,4 @@
-package edu.tartu.esi;
+package edu.tartu.esi.kafka.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

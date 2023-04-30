@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LocationEvent {
+public class LocationMessage {
 
     private String formattedAddress;
     private String city;
@@ -18,6 +18,4 @@ public class LocationEvent {
     private String country;
     private double latitude;
     private double longitude;
-
 }
-

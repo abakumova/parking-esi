@@ -20,7 +20,6 @@ public class LocationController {
     @GetMapping("/location")
     public ResponseEntity<String> processAddress(@RequestParam String address) {
         try {
-            log.debug("HELLO");
             locationService.processAddress(address);
             return new ResponseEntity<>("Address processed successfully", HttpStatus.OK);
         } catch (Exception e) {

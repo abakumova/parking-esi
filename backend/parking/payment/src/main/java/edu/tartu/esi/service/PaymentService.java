@@ -95,22 +95,22 @@ public class PaymentService {
     @KafkaListener(topics = "user-response-topic", groupId = "payment-group",
             containerFactory = "userRequestMessageListenerContainerFactory",
             id = "user-message-listener")
-    private PaymentMethodDto getPaymentMethodDtoForUser(@Payload UserResponseMessage message, String userId) {
-        // Send a request to the user-management service
+    public PaymentMethodDto getPaymentMethodDtoForUser(@Payload UserResponseMessage message) {
         String requestId = UUID.randomUUID().toString();
+        //TODO: replace userId with userId fetched from booking
+        String userId = new String("f469753e-20c0-4297-9511-b6a4e55a869c");
         UserRequestMessage requestMessage = new UserRequestMessage(requestId, userId);
         userRequestKafkaTemplate.send("user-request-topic", requestMessage);
 
         try {
             latch.await(15, TimeUnit.SECONDS);
             if (userId.equals(message.getUserId())) {
-                PaymentMethodDto paymentMethodDto = message.getPaymentMethodDTO();
-                return paymentMethodDto;
+                return message.getPaymentMethodDTO();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return new PaymentMethodDto();
+        return null;
     }
 
 //    @KafkaListener(topics = "user-response", groupId = "paymentServiceGroup")

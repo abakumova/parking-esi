@@ -24,4 +24,5 @@ public class PaymentMethod {
     private String cvv;
     private String cardHolderName;
     private String iban;
+    private String balance = "100";
 }

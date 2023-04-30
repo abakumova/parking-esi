@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +32,6 @@ public class UserService {
     private UserRepository userRepository;
     private final UserMapper userMapper;
 
-    private final KafkaTemplate<String, UserDto> kafkaTemplate;
-
     public void createUser(UserDto userDto) {
         assertUserDto(userDto, "Can't create a user info when user is null");
         if (userRepository.existsByEmail(userDto.getEmail())) {
@@ -50,8 +47,6 @@ public class UserService {
                 .paymentMethod(userDto.getPaymentMethod())
                 .build();
         userRepository.save(newUser);
-
-//        kafkaTemplate.send("userCreatedTopic", userDto);
 
         log.info("-- createUser; User {} is created", userDto.getId());
     }

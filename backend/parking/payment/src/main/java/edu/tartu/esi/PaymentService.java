@@ -1,6 +1,6 @@
 package edu.tartu.esi;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -12,30 +12,25 @@ import java.util.concurrent.*;
 import java.lang.String;
 
 @Service
+@Slf4j
 public class PaymentService {
 
     private final CountDownLatch latch = new CountDownLatch(1);
     private final ConcurrentMap<String, PaymentMethodDTO> paymentMethodDTOResponses = new ConcurrentHashMap<>();
     private final PaymentRepository paymentRepository;
-    private final KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate;
-    private final KafkaTemplate<Object, PaymentDTO> paymentDtoKafkaTemplate;
-    @Value("${kafka.topics.payment}")
-    private String paymentTopic;
     private final PaymentMapper paymentMapper;
 
-    public PaymentService(PaymentRepository paymentRepository,
-                          KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate,
-                          KafkaTemplate<Object, PaymentDTO> paymentDtoKafkaTemplate,
-                          String paymentTopic,
-                          PaymentMapper paymentMapper) {
+    private final KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate;
+    private final KafkaTemplate<String, UserBalanceMessage> paymentDtoKafkaTemplate;
+
+    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper, KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate, KafkaTemplate<String, UserBalanceMessage> paymentDtoKafkaTemplate) {
         this.paymentRepository = paymentRepository;
+        this.paymentMapper = paymentMapper;
         this.userRequestKafkaTemplate = userRequestKafkaTemplate;
         this.paymentDtoKafkaTemplate = paymentDtoKafkaTemplate;
-        this.paymentTopic = paymentTopic;
-        this.paymentMapper = paymentMapper;
     }
 
-    public void makePayment(UUID payerId, UUID receiverId, UUID bookingId, BigDecimal amount) {
+    public void makePayment(String payerId, String receiverId, String bookingId, BigDecimal amount) {
         // Get payment method for user
         PaymentMethodDTO PaymentMethodDTO = getPaymentMethodDTOForUser(payerId);
 
@@ -43,19 +38,23 @@ public class PaymentService {
         BigDecimal newBalance = new BigDecimal(PaymentMethodDTO.getBalance()).subtract(amount);
         PaymentMethodDTO.setBalance(String.valueOf(newBalance));
 
-        Payment payment = new Payment(UUID.randomUUID(), payerId, receiverId, bookingId, amount, Payment.PaymentStatus.PENDING, LocalDateTime.now());
+        Payment payment = new Payment(UUID.randomUUID().toString(), payerId, receiverId, bookingId, amount, Payment.PaymentStatus.PENDING, LocalDateTime.now());
         paymentRepository.save(payment);
 
         // Publish the payment result to the Kafka topic
         PaymentDTO paymentDto = paymentMapper.toDto(payment);
-        paymentDtoKafkaTemplate.send(paymentTopic, paymentDto);
+        // requestId, userId, balance
+        UserBalanceMessage userBalanceMessage = new UserBalanceMessage();
+        userBalanceMessage.setRequestId("nfnnf");
+        userBalanceMessage.setUserId(payerId);userBalanceMessage.setBalance("10");
+        paymentDtoKafkaTemplate.send("balance-request", userBalanceMessage);
     }
 
-    private PaymentMethodDTO getPaymentMethodDTOForUser(UUID userId) {
+    PaymentMethodDTO getPaymentMethodDTOForUser(String userId) {
         // Send a request to the user-management service
         String requestId = UUID.randomUUID().toString();
-        UserRequestMessage requestMessage = new UserRequestMessage(requestId, userId.toString());
-        userRequestKafkaTemplate.send("user-request", requestMessage);
+        UserRequestMessage requestMessage = new UserRequestMessage(requestId, userId);
+        userRequestKafkaTemplate.send("user-request-topic", requestMessage);
 
         // Wait for the response
         try {

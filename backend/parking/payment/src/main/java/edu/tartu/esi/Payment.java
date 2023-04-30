@@ -21,16 +21,16 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    private String id;
 
     @Column(nullable = false)
-    private UUID payerId;
+    private String payerId;
 
     @Column(nullable = false)
-    private UUID receiverId;
+    private String receiverId;
 
     @Column(nullable = false)
-    private UUID bookingId;
+    private String bookingId;
 
     @Column(nullable = false)
     private BigDecimal amount;

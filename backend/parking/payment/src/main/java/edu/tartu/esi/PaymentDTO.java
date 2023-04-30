@@ -8,10 +8,10 @@ import java.util.UUID;
 
 @Data
 public class PaymentDTO {
-    private UUID id;
-    private UUID payerId;
-    private UUID receiverId;
-    private UUID bookingId;
+    private String id;
+    private String payerId;
+    private String receiverId;
+    private String bookingId;
     private LocalDateTime time;
     private BigDecimal amount;
     private Payment.PaymentStatus status;

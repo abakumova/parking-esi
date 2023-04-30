@@ -1,6 +1,7 @@
 package edu.tartu.esi.kafka;
 
 import edu.tartu.esi.dto.UserDto;
+import edu.tartu.esi.kafka.message.UserBalanceMessage;
 import edu.tartu.esi.kafka.message.UserRequestMessage;
 import edu.tartu.esi.kafka.message.UserResponseMessage;
 import edu.tartu.esi.service.UserService;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class KafkaConsumerService {
-
     @Autowired
     private UserService userService;
     private final KafkaTemplate<String, UserResponseMessage> kafkaTemplate;
@@ -24,17 +24,22 @@ public class KafkaConsumerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @KafkaListener(topics = "user-request", groupId = "myGroup")
-    public void listen(@Payload UserRequestMessage message) {
-        log.debug("-- Message is received {}", message.toString());
+    @KafkaListener(topics = "user-request-topic", groupId = "user-group")
+    public void listenUser(@Payload UserRequestMessage message) {
+        log.warn("-- Message is received {}", message.toString());
         UserDto userDto = userService.getUserById(message.getUserId());
+        log.warn("-- user {}", userDto);
+        UserResponseMessage responseMessage = new UserResponseMessage(message.getRequestId(), userDto.getId(), userDto.getPaymentMethod());
+        log.warn("-- Message is formed {}", responseMessage);
+        kafkaTemplate.send("user-response-topic", responseMessage);
+    }
 
-        UserResponseMessage responseMessage = new UserResponseMessage();
-        responseMessage.setRequestId(message.getRequestId());
-        responseMessage.setUserId(userDto.getId());
-        responseMessage.setPaymentMethod(userDto.getPaymentMethod());
-
-        log.debug("-- Message is formed {}", responseMessage);
-        kafkaTemplate.send("user-response", responseMessage);
+    @KafkaListener(topics = "balance-request", groupId = "user-group")
+    public void listenBalance(@Payload UserBalanceMessage message) {
+        log.warn("-- Message is received {}", message.toString());
+        UserDto userDto = userService.getUserById(message.getUserId());
+        userDto.getPaymentMethod().setBalance(message.getBalance());
+        userService.updateUser(message.getUserId(), userDto);
+        log.warn("-- User was updated {}", userDto);
     }
 }

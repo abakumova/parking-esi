@@ -32,7 +32,7 @@ public class ParkingRestrictionController {
         return ResponseEntity.ok("Parking restriction has been created");
     }
 
-    @PutMapping(value = "/parking-restrictions", consumes = {"application/json"}, produces = {"application/json"})
+    @PutMapping(value = "/parking-restrictions/{id}", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> updateParkingRestriction(@Valid @PathVariable String id, @Valid @RequestBody ParkingRestrictionDto parkingRestrictionDto) {
         parkingRestrictionService.updateParkingRestriction(id, parkingRestrictionDto);

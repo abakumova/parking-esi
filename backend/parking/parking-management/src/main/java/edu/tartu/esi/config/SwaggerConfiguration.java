@@ -21,8 +21,8 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI springUMOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("User Management API")
-                        .description("User management")
+                .info(new Info().title("Parking Management API")
+                        .description("Parking management")
                         .version("v0.0.1")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }

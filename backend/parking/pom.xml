@@ -21,6 +21,7 @@
         <module>parking-management</module>
         <module>booking</module>
         <module>parking-availability</module>
+        <module>payment</module>
     </modules>
 
     <properties>

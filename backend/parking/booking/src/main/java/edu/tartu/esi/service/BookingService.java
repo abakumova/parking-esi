@@ -40,7 +40,7 @@ public class BookingService {
     public BookingDto getBookingById(String id) {
         log.info("-- fetch bookings");
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new BookingNotFoundException(format("Booking with id = %s wan't found", id)));
+                .orElseThrow(() -> new BookingNotFoundException(format("Booking with id = %s wasn't found", id)));
         return bookingMapper.toDto(booking);
     }
 

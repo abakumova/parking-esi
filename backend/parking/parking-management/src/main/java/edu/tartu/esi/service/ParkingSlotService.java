@@ -2,18 +2,19 @@ package edu.tartu.esi.service;
 
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.exception.ParkingSlotNotFoundException;
+import edu.tartu.esi.kafka.KafkaConsumerService;
 import edu.tartu.esi.mapper.ParkingSlotMapper;
 import edu.tartu.esi.model.ParkingSlot;
+import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.ParkingSlotRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -24,6 +25,8 @@ public class ParkingSlotService {
 
     @Autowired
     private ParkingSlotRepository parkingSlotRepository;
+    @Autowired
+    KafkaConsumerService kafkaConsumerService;
     private final ParkingSlotMapper parkingSlotMapper;
 
     public void createParkingSlot(ParkingSlotDto parkingSlotDto) {
@@ -32,9 +35,12 @@ public class ParkingSlotService {
                 .id(parkingSlotDto.getId())
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
+                .parkingSlotStatus(SlotStatusEnum.OPEN)
                 .parkingRestrictions(parkingSlotDto.getParkingRestrictions())
+                .location(parkingSlotDto.getLocation())
                 .build();
         parkingSlotRepository.save(parkingSlot);
+        kafkaConsumerService.sendManagementStatusCreated(parkingSlot);
         log.info("Parking Slot {} is added to the Database", parkingSlot.getId());
     }
 
@@ -52,18 +58,21 @@ public class ParkingSlotService {
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
                 .parkingRestrictions(parkingSlotDto.getParkingRestrictions())
+                .location(parkingSlotDto.getLocation())
                 .build();
         parkingSlotRepository.save(parkingSlot);
+        kafkaConsumerService.sendManagementStatusUpdated(parkingSlot);
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());
     }
 
     public void deleteParkingSlot(String id) {
         parkingSlotRepository.deleteById(id);
+        kafkaConsumerService.sendManagementStatusDeleted(id);
         log.info("-- Parking slot {} has been deleted", id);
     }
 
     private void assertParkingSlotDto(ParkingSlotDto parking, String msg) {
-        if (parking == null){
+        if (parking == null) {
             log.info("The body is missing");
             throw new IllegalArgumentException(msg);
         }

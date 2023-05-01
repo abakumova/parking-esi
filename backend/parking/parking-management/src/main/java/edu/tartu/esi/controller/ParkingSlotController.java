@@ -1,7 +1,6 @@
 package edu.tartu.esi.controller;
 
 import edu.tartu.esi.dto.ParkingSlotDto;
-import edu.tartu.esi.search.GenericSearchDto;
 import edu.tartu.esi.service.ParkingSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

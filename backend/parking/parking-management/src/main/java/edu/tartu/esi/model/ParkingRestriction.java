@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -22,21 +20,15 @@ public class ParkingRestriction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotNull
+    //@NotNull
     private String parkingSlotId;
 
-    @NotNull
     private LocalDateTime timeFrom;
-
-    @NotNull
     private LocalDateTime timeUntil;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "car_categories_id")
-    private CarCategory category;
+    private CarCategoryEnum category;
 
-    @NotBlank
     @Size(max = 50)
     private String code;
 }

@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.lang.String.format;
 
 @Service
@@ -40,7 +43,7 @@ public class BookingService {
     public BookingDto getBookingById(String id) {
         log.info("-- fetch bookings");
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new BookingNotFoundException(format("Booking with id = %s wan't found", id)));
+                .orElseThrow(() -> new BookingNotFoundException(format("Booking with id = %s wasn't found", id)));
         return bookingMapper.toDto(booking);
     }
 
@@ -62,8 +65,16 @@ public class BookingService {
         log.info("-- Booking {} has been deleted", id);
     }
 
+    public List<BookingDto> getAllBookingsByUserId(String id) {
+        List<Booking> list = bookingRepository.findAllByCustomerId(id);
+        return list
+                .stream()
+                .map(bookingMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     private void assertBookingDto(BookingDto booking, String msg) {
-        if (booking == null){
+        if (booking == null) {
             log.info("The body is missing");
             throw new IllegalArgumentException(msg);
         }

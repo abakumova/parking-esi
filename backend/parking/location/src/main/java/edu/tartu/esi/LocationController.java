@@ -1,7 +1,6 @@
 package edu.tartu.esi;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,13 +17,12 @@ public class LocationController {
     }
 
     @GetMapping("/location")
-    public ResponseEntity<String> processAddress(@RequestParam String address) {
+    public ResponseEntity<LocationMessage> processAddress(@RequestParam String address) {
         try {
-            log.debug("HELLO");
-            locationService.processAddress(address);
-            return new ResponseEntity<>("Address processed successfully", HttpStatus.OK);
+            LocationMessage locationMessage = locationService.processAddress(address);
+            return ResponseEntity.ok().body(locationMessage);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error processing address: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return (ResponseEntity<LocationMessage>) ResponseEntity.badRequest();
         }
     }
 }

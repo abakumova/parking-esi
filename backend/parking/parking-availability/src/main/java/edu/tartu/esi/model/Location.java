@@ -1,16 +1,14 @@
-package edu.tartu.esi;
+package edu.tartu.esi.model;
 
-import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LocationEvent {
+public class Location {
 
     private String formattedAddress;
     private String city;
@@ -20,4 +18,3 @@ public class LocationEvent {
     private double longitude;
 
 }
-

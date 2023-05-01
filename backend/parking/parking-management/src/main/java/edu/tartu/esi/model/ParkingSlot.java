@@ -24,14 +24,16 @@ public class ParkingSlot {
     @NotBlank
     private String landlordId;
 
-    private ParkingSlotStatusEnum parkingSlotStatus;
+    private SlotStatusEnum parkingSlotStatus;
 
     @NotBlank
     @Size(max = 50)
     private String price;
-
-    @NotBlank
+    
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "parking_restrictions_id")
     private List<ParkingRestriction> parkingRestrictions;
+
+    @Embedded
+    private Location location;
 }

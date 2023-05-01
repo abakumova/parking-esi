@@ -2,7 +2,7 @@ package edu.tartu.esi.kafka;
 
 import edu.tartu.esi.kafka.message.UserBalanceMessage;
 import edu.tartu.esi.kafka.message.UserRequestMessage;
-import edu.tartu.esi.kafka.message.UserResponseMessage;
+import edu.tartu.esi.kafka.message.UserPaymentMethodResponseMessage;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
@@ -30,7 +30,7 @@ public class KafkaConfig {
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         config.put(JsonSerializer.TYPE_MAPPINGS, "userrequestmessage:" + UserRequestMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "userresponsemessage:" + UserResponseMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, "userresponsemessage:" + UserPaymentMethodResponseMessage.class.getName());
         config.put(JsonSerializer.TYPE_MAPPINGS, "balancerequestmessage:" + UserBalanceMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }

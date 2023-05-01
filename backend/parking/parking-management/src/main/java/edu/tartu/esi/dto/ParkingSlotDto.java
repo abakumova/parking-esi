@@ -1,5 +1,6 @@
 package edu.tartu.esi.dto;
 
+import edu.tartu.esi.model.Location;
 import edu.tartu.esi.model.ParkingRestriction;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -20,4 +21,5 @@ public class ParkingSlotDto {
     private String landlordId;
     private String price;
     private List<ParkingRestriction> parkingRestrictions;
+    private Location location;
 }

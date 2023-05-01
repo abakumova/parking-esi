@@ -9,7 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -37,14 +36,8 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private PaymentStatusEnum status;
 
     @CreationTimestamp
     private LocalDateTime time;
-
-    public enum PaymentStatus {
-        PENDING,
-        PAID,
-        DECLINED
-    }
 }

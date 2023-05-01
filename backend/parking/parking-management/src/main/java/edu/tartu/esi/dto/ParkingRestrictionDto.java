@@ -1,7 +1,6 @@
 package edu.tartu.esi.dto;
 
-import edu.tartu.esi.model.CarCategory;
-import edu.tartu.esi.model.ParkingRestriction;
+import edu.tartu.esi.model.CarCategoryEnum;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder
 @Data
@@ -22,6 +20,6 @@ public class ParkingRestrictionDto {
     private String parkingSlotId;
     private LocalDateTime timeFrom;
     private LocalDateTime timeUntil;
-    private CarCategory category;
+    private CarCategoryEnum category;
     private String code;
 }

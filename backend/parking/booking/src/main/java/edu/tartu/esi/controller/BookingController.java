@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +19,12 @@ import javax.validation.Valid;
 public class BookingController {
     @Autowired
     private BookingService bookingService;
+
+    @GetMapping(value = "/bookings/{userId}", produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookingDto> getBookingsByUserId(@Valid @PathVariable String userId) {
+        return bookingService.getAllBookingsByUserId(userId);
+    }
 
     @GetMapping(value = "/bookings/{id}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)

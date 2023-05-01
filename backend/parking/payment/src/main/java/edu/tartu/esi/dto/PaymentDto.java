@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class PaymentDto {
+
     private String id;
     private String payerId;
     private String receiverId;
@@ -15,8 +16,4 @@ public class PaymentDto {
     private LocalDateTime time;
     private BigDecimal amount;
     private Payment.PaymentStatus status;
-
-    // Getters and setters
-
-    // Additional methods if needed
 }

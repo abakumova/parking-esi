@@ -2,7 +2,7 @@ package edu.tartu.esi.kafka;
 
 import edu.tartu.esi.dto.PaymentDto;
 import edu.tartu.esi.kafka.message.UserRequestMessage;
-import edu.tartu.esi.kafka.message.UserResponseMessage;
+import edu.tartu.esi.kafka.message.UserPaymentMethodResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -25,7 +25,7 @@ public class KafkaConsumerService {
     }
 
     @KafkaListener(topics = "user-response", groupId = "payment-group")
-    public void listen(@Payload UserResponseMessage message) {
+    public void listen(@Payload UserPaymentMethodResponseMessage message) {
         log.debug("-- Message is received {}", message.toString());
 //        UserDto userDto = userService.getUserById(message.getUserId());
 //

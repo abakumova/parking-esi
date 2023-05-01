@@ -9,7 +9,7 @@ public class MessageHandler {
 
     private KafkaTemplate<String, BookingPriceRequestMessage> priceRequest;
     private KafkaTemplate<String, BookingUpdateStatusMessage> statusUpdate;
-    private KafkaTemplate<String, BookingParkingRestrictionRequest> restrictionRequest;
+    private KafkaTemplate<String, BookingParkingRestrictionRequestMessage> restrictionRequest;
 
     public void sendBookingPriceRequest(String slotId) {
         String requestId = UUID.randomUUID().toString();
@@ -25,7 +25,7 @@ public class MessageHandler {
 
     public void sendBookingParkingRestrictionRequest(String slotId) {
         String requestId = UUID.randomUUID().toString();
-        BookingParkingRestrictionRequest message = new BookingParkingRestrictionRequest(requestId, slotId);
+        BookingParkingRestrictionRequestMessage message = new BookingParkingRestrictionRequestMessage(requestId, slotId);
         restrictionRequest.send("booking-restriction-request-topic", message);
     }
 }

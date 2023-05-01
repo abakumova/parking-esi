@@ -3,7 +3,8 @@ package edu.tartu.esi.kafka;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class BookingParkingRestrictionRequest {
+public class BookingParkingRestrictionRequestMessage {
+
     private String requestId;
     private String id;
 }

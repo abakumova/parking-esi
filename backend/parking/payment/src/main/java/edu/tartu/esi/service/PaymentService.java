@@ -3,7 +3,7 @@ package edu.tartu.esi.service;
 import edu.tartu.esi.dto.PaymentMethodDto;
 import edu.tartu.esi.kafka.message.UserBalanceMessage;
 import edu.tartu.esi.kafka.message.UserRequestMessage;
-import edu.tartu.esi.kafka.message.UserResponseMessage;
+import edu.tartu.esi.kafka.message.UserPaymentMethodResponseMessage;
 import edu.tartu.esi.mapper.PaymentMapper;
 import edu.tartu.esi.repository.PaymentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class PaymentService {
 
 //    public void makePayment(String payerId, String receiverId, String bookingId, BigDecimal amount) {
 //        // Get payment method for user
-//        PaymentMethodDto paymentMethodDto = getPaymentMethodDTOForUser(payerId);
+//        PaymentMethodDto paymentMethodDto = getPaymentMethodDtoForUser(payerId);
 //
 //        // Update the balance and create the payment
 //        BigDecimal newBalance = new BigDecimal(paymentMethodDto.getBalance()).subtract(amount);
@@ -54,51 +54,13 @@ public class PaymentService {
 //        userBalanceMessage.setUserId(payerId);userBalanceMessage.setBalance("10");
 //        paymentDtoKafkaTemplate.send("balance-request", userBalanceMessage);
 //    }
-//
-//    @KafkaListener(topics = "user-response", groupId = "paymentServiceGroup")
-//    private PaymentMethodDto getPaymentMethodDTOForUser(String userId) {
-//        // Send a request to the user-management service
-//        String requestId = UUID.randomUUID().toString();
-//        UserRequestMessage requestMessage = new UserRequestMessage(requestId, userId);
-//        userRequestKafkaTemplate.send("user-request-topic", requestMessage);
-//
-//        // Wait for the response
-//        try {
-//            latch.await(30, TimeUnit.SECONDS);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Retrieve the payment method from the response
-//        PaymentMethodDto PaymentMethodDTO = paymentMethodDTOResponses.get(requestId);
-//        paymentMethodDTOResponses.remove(requestId);
-//        return PaymentMethodDTO;
-//    }
-
-//    @KafkaListener(topics = "user-response", groupId = "paymentServiceGroup")
-//    public void onUserResponse(UserResponseMessage message) {
-//        paymentMethodDTOResponses.put(message.getRequestId(), message.getPaymentMethodDTO());
-//        latch.countDown();
-//    }
-
-
-//    @KafkaListener(topics = "user-response-topic", groupId = "payment-group",
-//            containerFactory = "userRequestMessageListenerContainerFactory",
-//            id = "user-message-listener")
-//    public UserResponseMessage consumeUserMessage(UserResponseMessage message, String userId) {
-//        if (userId.equals(message.getUserId())) {
-//            return message;
-//        }
-//        return new UserResponseMessage();
-//    }
 
     @KafkaListener(topics = "user-response-topic", groupId = "payment-group",
             containerFactory = "userRequestMessageListenerContainerFactory",
             id = "user-message-listener")
-    public PaymentMethodDto getPaymentMethodDtoForUser(@Payload UserResponseMessage message) {
+    public PaymentMethodDto getPaymentMethodDtoForUser(@Payload UserPaymentMethodResponseMessage message) {
         String requestId = UUID.randomUUID().toString();
-        //TODO: replace userId with userId fetched from booking
-        String userId = new String("f469753e-20c0-4297-9511-b6a4e55a869c");
+        String userId = message.getUserId();
         UserRequestMessage requestMessage = new UserRequestMessage(requestId, userId);
         userRequestKafkaTemplate.send("user-request-topic", requestMessage);
 
@@ -112,10 +74,4 @@ public class PaymentService {
         }
         return null;
     }
-
-//    @KafkaListener(topics = "user-response", groupId = "paymentServiceGroup")
-//    public void onUserResponse(UserResponseMessage message) {
-//        paymentMethodDto.put(message.getRequestId(), message.getPaymentMethodDTO());
-//        latch.countDown();
-//    }
 }

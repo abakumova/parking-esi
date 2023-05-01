@@ -1,18 +1,16 @@
 package edu.tartu.esi.kafka.message;
 
+import edu.tartu.esi.model.PaymentStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderCreatedEvent {
+public class PaymentResultMessage {
 
-    private String payerId;
-    private String receiverId;
+    private String requestId;
     private String bookingId;
-    private BigDecimal amount;
+    private PaymentStatusEnum status;
 }

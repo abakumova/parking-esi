@@ -29,6 +29,51 @@ public class KafkaConfig {
     }
 
     @Bean
+    public KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate() {
+        return new KafkaTemplate<>(producerFactoryDelete());
+    }
+
+    @Bean
+    public KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate() {
+        return new KafkaTemplate<>(producerFactoryCreate());
+    }
+
+    @Bean
+    public KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate() {
+        return new KafkaTemplate<>(producerFactoryUpdate());
+    }
+
+    @Bean
+    public ProducerFactory<String, SlotDeletedMessage> producerFactoryDelete() {
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotDeletedMessage.class.getName());
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+
+    @Bean
+    public ProducerFactory<String, SlotCreatedMessage> producerFactoryCreate() {
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotCreatedMessage.class.getName());
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+
+    @Bean
+    public ProducerFactory<String, SlotUpdatedMessage> producerFactoryUpdate() {
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotUpdatedMessage.class.getName());
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+
+    @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");

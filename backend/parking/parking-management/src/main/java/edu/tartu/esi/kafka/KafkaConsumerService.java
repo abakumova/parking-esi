@@ -8,6 +8,7 @@ import edu.tartu.esi.model.CarCategoryEnum;
 import edu.tartu.esi.model.ParkingRestriction;
 import edu.tartu.esi.model.ParkingSlot;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +25,11 @@ public class KafkaConsumerService {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public KafkaConsumerService(KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate,
-                                KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate,
-                                KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate,
-                                KafkaTemplate<String, Object> kafkaTemplate) {
+    public KafkaConsumerService(
+            KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate,
+            KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate,
+            KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate,
+            KafkaTemplate<String, Object> kafkaTemplate) {
         this.slotDeletedMessageKafkaTemplate = slotDeletedMessageKafkaTemplate;
         this.slotCreatedMessageKafkaTemplate = slotCreatedMessageKafkaTemplate;
         this.slotUpdatedMessageKafkaTemplate = slotUpdatedMessageKafkaTemplate;

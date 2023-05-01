@@ -26,6 +26,7 @@ public class KafkaConsumerService {
     private final KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate;
     private final KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate;
     private final KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public KafkaConsumerService(AvailableParkingSlotService availableParkingSlotService,
                                 KafkaTemplate<String, BookingPriceResponseMessage> bookingPriceMessageKafkaTemplate,
@@ -34,7 +35,8 @@ public class KafkaConsumerService {
                                 KafkaTemplate<String, LocationMessage> locationMessageKafkaTemplate,
                                 KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate,
                                 KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate,
-                                KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate) {
+                                KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate,
+                                KafkaTemplate<String, Object> kafkaTemplate) {
         this.availableParkingSlotService = availableParkingSlotService;
         this.bookingPriceMessageKafkaTemplate = bookingPriceMessageKafkaTemplate;
         this.bookingPriceRequestMessageKafkaTemplate = bookingPriceRequestMessageKafkaTemplate;
@@ -43,6 +45,7 @@ public class KafkaConsumerService {
         this.slotDeletedMessageKafkaTemplate = slotDeletedMessageKafkaTemplate;
         this.slotCreatedMessageKafkaTemplate = slotCreatedMessageKafkaTemplate;
         this.slotUpdatedMessageKafkaTemplate = slotUpdatedMessageKafkaTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @KafkaListener(topics = "booking-price-request-topic", groupId = "availability-group")

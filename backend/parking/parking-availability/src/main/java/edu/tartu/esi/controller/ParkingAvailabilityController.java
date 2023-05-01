@@ -25,6 +25,7 @@ public class ParkingAvailabilityController {
     private AvailableParkingSlotService availableParkingSlotService;
 
     @GetMapping("/available-slots")
+    //"location-topic"
     public List<AvailableParkingSlotDto> fetchAllSlots(@Valid Location location) {
         return availableParkingSlotService.searchSlots(location);
     }

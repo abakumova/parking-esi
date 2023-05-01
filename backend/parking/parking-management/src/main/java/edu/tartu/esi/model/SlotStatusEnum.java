@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum SlotStatusEnum {
     OPEN("Open", 1), //Parking management
-    CLOSED("Closed", 2), //Parking management
-    AVAILABLE("Available", 3), //Booking
-    BOOKED("Booked", 4); //Booking
+    CLOSED("Closed", 2); //Parking management
 
 
     private String parkingStatusName;
@@ -20,12 +18,8 @@ public enum SlotStatusEnum {
     public static SlotStatusEnum getParkingSlotStatusByName(String parkingSlotStatusName) {
         if (parkingSlotStatusName.equals(OPEN.getParkingStatusName())) {
             return OPEN;
-        } else if (parkingSlotStatusName.equals(CLOSED.getParkingStatusName())) {
-            return CLOSED;
-        } else if (parkingSlotStatusName.equals(AVAILABLE.getParkingStatusName())) {
-            return AVAILABLE;
         } else {
-            return BOOKED;
+            return CLOSED;
         }
     }
 
@@ -33,8 +27,6 @@ public enum SlotStatusEnum {
         return switch (parkingStatusId) {
             case 1 -> OPEN;
             case 2 -> CLOSED;
-            case 3 -> AVAILABLE;
-            case 4 -> BOOKED;
             default -> throw new IllegalStateException("Unexpected value: " + parkingStatusId);
         };
     }

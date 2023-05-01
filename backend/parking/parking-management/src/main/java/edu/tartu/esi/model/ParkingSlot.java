@@ -24,7 +24,7 @@ public class ParkingSlot {
     @NotBlank
     private String landlordId;
 
-    private ParkingSlotStatusEnum parkingSlotStatus;
+    private SlotStatusEnum parkingSlotStatus;
 
     @NotBlank
     @Size(max = 50)

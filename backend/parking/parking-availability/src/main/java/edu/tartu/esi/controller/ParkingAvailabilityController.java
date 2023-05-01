@@ -4,6 +4,7 @@ import edu.tartu.esi.dto.AvailableParkingSlotDto;
 import edu.tartu.esi.model.Location;
 import edu.tartu.esi.service.AvailableParkingSlotService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 @Validated
+@Slf4j
 public class ParkingAvailabilityController {
 
     @Autowired

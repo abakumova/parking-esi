@@ -27,8 +27,9 @@ public class KafkaConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingresponsemessage:" + BookingPriceMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingresponsemessage:" + BookingPriceResponseMessage.class.getName());
         config.put(JsonSerializer.TYPE_MAPPINGS, "bookingrequestmessage:" + BookingUpdateStatusMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingrequestmessage:" + BookingPriceRequestMessage.class.getName());
         config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotCreatedMessage.class.getName());
         config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotDeletedMessage.class.getName());
         config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotUpdatedMessage.class.getName());
@@ -45,7 +46,7 @@ public class KafkaConfig {
     public ConsumerFactory<String, Object> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "payment-group");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "availability-group");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");

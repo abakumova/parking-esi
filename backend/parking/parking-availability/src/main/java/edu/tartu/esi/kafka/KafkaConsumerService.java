@@ -1,40 +1,87 @@
 package edu.tartu.esi.kafka;
 
-//import edu.tartu.esi.dto.PaymentDto;
-//import edu.tartu.esi.kafka.message.SlotUpdatedMessage;
-//import edu.tartu.esi.kafka.message.BookingUpdateStatusMessage;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.kafka.annotation.KafkaListener;
-//import org.springframework.kafka.core.KafkaTemplate;
-//import org.springframework.messaging.handler.annotation.Payload;
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//@Slf4j
-//public class KafkaConsumerService {
-//
-//    private final KafkaTemplate<String, SlotUpdatedMessage> userRequestKafkaTemplate;
-//    private final KafkaTemplate<Object, PaymentDto> paymentDtoKafkaTemplate;
-//    @Value("${kafka.topics.payment}")
-//    private String paymentTopic;
-//
-//    public KafkaConsumerService(KafkaTemplate<String, SlotUpdatedMessage> userRequestKafkaTemplate, KafkaTemplate<Object, PaymentDto> paymentDtoKafkaTemplate) {
-//        this.userRequestKafkaTemplate = userRequestKafkaTemplate;
-//        this.paymentDtoKafkaTemplate = paymentDtoKafkaTemplate;
-//    }
-//
-//    @KafkaListener(topics = "user-response", groupId = "payment-group")
-//    public void listen(@Payload BookingUpdateStatusMessage message) {
-//        log.debug("-- Message is received {}", message.toString());
-////        UserDto userDto = userService.getUserById(message.getUserId());
-////
-////        UserResponseMessage responseMessage = new UserResponseMessage();
-////        responseMessage.setRequestId(message.getRequestId());
-////        responseMessage.setUserId(userDto.getId());
-////        responseMessage.setPaymentMethod(userDto.getPaymentMethod());
-////
-////        log.debug("-- Message is formed {}", responseMessage);
-////        kafkaTemplate.send("user-response", responseMessage);
-//    }
-//}
+import edu.tartu.esi.kafka.message.*;
+import edu.tartu.esi.model.AvailableParkingSlot;
+import edu.tartu.esi.model.SlotStatusEnum;
+import edu.tartu.esi.service.AvailableParkingSlotService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Service;
+
+import static java.lang.Double.parseDouble;
+
+@Service
+@Slf4j
+public class KafkaConsumerService {
+
+    @Autowired
+    private AvailableParkingSlotService availableParkingSlotService;
+    private final KafkaTemplate<String, BookingPriceResponseMessage> bookingPriceMessageKafkaTemplate;
+    private final KafkaTemplate<String, BookingPriceRequestMessage> bookingPriceRequestMessageKafkaTemplate;
+    private final KafkaTemplate<String, BookingUpdateStatusMessage> bookingUpdateStatusMessageKafkaTemplate;
+    private final KafkaTemplate<String, LocationMessage> locationMessageKafkaTemplate;
+    private final KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate;
+    private final KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate;
+    private final KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate;
+
+    public KafkaConsumerService(AvailableParkingSlotService availableParkingSlotService,
+                                KafkaTemplate<String, BookingPriceResponseMessage> bookingPriceMessageKafkaTemplate,
+                                KafkaTemplate<String, BookingPriceRequestMessage> bookingPriceRequestMessageKafkaTemplate,
+                                KafkaTemplate<String, BookingUpdateStatusMessage> bookingUpdateStatusMessageKafkaTemplate,
+                                KafkaTemplate<String, LocationMessage> locationMessageKafkaTemplate,
+                                KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate,
+                                KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate,
+                                KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate) {
+        this.availableParkingSlotService = availableParkingSlotService;
+        this.bookingPriceMessageKafkaTemplate = bookingPriceMessageKafkaTemplate;
+        this.bookingPriceRequestMessageKafkaTemplate = bookingPriceRequestMessageKafkaTemplate;
+        this.bookingUpdateStatusMessageKafkaTemplate = bookingUpdateStatusMessageKafkaTemplate;
+        this.locationMessageKafkaTemplate = locationMessageKafkaTemplate;
+        this.slotDeletedMessageKafkaTemplate = slotDeletedMessageKafkaTemplate;
+        this.slotCreatedMessageKafkaTemplate = slotCreatedMessageKafkaTemplate;
+        this.slotUpdatedMessageKafkaTemplate = slotUpdatedMessageKafkaTemplate;
+    }
+
+    @KafkaListener(topics = "booking-price-request-topic", groupId = "availability-group")
+    public void listenBookingPrice(@Payload BookingPriceRequestMessage message) {
+        log.warn("-- Message is received {}", message.toString());
+        AvailableParkingSlot parkingSlot = availableParkingSlotService.findSlotById(message.getSlotId());
+        BookingPriceResponseMessage bookingPriceResponseMessage = new BookingPriceResponseMessage(message.getRequestId(), message.getSlotId(), parseDouble(parkingSlot.getPrice()));
+        bookingPriceMessageKafkaTemplate.send("booking-price-response-topic", bookingPriceResponseMessage);
+    }
+
+    @KafkaListener(topics = "booking-update-status-topic", groupId = "availability-group")
+    public void listenBookingStatus(@Payload BookingUpdateStatusMessage message) {
+        log.warn("-- Message is received {}", message.toString());
+        availableParkingSlotService.updateBookingStatus(message.getSlotId(), message.getStatus());
+    }
+
+    @KafkaListener(topics = "slot-updated-topic", groupId = "availability-group")
+    public void listenManagementStatusUpdated(@Payload SlotUpdatedMessage message) {
+        log.warn("-- Message is received {}", message.toString());
+        availableParkingSlotService.updateManagementStatus(message.getSlotId(), message.getStatus());
+    }
+
+    @KafkaListener(topics = "slot-deleted-topic", groupId = "availability-group")
+    public void listenManagementStatusDeleted(@Payload SlotDeletedMessage message) {
+        log.warn("-- Message is received {}", message.toString());
+        availableParkingSlotService.deleteSlot(message.getSlotId());
+    }
+
+    @KafkaListener(topics = "slot-created-topic", groupId = "availability-group")
+    public void listenManagementStatusCreated(@Payload SlotCreatedMessage message) {
+        log.warn("-- Message is received {}", message.toString());
+        AvailableParkingSlot parkingSlot = AvailableParkingSlot.builder()
+                .slotId(message.getSlotId())
+                .managementStatus(message.getStatus())
+                .bookingStatus(SlotStatusEnum.AVAILABLE)
+                .category(message.getCategory())
+                .location(message.getLocation())
+                .price(message.getPrice())
+                .build();
+        availableParkingSlotService.createSlot(parkingSlot);
+    }
+}

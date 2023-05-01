@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingPriceMessage {
+public class BookingPriceRequestMessage {
 
     private String requestId;
-    private String id;
-    private double price;
+    private String slotId;
 }

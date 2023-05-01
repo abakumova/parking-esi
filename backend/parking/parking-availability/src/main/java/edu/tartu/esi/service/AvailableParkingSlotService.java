@@ -4,6 +4,7 @@ import edu.tartu.esi.dto.AvailableParkingSlotDto;
 import edu.tartu.esi.mapper.AvailableParkingSlotMapper;
 import edu.tartu.esi.model.AvailableParkingSlot;
 import edu.tartu.esi.model.Location;
+import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.AvailableParkingSlotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +25,33 @@ public class AvailableParkingSlotService {
 
     private final AvailableParkingSlotMapper availableParkingSlotMapper;
 
+    public AvailableParkingSlot findSlotById(String id) {
+        return availableParkingSlotRepository.findAvailableParkingSlotBySlotId(id);
+    }
+
+    public void updateBookingStatus(String id, SlotStatusEnum statusEnum) {
+        availableParkingSlotRepository.updateBookingStatus(id, statusEnum);
+    }
+
+    public void updateManagementStatus(String id, SlotStatusEnum statusEnum) {
+        availableParkingSlotRepository.updateManagementStatus(id, statusEnum);
+    }
+
+    public void deleteSlot(String id) {
+        availableParkingSlotRepository.deleteById(id);
+    }
+
+    public void createSlot(AvailableParkingSlot parkingSlot) {
+        availableParkingSlotRepository.save(parkingSlot);
+    }
+
     public List<AvailableParkingSlotDto> searchSlots(Location location) {
         List<AvailableParkingSlot> parkingSlotDtoList = availableParkingSlotRepository.findAll();
 
         Optional<AvailableParkingSlot> result = parkingSlotDtoList
                 .stream()
                 .filter(slot -> distance(slot.getLocation().getLatitude(), slot.getLocation().getLongitude(),
-                        location.getLatitude(), location.getLongitude()) < 1.0)
+                        location.getLatitude(), location.getLongitude()) < 1.0) //1 KM
                 .findAny();
 
         Optional<AvailableParkingSlotDto> dtoResult = result.map(availableParkingSlotMapper::toDto);

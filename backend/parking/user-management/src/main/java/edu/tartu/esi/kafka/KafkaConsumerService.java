@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class KafkaConsumerService {
-    @Autowired
-    private UserService userService;
-    private final KafkaTemplate<String, UserResponseMessage> kafkaTemplate;
 
-    public KafkaConsumerService(UserService userService, KafkaTemplate<String, UserResponseMessage> kafkaTemplate) {
+    private UserService userService;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public KafkaConsumerService(UserService userService, KafkaTemplate<String, Object> kafkaTemplate) {
         this.userService = userService;
         this.kafkaTemplate = kafkaTemplate;
     }

@@ -22,12 +22,16 @@ public class KafkaConsumerService {
     private final KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate;
     private final KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate;
 
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
     public KafkaConsumerService(KafkaTemplate<String, SlotDeletedMessage> slotDeletedMessageKafkaTemplate,
                                 KafkaTemplate<String, SlotCreatedMessage> slotCreatedMessageKafkaTemplate,
-                                KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate) {
+                                KafkaTemplate<String, SlotUpdatedMessage> slotUpdatedMessageKafkaTemplate,
+                                KafkaTemplate<String, Object> kafkaTemplate) {
         this.slotDeletedMessageKafkaTemplate = slotDeletedMessageKafkaTemplate;
         this.slotCreatedMessageKafkaTemplate = slotCreatedMessageKafkaTemplate;
         this.slotUpdatedMessageKafkaTemplate = slotUpdatedMessageKafkaTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public void sendManagementStatusUpdated(ParkingSlot parkingSlot) {

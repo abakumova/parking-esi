@@ -1,7 +1,7 @@
 package edu.tartu.esi.search;
 
 import edu.tartu.esi.model.ParkingSlot;
-import edu.tartu.esi.model.ParkingSlotStatusEnum;
+import edu.tartu.esi.model.SlotStatusEnum;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -25,7 +25,7 @@ import java.util.List;
 public class ParkingSlotSearchDto extends GenericSearchDto<ParkingSlot> {
 
     private String price;
-    private ParkingSlotStatusEnum parkingSlotStatus;
+    private SlotStatusEnum parkingSlotStatus;
 
     protected void addFilters(Root<ParkingSlot> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, List<Predicate> filters) {
         if (StringUtils.isNotEmpty(price)) {

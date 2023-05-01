@@ -3,12 +3,10 @@ package edu.tartu.esi.kafka;
 import edu.tartu.esi.kafka.message.SlotCreatedMessage;
 import edu.tartu.esi.kafka.message.SlotDeletedMessage;
 import edu.tartu.esi.kafka.message.SlotUpdatedMessage;
-import edu.tartu.esi.model.CarCategory;
 import edu.tartu.esi.model.CarCategoryEnum;
 import edu.tartu.esi.model.ParkingRestriction;
 import edu.tartu.esi.model.ParkingSlot;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +44,7 @@ public class KafkaConsumerService {
 
     public void sendManagementStatusCreated(ParkingSlot parkingSlot) {
         String requestId = UUID.randomUUID().toString();
-        List<CarCategory> categories = parkingSlot.getParkingRestrictions()
+        List<CarCategoryEnum> categories = parkingSlot.getParkingRestrictions()
                 .stream()
                 .map(ParkingRestriction::getCategory)
                 .toList();

@@ -4,9 +4,8 @@ import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.exception.ParkingSlotNotFoundException;
 import edu.tartu.esi.kafka.KafkaConsumerService;
 import edu.tartu.esi.mapper.ParkingSlotMapper;
-import edu.tartu.esi.model.CarCategory;
-import edu.tartu.esi.model.ParkingRestriction;
 import edu.tartu.esi.model.ParkingSlot;
+import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.ParkingSlotRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +35,7 @@ public class ParkingSlotService {
                 .id(parkingSlotDto.getId())
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
+                .parkingSlotStatus(SlotStatusEnum.OPEN)
                 .parkingRestrictions(parkingSlotDto.getParkingRestrictions())
                 .location(parkingSlotDto.getLocation())
                 .build();

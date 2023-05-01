@@ -20,16 +20,14 @@ public class ParkingRestriction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotNull
+    //@NotNull
     private String parkingSlotId;
 
     private LocalDateTime timeFrom;
     private LocalDateTime timeUntil;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "car_categories_id")
-    private CarCategory category;
+    private CarCategoryEnum category;
 
     @Size(max = 50)
     private String code;

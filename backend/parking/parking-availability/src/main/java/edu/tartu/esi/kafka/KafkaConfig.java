@@ -24,19 +24,19 @@ public class KafkaConfig {
     public KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
+
     @Bean
-    public ProducerFactory<String, Object> producerFactory()  {
+    public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingresponsemessage:" + BookingPriceResponseMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingrequestmessage:" + BookingUpdateStatusMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingrequestmessage:" + BookingPriceRequestMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotCreatedMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotDeletedMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotUpdatedMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "locationrequestmessage:" + LocationMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, BookingPriceResponseMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, BookingPriceRequestMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotCreatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotDeletedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotUpdatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, LocationMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
 
@@ -44,93 +44,107 @@ public class KafkaConfig {
     public KafkaTemplate<String, SlotDeletedMessage> kafkaTemplateSlotDeleted() {
         return new KafkaTemplate<>(producerFactorySlotDeleted());
     }
+
     @Bean
     public ProducerFactory<String, SlotDeletedMessage> producerFactorySlotDeleted() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotDeletedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotDeletedMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public KafkaTemplate<String, BookingPriceResponseMessage> kafkaTemplateBookingPriceResponse() {
         return new KafkaTemplate<>(producerFactoryBookingPriceResponse());
     }
+
     @Bean
     public ProducerFactory<String, BookingPriceResponseMessage> producerFactoryBookingPriceResponse() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingresponsemessage:" + BookingPriceResponseMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, BookingPriceResponseMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public KafkaTemplate<String, BookingUpdateStatusMessage> kafkaTemplateBookingUpdateStatus() {
         return new KafkaTemplate<>(producerFactoryBookingUpdateStatus());
     }
+
     @Bean
     public ProducerFactory<String, BookingUpdateStatusMessage> producerFactoryBookingUpdateStatus() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingrequestmessage:" + BookingUpdateStatusMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, BookingUpdateStatusMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public KafkaTemplate<String, BookingPriceRequestMessage> kafkaTemplateBookingPriceRequest() {
         return new KafkaTemplate<>(producerFactoryBookingPriceRequest());
     }
+
     @Bean
     public ProducerFactory<String, BookingPriceRequestMessage> producerFactoryBookingPriceRequest() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "bookingrequestmessage:" + BookingPriceRequestMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, BookingPriceRequestMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public KafkaTemplate<String, SlotCreatedMessage> kafkaTemplateSlotCreated() {
         return new KafkaTemplate<>(producerFactorySlotCreated());
     }
+
     @Bean
     public ProducerFactory<String, SlotCreatedMessage> producerFactorySlotCreated() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotCreatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotCreatedMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public KafkaTemplate<String, SlotUpdatedMessage> kafkaTemplateSlotUpdated() {
         return new KafkaTemplate<>(producerFactorySlotUpdated());
     }
+
     @Bean
     public ProducerFactory<String, SlotUpdatedMessage> producerFactorySlotUpdated() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotUpdatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotUpdatedMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public KafkaTemplate<String, LocationMessage> kafkaTemplateLocation() {
         return new KafkaTemplate<>(producerFactoryLocation());
     }
+
     @Bean
     public ProducerFactory<String, LocationMessage> producerFactoryLocation() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "locationrequestmessage:" + LocationMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, LocationMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public ConsumerFactory<String, Object> consumerFactory() {
         Map<String, Object> config = new HashMap<>();

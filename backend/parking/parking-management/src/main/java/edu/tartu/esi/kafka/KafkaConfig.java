@@ -49,7 +49,7 @@ public class KafkaConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotDeletedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotDeletedMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
 
@@ -59,7 +59,7 @@ public class KafkaConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotCreatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotCreatedMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
 
@@ -69,7 +69,7 @@ public class KafkaConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotUpdatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotUpdatedMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
 
@@ -79,9 +79,9 @@ public class KafkaConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotCreatedMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotDeletedMessage.class.getName());
-        config.put(JsonSerializer.TYPE_MAPPINGS, "managementrequestmessage:" + SlotUpdatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotCreatedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotDeletedMessage.class.getName());
+        config.put(JsonSerializer.TYPE_MAPPINGS, SlotUpdatedMessage.class.getName());
         return new DefaultKafkaProducerFactory<>(config);
     }
 

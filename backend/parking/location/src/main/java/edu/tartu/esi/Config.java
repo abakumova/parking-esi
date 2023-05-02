@@ -15,9 +15,4 @@ public class Config {
                 .apiKey("AIzaSyDpDx-V5s6lH1W0HLqmE9MvkX4zMFP3TfY")
                 .build();
     }
-
-    @Bean
-    public String kafkaTopic() {
-        return "location";
-    }
 }

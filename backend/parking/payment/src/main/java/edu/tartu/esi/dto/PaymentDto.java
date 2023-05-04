@@ -1,6 +1,6 @@
 package edu.tartu.esi.dto;
 
-import edu.tartu.esi.model.Payment;
+import edu.tartu.esi.model.PaymentStatusEnum;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,5 +15,5 @@ public class PaymentDto {
     private String bookingId;
     private LocalDateTime time;
     private BigDecimal amount;
-    private Payment.PaymentStatus status;
+    private PaymentStatusEnum status;
 }

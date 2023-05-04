@@ -20,7 +20,6 @@
         <module>location</module>
         <module>parking-management</module>
         <module>booking</module>
-        <module>parking-availability</module>
         <module>payment</module>
     </modules>
 

@@ -99,6 +99,21 @@ public class UserService {
         log.info("-- User {} is updated", id);
     }
 
+    public String getUserBalanceById(String id) {
+        log.info("-- getUserBalanceById");
+        User user = userRepository.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException(format("User with id = %s wasn't found", id)));
+        return user.getPaymentMethod().getBalance();
+    }
+
+    public void updateUserBalanceById(String id, String balance) {
+        log.info("-- updateUserBalanceById");
+        User user = userRepository.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException(format("User with id = %s wasn't found", id)));
+        user.getPaymentMethod().setBalance(balance);
+        userRepository.save(user);
+    }
+
     private void assertUserDto(UserDto user, String msg) {
         if (user == null) {
             log.info("The body payload is missed");

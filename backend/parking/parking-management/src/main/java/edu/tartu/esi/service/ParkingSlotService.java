@@ -71,6 +71,11 @@ public class ParkingSlotService {
         log.info("-- Parking slot {} has been deleted", id);
     }
 
+
+    public List<ParkingSlotDto> getParkingSlotByStatus(String status) {
+        return parkingSlotRepository.findAllByStatus(status);
+    }
+
     private void assertParkingSlotDto(ParkingSlotDto parking, String msg) {
         if (parking == null) {
             log.info("The body is missing");

@@ -25,6 +25,12 @@ public class ParkingSlotController {
         return parkingSlotService.getParkingSlotById(id);
     }
 
+    @GetMapping(value = "/parking-slots/{status}", produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public ParkingSlotDto getParkingSlotByStatus(@Valid @PathVariable String status) {
+        return parkingSlotService.getParkingSlotByStatus(status);
+    }
+
     @PostMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> createParkingSlot(@Valid @RequestBody ParkingSlotDto parkingSlotDto) {

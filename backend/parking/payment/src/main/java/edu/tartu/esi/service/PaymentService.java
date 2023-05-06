@@ -1,6 +1,6 @@
 package edu.tartu.esi.service;
 
-import edu.tartu.esi.mapper.PaymentMapper;
+import edu.tartu.esi.mapper.PaymentEntityMapper;
 import edu.tartu.esi.model.Booking;
 import edu.tartu.esi.model.Payment;
 import edu.tartu.esi.model.PaymentStatusEnum;
@@ -21,10 +21,10 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
-    private final PaymentMapper paymentMapper;
+    private PaymentEntityMapper paymentMapper;
 
     @Autowired
-    private static WebClient.Builder webClientBuilder;
+    private WebClient.Builder webClientBuilder;
 
     public PaymentStatusEnum makePayment(String bookingId) {
         Booking booking = getBooking(bookingId);
@@ -63,7 +63,7 @@ public class PaymentService {
     }
 
 
-    public static void updateBalance(String userId, String newBalanceStr) {
+    public void updateBalance(String userId, String newBalanceStr) {
         webClientBuilder.build()
                 .post()
                 .uri("http://localhost:8083/api/v1/users/{id}/balance", userId)
@@ -73,7 +73,7 @@ public class PaymentService {
                 .block();
     }
 
-    public static Booking getBooking(String bookingId) {
+    public  Booking getBooking(String bookingId) {
         return webClientBuilder
                 .build()
                 .get()
@@ -83,7 +83,7 @@ public class PaymentService {
                 .block();
     }
 
-    public static String getPaymentMethodDtoForUser(String userId) {
+    public String getPaymentMethodDtoForUser(String userId) {
         return webClientBuilder
                 .build()
                 .get()

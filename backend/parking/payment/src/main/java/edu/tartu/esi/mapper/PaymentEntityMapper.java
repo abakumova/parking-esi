@@ -5,7 +5,7 @@ import edu.tartu.esi.model.Payment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PaymentMapper {
+public class PaymentEntityMapper {
 
     public PaymentDto toDto(Payment payment) {
         PaymentDto dto = new PaymentDto();

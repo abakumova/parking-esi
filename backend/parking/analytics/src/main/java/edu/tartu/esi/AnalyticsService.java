@@ -14,11 +14,10 @@ public class AnalyticsService {
     @Autowired
     private AnalyticsRepository analyticsRepository;
 
-    @Autowired
     private AnalyticsMapper analyticsMapper;
 
     @Transactional
-    @KafkaListener(topics = "booking-created-topic", groupId = "analytics-group")
+    @KafkaListener(topics = "booking-topic", groupId = "analytics-group")
     public void onBookingCreated(BookingDto bookingDto) {
         String parkingSlotId = bookingDto.getParkingSlotId();
         Analytics analytics = analyticsRepository.findByParkingSlotId(parkingSlotId);

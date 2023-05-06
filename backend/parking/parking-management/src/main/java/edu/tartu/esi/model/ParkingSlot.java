@@ -29,11 +29,9 @@ public class ParkingSlot {
     @NotBlank
     @Size(max = 50)
     private String price;
-    
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parking_restrictions_id")
-    private List<ParkingRestriction> parkingRestrictions;
 
     @Embedded
     private Location location;
+
+    private SlotStatusEnum status;
 }

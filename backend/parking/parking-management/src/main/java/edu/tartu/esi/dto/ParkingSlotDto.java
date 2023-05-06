@@ -1,14 +1,12 @@
 package edu.tartu.esi.dto;
 
 import edu.tartu.esi.model.Location;
-import edu.tartu.esi.model.ParkingRestriction;
+import edu.tartu.esi.model.SlotStatusEnum;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Builder
 @Data
@@ -20,6 +18,6 @@ public class ParkingSlotDto {
     private String id;
     private String landlordId;
     private String price;
-    private List<ParkingRestriction> parkingRestrictions;
     private Location location;
+    private SlotStatusEnum status;
 }

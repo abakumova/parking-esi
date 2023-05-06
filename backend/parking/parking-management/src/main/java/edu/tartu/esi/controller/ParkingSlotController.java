@@ -1,6 +1,8 @@
 package edu.tartu.esi.controller;
 
 import edu.tartu.esi.dto.ParkingSlotDto;
+import edu.tartu.esi.model.Location;
+import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.service.ParkingSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,8 +30,14 @@ public class ParkingSlotController {
 
     @GetMapping(value = "/parking-slots/{status}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public ParkingSlotDto getParkingSlotByStatus(@Valid @PathVariable String status) {
+    public List<ParkingSlotDto> getParkingSlotByStatus(@Valid @PathVariable SlotStatusEnum status) {
         return parkingSlotService.getParkingSlotByStatus(status);
+    }
+
+    @GetMapping(value = "/parking-slots/{location}", produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParkingSlotDto> getParkingSlotByLocation(@Valid @PathVariable Location location) {
+        return parkingSlotService.getParkingSlotByLocation(location);
     }
 
     @PostMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})

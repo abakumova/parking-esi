@@ -23,7 +23,7 @@ public enum SlotStatusEnum {
         }
     }
 
-    public static SlotStatusEnum getRoleById(int parkingStatusId) {
+    public static SlotStatusEnum getParkingSlotById(int parkingStatusId) {
         return switch (parkingStatusId) {
             case 1 -> OPEN;
             case 2 -> CLOSED;

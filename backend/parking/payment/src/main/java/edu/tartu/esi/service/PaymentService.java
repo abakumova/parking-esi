@@ -1,7 +1,5 @@
 package edu.tartu.esi.service;
 
-import edu.tartu.esi.kafka.message.UserBalanceMessage;
-import edu.tartu.esi.kafka.message.UserRequestMessage;
 import edu.tartu.esi.mapper.PaymentMapper;
 import edu.tartu.esi.model.Booking;
 import edu.tartu.esi.model.Payment;
@@ -29,14 +27,9 @@ public class PaymentService {
     @Autowired
     private static WebClient.Builder webClientBuilder;
 
-    private final KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate;
-    private final KafkaTemplate<String, UserBalanceMessage> paymentDtoKafkaTemplate;
-
-    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper, KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate, KafkaTemplate<String, UserBalanceMessage> paymentDtoKafkaTemplate) {
+    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
-        this.userRequestKafkaTemplate = userRequestKafkaTemplate;
-        this.paymentDtoKafkaTemplate = paymentDtoKafkaTemplate;
     }
 
 

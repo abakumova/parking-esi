@@ -28,7 +28,7 @@ public class BookingService {
     private BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
 
-    private final KafkaTemplate<String, BookingMessage> kafkaTemplate;
+//    private final KafkaTemplate<String, BookingMessage> kafkaTemplate;
 
 
     public void createBooking(BookingDto bookingDto) {
@@ -43,17 +43,17 @@ public class BookingService {
                 .build();
         bookingRepository.save(booking);
 
-        BookingMessage message = new BookingMessage(
-                UUID.randomUUID().toString(),
-                booking.getId(),
-                booking.getParkingSlotId(),
-                booking.getTimeFrom(),
-                booking.getTimeUntil(),
-                null,
-                null
-        );
-
-        kafkaTemplate.send("booking-topic", message);
+//        BookingMessage message = new BookingMessage(
+//                UUID.randomUUID().toString(),
+//                booking.getId(),
+//                booking.getParkingSlotId(),
+//                booking.getTimeFrom(),
+//                booking.getTimeUntil(),
+//                null,
+//                null
+//        );
+//
+//        kafkaTemplate.send("booking-topic", message);
         log.info("Booking {} is added to the Database", booking.getId());
     }
 

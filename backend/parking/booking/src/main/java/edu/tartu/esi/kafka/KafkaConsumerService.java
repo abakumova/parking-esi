@@ -1,6 +1,6 @@
-package edu.tartu.esi.kafka.message;
+package edu.tartu.esi.kafka;
 
-import edu.tartu.esi.dto.PaymentDto;
+import edu.tartu.esi.kafka.message.BookingMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -31,7 +31,7 @@ public class KafkaConsumerService {
 ////        log.debug("-- Message is formed {}", responseMessage);
 ////        kafkaTemplate.send("user-response", responseMessage);
 //    }
-    @KafkaListener(topics = "booking-topic", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = "booking-topic")
     public void consumeBookingMessage(BookingMessage bookingMessage, Acknowledgment acknowledgment) {
         // Process the booking message here
         System.out.println("Received booking message: " + bookingMessage);

@@ -34,26 +34,26 @@ public class PaymentService {
         this.paymentDtoKafkaTemplate = paymentDtoKafkaTemplate;
     }
 
-    @KafkaListener(topics = "balance-topic")
-    public void makePayment() {
-
-        String paymentMethodDto = getPaymentMethodDtoForUser(userId);
-
-//        // Update the balance and create the payment
-//        BigDecimal newBalance = new BigDecimal(paymentMethodDto.getBalance()).subtract(amount);
-//        paymentMethodDto.setBalance(String.valueOf(newBalance));
+//    @KafkaListener(topics = "balance-topic")
+//    public void makePayment() {
 //
-//        Payment payment = new Payment(UUID.randomUUID().toString(), payerId, receiverId, bookingId, amount, Payment.PaymentStatus.PENDING, LocalDateTime.now());
-//        paymentRepository.save(payment);
+//        String paymentMethodDto = getPaymentMethodDtoForUser(userId);
 //
-//        // Publish the payment result to the Kafka topic
-//        PaymentDto paymentDto = paymentMapper.toDto(payment);
-//        // requestId, userId, balance
-//        UserBalanceMessage userBalanceMessage = new UserBalanceMessage();
-//        userBalanceMessage.setRequestId("nfnnf");
-//        userBalanceMessage.setUserId(payerId);userBalanceMessage.setBalance("10");
-        paymentDtoKafkaTemplate.send("balance-topic", userBalanceMessage);
-    }
+////        // Update the balance and create the payment
+////        BigDecimal newBalance = new BigDecimal(paymentMethodDto.getBalance()).subtract(amount);
+////        paymentMethodDto.setBalance(String.valueOf(newBalance));
+////
+////        Payment payment = new Payment(UUID.randomUUID().toString(), payerId, receiverId, bookingId, amount, Payment.PaymentStatus.PENDING, LocalDateTime.now());
+////        paymentRepository.save(payment);
+////
+////        // Publish the payment result to the Kafka topic
+////        PaymentDto paymentDto = paymentMapper.toDto(payment);
+////        // requestId, userId, balance
+////        UserBalanceMessage userBalanceMessage = new UserBalanceMessage();
+////        userBalanceMessage.setRequestId("nfnnf");
+////        userBalanceMessage.setUserId(payerId);userBalanceMessage.setBalance("10");
+//        paymentDtoKafkaTemplate.send("balance-topic", userBalanceMessage);
+//    }
 
     public String getPaymentMethodDtoForUser(String userId) {
         return webClientBuilder

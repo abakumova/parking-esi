@@ -19,7 +19,7 @@ public class DatabaseInitializer {
         //TODO: update hardcoded values by reading from application.properties
         String url = "jdbc:postgresql://localhost:5432/";
         String username = "postgres";
-        String password = "postgres";
+        String password = "123123";
         String databaseName = "booking_db";
 
         DataSource dataSource = new DriverManagerDataSource(url, username, password);

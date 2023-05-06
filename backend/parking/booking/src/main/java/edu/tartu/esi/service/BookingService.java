@@ -2,6 +2,7 @@ package edu.tartu.esi.service;
 
 import edu.tartu.esi.dto.BookingDto;
 import edu.tartu.esi.exception.BookingNotFoundException;
+import edu.tartu.esi.kafka.message.BookingMessage;
 import edu.tartu.esi.mapper.BookingMapper;
 import edu.tartu.esi.model.Booking;
 import edu.tartu.esi.repository.BookingRepository;
@@ -9,9 +10,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -25,6 +28,9 @@ public class BookingService {
     private BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
 
+    private final KafkaTemplate<String, BookingMessage> kafkaTemplate;
+
+
     public void createBooking(BookingDto bookingDto) {
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
@@ -36,6 +42,18 @@ public class BookingService {
                 .timeUntil(bookingDto.getTimeUntil())
                 .build();
         bookingRepository.save(booking);
+
+        BookingMessage message = new BookingMessage(
+                UUID.randomUUID().toString(),
+                booking.getId(),
+                booking.getParkingSlotId(),
+                booking.getTimeFrom(),
+                booking.getTimeUntil(),
+                null,
+                null
+        );
+
+        kafkaTemplate.send("booking-topic", message);
         log.info("Booking {} is added to the Database", booking.getId());
     }
 

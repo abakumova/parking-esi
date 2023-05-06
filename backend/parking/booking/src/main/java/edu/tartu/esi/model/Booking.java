@@ -38,4 +38,7 @@ public class Booking {
 
     @NotBlank
     private LocalDateTime timeUntil;
+
+    @NotBlank
+    private String landlordId;
 }

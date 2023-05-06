@@ -21,4 +21,5 @@ public class BookingDto {
     private String price;
     private LocalDateTime timeFrom;
     private LocalDateTime timeUntil;
+    private String landlordId;
 }

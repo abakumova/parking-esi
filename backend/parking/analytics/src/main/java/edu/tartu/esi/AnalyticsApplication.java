@@ -10,6 +10,6 @@ public class AnalyticsApplication {
 
     public static void main(String[] args) {
         DatabaseInitializer.initialize();
-        SpringApplication.run(BookingApplication.class, args);
+        SpringApplication.run(AnalyticsApplication.class, args);
     }
 }

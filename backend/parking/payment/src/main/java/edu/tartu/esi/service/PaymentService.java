@@ -5,35 +5,28 @@ import edu.tartu.esi.model.Booking;
 import edu.tartu.esi.model.Payment;
 import edu.tartu.esi.model.PaymentStatusEnum;
 import edu.tartu.esi.repository.PaymentRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.concurrent.CountDownLatch;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class PaymentService {
 
-    //private final ConcurrentMap<String, PaymentMethodDto> paymentMethodDto = new ConcurrentHashMap<>();
-    private static PaymentRepository paymentRepository;
+    @Autowired
+    private PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
 
     @Autowired
     private static WebClient.Builder webClientBuilder;
 
-    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
-        this.paymentRepository = paymentRepository;
-        this.paymentMapper = paymentMapper;
-    }
-
-
-    public static PaymentStatusEnum makePayment(String bookingId) {
+    public PaymentStatusEnum makePayment(String bookingId) {
         Booking booking = getBooking(bookingId);
 
         String oldBalanceStr = getPaymentMethodDtoForUser(booking.getCustomerId());

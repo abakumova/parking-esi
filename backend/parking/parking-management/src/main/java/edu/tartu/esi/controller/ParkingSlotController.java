@@ -1,11 +1,11 @@
 package edu.tartu.esi.controller;
 
 import edu.tartu.esi.dto.ParkingSlotDto;
-import edu.tartu.esi.model.Location;
 import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.service.ParkingSlotService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 @RequestMapping("/api/v1")
 public class ParkingSlotController {
+
     @Autowired
     private ParkingSlotService parkingSlotService;
 
@@ -48,16 +50,16 @@ public class ParkingSlotController {
         return ResponseEntity.ok("Parking slot has been created");
     }
 
-    @PutMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})
+    @PutMapping(value = "/parking-slots/{id}", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> updateParkingSlot(@Valid @PathVariable String id, @Valid @RequestBody ParkingSlotDto parkingSlotDto) {
         parkingSlotService.updateParkingSlot(id, parkingSlotDto);
         return ResponseEntity.ok("Parking slot has been updated");
     }
 
-    @PutMapping(value = "/parking-slots/status", consumes = {"application/json"}, produces = {"application/json"})
+    @PutMapping(value = "/parking-slots/{id}/status")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> updateParkingSlotStatus(@Valid @PathVariable String id, @Valid @RequestBody String status) {
+    public ResponseEntity<String> updateParkingSlotStatus(@Valid @PathVariable String id, @Valid @RequestBody SlotStatusEnum status) {
         parkingSlotService.updateParkingSlotStatus(id, status);
         return ResponseEntity.ok("Parking slot status has been updated");
     }

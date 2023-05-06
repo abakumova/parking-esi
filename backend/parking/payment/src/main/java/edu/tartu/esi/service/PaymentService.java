@@ -65,18 +65,19 @@ public class PaymentService {
 
     public void updateBalance(String userId, String newBalanceStr) {
         webClientBuilder.build()
-                .post()
-                .uri("http://localhost:8083/api/v1/users/{id}/balance", userId)
+                .put()
+                .uri("http://localhost:8083/api/v1/users/" + userId + "/balance")
                 .bodyValue(newBalanceStr)
                 .retrieve()
                 .bodyToMono(Void.class)
-                .block();}
+                .block();
+    }
 
     public Booking getBooking(String bookingId) {
         return webClientBuilder
                 .build()
                 .get()
-                .uri("http://localhost:8086/api/v1/bookings/{id}", bookingId)
+                .uri("http://localhost:8086/api/v1/bookings/" + bookingId)
                 .retrieve()
                 .bodyToMono(Booking.class)
                 .block();
@@ -86,7 +87,7 @@ public class PaymentService {
         return webClientBuilder
                 .build()
                 .get()
-                .uri("http://localhost:8083/api/v1/users/{id}/balance", userId)
+                .uri("http://localhost:8083/api/v1/users/" + userId + "/balance")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

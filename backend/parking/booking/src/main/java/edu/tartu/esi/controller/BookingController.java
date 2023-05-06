@@ -20,7 +20,7 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @GetMapping(value = "/bookings/{userId}", produces = {"application/json"})
+    @GetMapping(value = "/bookings/by-user/{userId}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> getBookingsByUserId(@Valid @PathVariable String userId) {
         return bookingService.getAllBookingsByUserId(userId);

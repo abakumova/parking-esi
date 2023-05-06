@@ -84,10 +84,11 @@ public class ParkingSlotService {
 
         return result;
     }
-    public void updateParkingSlotStatus(String id, String status) {
+
+    public void updateParkingSlotStatus(String id, SlotStatusEnum status) {
         ParkingSlot parkingSlot = parkingSlotRepository.findById(id)
                 .orElseThrow(() -> new ParkingSlotNotFoundException(format("Parking slot with id = %s wasn't found", id)));
-        parkingSlot.setParkingSlotStatus(SlotStatusEnum.getParkingSlotStatusByName(status));
+        parkingSlot.setParkingSlotStatus(status);
         parkingSlotRepository.save(parkingSlot);
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());
     }

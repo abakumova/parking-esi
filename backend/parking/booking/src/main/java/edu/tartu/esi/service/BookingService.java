@@ -45,6 +45,7 @@ public class BookingService {
                 .price(bookingDto.getPrice())
                 .timeFrom(bookingDto.getTimeFrom())
                 .timeUntil(bookingDto.getTimeUntil())
+                .landlordId(bookingDto.getLandlordId())
                 .build();
         bookingRepository.save(booking);
 
@@ -74,15 +75,15 @@ public class BookingService {
     @Transactional
     public BookingDto getBookingById(String id) {
         log.info("-- fetch bookings");
-        Booking booking = bookingRepository.findById(id)
+        Booking booking = bookingRepository.findBookingById(id)
                 .orElseThrow(() -> new BookingNotFoundException(format("Booking with id = %s wasn't found", id)));
         return bookingMapper.toDto(booking);
     }
 
     public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) {
         webClientBuilder.build()
-                .post()
-                .uri("http://localhost:8084/api/v1/parking-slots/status", parkingSlotId)
+                .put()
+                .uri("http://localhost:8084/api/v1/parking-slots/"+ parkingSlotId + "/status")
                 .bodyValue(status)
                 .retrieve()
                 .bodyToMono(Void.class)

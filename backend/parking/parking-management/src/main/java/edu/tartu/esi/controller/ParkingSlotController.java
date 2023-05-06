@@ -55,6 +55,13 @@ public class ParkingSlotController {
         return ResponseEntity.ok("Parking slot has been updated");
     }
 
+    @PutMapping(value = "/parking-slots/status", consumes = {"application/json"}, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> updateParkingSlotStatus(@Valid @PathVariable String id, @Valid @RequestBody String status) {
+        parkingSlotService.updateParkingSlotStatus(id, status);
+        return ResponseEntity.ok("Parking slot status has been updated");
+    }
+
     @DeleteMapping(value = "/parking-slots/{id}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deleteParkingStatus(@Valid @PathVariable String id) {

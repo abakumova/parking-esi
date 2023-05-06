@@ -46,7 +46,7 @@ public class ParkingSlotService {
     public ParkingSlotDto getParkingSlotById(String id) {
         log.info("-- fetch parking slots");
         ParkingSlot parkingSlot = parkingSlotRepository.findById(id)
-                .orElseThrow(() -> new ParkingSlotNotFoundException(format("Parking slot with id = %s wan't found", id)));
+                .orElseThrow(() -> new ParkingSlotNotFoundException(format("Parking slot with id = %s wasn't found", id)));
         return parkingSlotMapper.toDto(parkingSlot);
     }
 
@@ -83,6 +83,13 @@ public class ParkingSlotService {
         log.warn("-- getParkingSlotByLocation LOCATION {}", result);
 
         return result;
+    }
+    public void updateParkingSlotStatus(String id, String status) {
+        ParkingSlot parkingSlot = parkingSlotRepository.findById(id)
+                .orElseThrow(() -> new ParkingSlotNotFoundException(format("Parking slot with id = %s wasn't found", id)));
+        parkingSlot.setParkingSlotStatus(SlotStatusEnum.getParkingSlotStatusByName(status));
+        parkingSlotRepository.save(parkingSlot);
+        log.info("-- Parking Slot {} has been updated", parkingSlot.getId());
     }
 
     private void assertParkingSlotDto(ParkingSlotDto parking, String msg) {

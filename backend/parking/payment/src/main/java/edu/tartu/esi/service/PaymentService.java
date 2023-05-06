@@ -70,10 +70,9 @@ public class PaymentService {
                 .bodyValue(newBalanceStr)
                 .retrieve()
                 .bodyToMono(Void.class)
-                .block();
-    }
+                .block();}
 
-    public  Booking getBooking(String bookingId) {
+    public Booking getBooking(String bookingId) {
         return webClientBuilder
                 .build()
                 .get()

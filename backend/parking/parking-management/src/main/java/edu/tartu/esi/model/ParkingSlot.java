@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity
 @Table(name = "parking_slots")
@@ -24,6 +23,7 @@ public class ParkingSlot {
     @NotBlank
     private String landlordId;
 
+    @Enumerated(EnumType.STRING)
     private SlotStatusEnum parkingSlotStatus;
 
     @NotBlank
@@ -32,6 +32,4 @@ public class ParkingSlot {
 
     @Embedded
     private Location location;
-
-    private SlotStatusEnum status;
 }

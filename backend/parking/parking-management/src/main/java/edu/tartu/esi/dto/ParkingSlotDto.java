@@ -2,6 +2,8 @@ package edu.tartu.esi.dto;
 
 import edu.tartu.esi.model.Location;
 import edu.tartu.esi.model.SlotStatusEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +21,6 @@ public class ParkingSlotDto {
     private String landlordId;
     private String price;
     private Location location;
-    private SlotStatusEnum status;
+    @Enumerated(EnumType.STRING)
+    private SlotStatusEnum parkingSlotStatus;
 }

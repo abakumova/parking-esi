@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -66,24 +67,22 @@ public class ParkingSlotService {
     }
 
 
-    public List<ParkingSlotDto> getParkingSlotByStatus(SlotStatusEnum status) {
+    public List<ParkingSlot> getParkingSlotByStatus(SlotStatusEnum status) {
         log.info("-- getParkingSlotByStatus");
         return parkingSlotRepository.findAllByStatus(status);
     }
 
-    public List<ParkingSlotDto> getParkingSlotByLocation(Location location) {
-        List<ParkingSlotDto> list = parkingSlotRepository.findAllByStatus(SlotStatusEnum.OPEN);
+    public List<ParkingSlot> getParkingSlotByLocation(String lat, String lon) {
+        List<ParkingSlot> list = parkingSlotRepository.findAllByStatus(SlotStatusEnum.OPEN);
         log.debug("-- getParkingSlotByLocation Status OPEN {}", list);
-        Optional<ParkingSlotDto> result = list
+        List<ParkingSlot> result = list
                 .stream()
                 .filter(slot -> distance(slot.getLocation().getLatitude(), slot.getLocation().getLongitude(),
-                        location.getLatitude(), location.getLongitude()) < 1.0) //1 KM
-                .findAny();
-        log.debug("-- getParkingSlotByLocation LOCATION {}", result);
+                        Double.parseDouble(lat), Double.parseDouble(lon)) < 1.0) //1 KM
+                .collect(Collectors.toList());
+        log.warn("-- getParkingSlotByLocation LOCATION {}", result);
 
-        return result
-                .map(Collections::singletonList)
-                .orElse(Collections.emptyList());
+        return result;
     }
 
     private void assertParkingSlotDto(ParkingSlotDto parking, String msg) {

@@ -2,6 +2,7 @@ package edu.tartu.esi.controller;
 
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.model.Location;
+import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.service.ParkingSlotService;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +23,22 @@ public class ParkingSlotController {
     @Autowired
     private ParkingSlotService parkingSlotService;
 
-    @GetMapping(value = "/parking-slots/{id}", produces = {"application/json"})
+    @GetMapping(value = "/parking-slots/by-id/{slotId}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public ParkingSlotDto getParkingSlot(@Valid @PathVariable String id) {
-        return parkingSlotService.getParkingSlotById(id);
+    public ParkingSlotDto getParkingSlot(@Valid @PathVariable String slotId) {
+        return parkingSlotService.getParkingSlotById(slotId);
     }
 
-    @GetMapping(value = "/parking-slots/{status}", produces = {"application/json"})
+    @GetMapping(value = "/parking-slots/by-status/{status}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public List<ParkingSlotDto> getParkingSlotByStatus(@Valid @PathVariable SlotStatusEnum status) {
+    public List<ParkingSlot> getParkingSlotByStatus(@Valid @PathVariable SlotStatusEnum status) {
         return parkingSlotService.getParkingSlotByStatus(status);
     }
 
-    @GetMapping(value = "/parking-slots/{location}", produces = {"application/json"})
+    @GetMapping(value = "/parking-slots/by-location/{lat}/{lon}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public List<ParkingSlotDto> getParkingSlotByLocation(@Valid @PathVariable Location location) {
-        return parkingSlotService.getParkingSlotByLocation(location);
+    public List<ParkingSlot> getParkingSlotByLocation(@Valid @PathVariable String lat, @Valid @PathVariable String lon) {
+        return parkingSlotService.getParkingSlotByLocation(lat, lon);
     }
 
     @PostMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})

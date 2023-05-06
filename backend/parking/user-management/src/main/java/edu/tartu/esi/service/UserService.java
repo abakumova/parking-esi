@@ -6,6 +6,7 @@ import edu.tartu.esi.exception.EmailAlreadyExistsException;
 import edu.tartu.esi.exception.UserNotFoundException;
 import edu.tartu.esi.mapper.UserMapper;
 import edu.tartu.esi.model.User;
+import edu.tartu.esi.model.UserRoleEnum;
 import edu.tartu.esi.repository.UserRepository;
 import edu.tartu.esi.search.GenericSearchDto;
 import jakarta.transaction.Transactional;
@@ -43,19 +44,20 @@ public class UserService {
                 .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDto.getPassword()))
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
-                .userRole(userDto.getUserRoleEnum())
+                .userRole(userDto.getUserRole())
                 .paymentMethod(userDto.getPaymentMethod())
                 .build();
         userRepository.save(newUser);
 
-        log.info("-- createUser; User {} is created", userDto.getId());
+        log.info("-- createUser; User {} is created", newUser.getId());
     }
 
     @Transactional
     public UserDto getUserById(String id) {
-        log.info("-- fetchUser");
+        log.info("-- fetchUser {}", id);
         User user = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(format("User with id = %s wasn't found", id)));
+        log.warn("-- get USER {}", userMapper.toDto(user));
         return userMapper.toDto(user);
     }
 
@@ -92,7 +94,7 @@ public class UserService {
                 .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDto.getPassword()))
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
-                .userRole(userDto.getUserRoleEnum())
+                .userRole(userDto.getUserRole())
                 .paymentMethod(userDto.getPaymentMethod())
                 .build();
         userRepository.save(newUser);

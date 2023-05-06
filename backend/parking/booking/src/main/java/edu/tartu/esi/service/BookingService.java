@@ -90,12 +90,12 @@ public class BookingService {
     }
 
     public PaymentStatusEnum requestPayment(String bookingId) {
-        webClientBuilder.build()
+        return webClientBuilder.build()
                 .post()
                 .uri("http://localhost:8087/api/v1/make-payment")
                 .bodyValue(bookingId)
                 .retrieve()
-                .bodyToMono(Void.class)
+                .bodyToMono(PaymentStatusEnum.class)
                 .block();
     }
 

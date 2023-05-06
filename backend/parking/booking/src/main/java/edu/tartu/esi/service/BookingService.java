@@ -5,6 +5,8 @@ import edu.tartu.esi.exception.BookingNotFoundException;
 import edu.tartu.esi.kafka.message.BookingMessage;
 import edu.tartu.esi.mapper.BookingMapper;
 import edu.tartu.esi.model.Booking;
+import edu.tartu.esi.model.PaymentStatusEnum;
+import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.BookingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,11 +30,13 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
+    @Autowired
+    private WebClient.Builder webClientBuilder;
 
 //    private final KafkaTemplate<String, BookingMessage> kafkaTemplate;
 
 
-    public void createBooking(BookingDto bookingDto) {
+    public String createBooking(BookingDto bookingDto) {
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
                 .id(bookingDto.getId())
@@ -54,7 +59,16 @@ public class BookingService {
 //        );
 //
 //        kafkaTemplate.send("booking-topic", message);
+
         log.info("Booking {} is added to the Database", booking.getId());
+
+        PaymentStatusEnum status = requestPayment(booking.getId());
+        if (status.equals(PaymentStatusEnum.COMPLETED)) {
+            updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
+            return "Booking completed.";
+        } else {
+            return "Payment rejected.";
+        }
     }
 
     @Transactional
@@ -63,6 +77,26 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new BookingNotFoundException(format("Booking with id = %s wasn't found", id)));
         return bookingMapper.toDto(booking);
+    }
+
+    public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) {
+        webClientBuilder.build()
+                .post()
+                .uri("http://localhost:8084/api/v1/parking-slots/status", parkingSlotId)
+                .bodyValue(status)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
+
+    public PaymentStatusEnum requestPayment(String bookingId) {
+        webClientBuilder.build()
+                .post()
+                .uri("http://localhost:8087/api/v1/make-payment")
+                .bodyValue(bookingId)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
     }
 
     public void updateBooking(String id, BookingDto bookingDto) {

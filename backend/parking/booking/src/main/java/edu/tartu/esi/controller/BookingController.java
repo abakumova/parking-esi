@@ -35,21 +35,21 @@ public class BookingController {
     @PostMapping(value = "/bookings", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> createBooking(@Valid @RequestBody BookingDto bookingDto) {
-        bookingService.createBooking(bookingDto);
-        return ResponseEntity.ok("Parking restriction has been created");
+        String response = bookingService.createBooking(bookingDto);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping(value = "/bookings/{id}", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> updateBooking(@Valid @PathVariable String id, @Valid @RequestBody BookingDto bookingDto) {
         bookingService.updateBooking(id, bookingDto);
-        return ResponseEntity.ok("Parking restriction has been updated");
+        return ResponseEntity.ok("Booking has been updated");
     }
 
     @DeleteMapping(value = "/bookings/{id}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deleteParkingStatus(@Valid @PathVariable String id) {
         bookingService.deleteBooking(id);
-        return ResponseEntity.ok("Parking restriction has been deleted");
+        return ResponseEntity.ok("Booking has been deleted");
     }
 }

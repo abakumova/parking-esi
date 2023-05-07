@@ -3,8 +3,7 @@
         <div class="signup-form">
             <h1><router-link to="/">
                 <i class="arrow"/>
-            </router-link>Sign Up</h1>
-
+            </router-link>{{en}}Sign Up</h1>
             <label for="email">Email</label>
             <input id="email" type="email" v-model="email" required>
 
@@ -18,9 +17,9 @@
             <input id="lastName" type="text" v-model="lastName" required>
 
             <label for="role">Role</label>
-            <select id="role" v-model="role">
-                <option value="landlord">Landlord</option>
-                <option value="user">User</option>
+            <select id="role" v-model="userRole">
+                <option value="LANDLORD">Landlord</option>
+                <option value="USER">User</option>
             </select>
 
             <button class="btn-sign-up" @click="signUp">Sign Up</button>
@@ -33,14 +32,16 @@
 import './SignUp.css'
 export default {
     name: "SignUp",
-    data() {
-        return {
+    data(){ return {
+        en: process.env.SOMETHING,
+        val: {
             email: '',
             password: '',
             firstName: '',
             lastName: '',
-            role: 'user'
+            userRole: 'user'
         }
+    }
     },
     methods: {
         methods: {
@@ -49,6 +50,7 @@ export default {
             }
         },
         openSignIn() {
+            console.log(process.env.SOMETHING)
             this.$router.push({ name: 'signin' })
         }
     }

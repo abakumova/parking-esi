@@ -42,6 +42,12 @@ const routes = [
     booking: '/booking/:id',
     name: 'booking',
     component: Booking,
+  },
+
+  { //will route to AllPosts view if none of the previous routes apply
+    path: "/:catchAll(.*)",
+    name: "home",
+    component: Home,
   }
 ];
 

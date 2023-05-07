@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "*")
 public class BookingController {
     @Autowired
     private BookingService bookingService;

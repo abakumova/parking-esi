@@ -19,6 +19,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 @Validated
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired

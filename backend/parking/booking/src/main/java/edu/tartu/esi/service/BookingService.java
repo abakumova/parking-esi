@@ -2,7 +2,6 @@ package edu.tartu.esi.service;
 
 import edu.tartu.esi.dto.BookingDto;
 import edu.tartu.esi.exception.BookingNotFoundException;
-import edu.tartu.esi.kafka.message.BookingMessage;
 import edu.tartu.esi.mapper.BookingMapper;
 import edu.tartu.esi.model.Booking;
 import edu.tartu.esi.model.PaymentStatusEnum;
@@ -16,6 +15,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,11 +29,11 @@ public class BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
-    private final BookingMapper bookingMapper;
+    private BookingMapper bookingMapper;
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    private final KafkaTemplate<String, BookingMessage> kafkaTemplate;
+    private final KafkaTemplate<String, BookingDto> kafkaTemplate;
 
 
     public String createBooking(BookingDto bookingDto) {
@@ -57,15 +57,17 @@ public class BookingService {
         if (status.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
 
-            BookingMessage message = new BookingMessage(
-                    UUID.randomUUID().toString(),
-                    booking.getId(),
-                    booking.getParkingSlotId(),
-                    booking.getTimeFrom(),
-                    booking.getTimeUntil(),
-                    null,
-                    null
-            );
+            BookingDto message = new BookingDto();
+
+            message.builder()
+                    .id(booking.getId())
+                    .customerId(booking.getCustomerId())
+                    .parkingSlotId(booking.getParkingSlotId())
+                    .price(booking.getPrice())
+                    .timeFrom(booking.getTimeFrom())
+                    .timeUntil(booking.getTimeUntil())
+                    .landlordId(booking.getLandlordId())
+                    .build();
 
             kafkaTemplate.send("booking-topic", message);
 

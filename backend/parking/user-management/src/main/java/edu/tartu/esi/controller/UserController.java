@@ -29,27 +29,37 @@ public class UserController {
         return userService.getUsers(genericSearchDto);
     }
 
-//    @RolesAllowed(ADMIN_ROLE)
+    //    @RolesAllowed(ADMIN_ROLE)
     @GetMapping(value = "/users/{id}", produces = {"application/json"})
     public UserDto fetchUser(@Valid @PathVariable String id) {
         return userService.getUserById(id);
     }
 
-//    @RolesAllowed(ADMIN_ROLE)
+    @GetMapping(value = "/users/{id}/balance", produces = {"application/json"})
+    public String fetchUserBalance(@Valid @PathVariable String id) {
+        return userService.getUserBalanceById(id);
+    }
+
+    @PutMapping(value = "/users/{id}/balance", produces = {"application/json"})
+    public void updateUserBalance(@Valid @PathVariable String id, @RequestBody String balance) {
+        userService.updateUserBalanceById(id, balance);
+    }
+
+    //    @RolesAllowed(ADMIN_ROLE)
     @PostMapping(value = "/users", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) {
         userService.createUser(userDto);
         return ResponseEntity.ok("User was created");
     }
 
-//    @RolesAllowed(ADMIN_ROLE)
+    //    @RolesAllowed(ADMIN_ROLE)
     @DeleteMapping(value = "/users/{id}", produces = {"application/json"})
     public ResponseEntity<String> deleteUser(@Valid @PathVariable String id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User was deleted");
     }
 
-//    @RolesAllowed(ADMIN_ROLE)
+    //    @RolesAllowed(ADMIN_ROLE)
     @PutMapping(value = "/users/{id}", produces = {"application/json"})
     public ResponseEntity<String> updateUser(@Valid @PathVariable String id, @Valid @RequestBody UserDto userDto) {
         userService.updateUser(id, userDto);

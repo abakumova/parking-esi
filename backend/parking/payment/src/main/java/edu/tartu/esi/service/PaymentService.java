@@ -1,77 +1,100 @@
 package edu.tartu.esi.service;
 
-import edu.tartu.esi.dto.PaymentMethodDto;
-import edu.tartu.esi.kafka.message.UserBalanceMessage;
-import edu.tartu.esi.kafka.message.UserRequestMessage;
-import edu.tartu.esi.kafka.message.UserPaymentMethodResponseMessage;
-import edu.tartu.esi.mapper.PaymentMapper;
+import edu.tartu.esi.mapper.PaymentEntityMapper;
+import edu.tartu.esi.model.Booking;
+import edu.tartu.esi.model.Payment;
+import edu.tartu.esi.model.PaymentStatusEnum;
 import edu.tartu.esi.repository.PaymentRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class PaymentService {
 
-    private final CountDownLatch latch = new CountDownLatch(1);
-    //private final ConcurrentMap<String, PaymentMethodDto> paymentMethodDto = new ConcurrentHashMap<>();
-    private final PaymentRepository paymentRepository;
-    private final PaymentMapper paymentMapper;
+    @Autowired
+    private PaymentRepository paymentRepository;
+    private PaymentEntityMapper paymentMapper;
 
-    private final KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate;
-    private final KafkaTemplate<String, UserBalanceMessage> paymentDtoKafkaTemplate;
+    @Autowired
+    private WebClient.Builder webClientBuilder;
 
-    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper, KafkaTemplate<String, UserRequestMessage> userRequestKafkaTemplate, KafkaTemplate<String, UserBalanceMessage> paymentDtoKafkaTemplate) {
-        this.paymentRepository = paymentRepository;
-        this.paymentMapper = paymentMapper;
-        this.userRequestKafkaTemplate = userRequestKafkaTemplate;
-        this.paymentDtoKafkaTemplate = paymentDtoKafkaTemplate;
+    public PaymentStatusEnum makePayment(String bookingId) {
+        Booking booking = getBooking(bookingId);
+
+        String oldBalanceStr = getPaymentMethodDtoForUser(booking.getCustomerId());
+        PaymentStatusEnum paymentStatus;
+
+        Duration duration = Duration.between(booking.getTimeFrom(), booking.getTimeUntil());
+        BigDecimal hours = new BigDecimal(duration.toHours());
+
+        BigDecimal oldBalance = new BigDecimal(oldBalanceStr);
+        String pricePerHour = booking.getPrice();
+        BigDecimal price = new BigDecimal(pricePerHour);
+        BigDecimal amount = price.multiply(hours);
+
+        if (oldBalance.compareTo(amount) >= 0) {
+            BigDecimal newBalance = oldBalance.subtract(amount);
+            updateBalance(booking.getCustomerId(), newBalance.toString());
+
+            paymentStatus = PaymentStatusEnum.COMPLETED;
+
+            BigDecimal balanceLandlord = new BigDecimal(getPaymentMethodDtoForUser(booking.getLandlordId()));
+            updateBalance(booking.getLandlordId(), balanceLandlord.add(amount).toString());
+        } else {
+            paymentStatus = PaymentStatusEnum.DECLINED;
+        }
+
+        Payment payment = Payment.builder()
+                .payerId(booking.getCustomerId())
+                .receiverId(booking.getLandlordId())
+                .bookingId(bookingId)
+                .time(LocalDateTime.now())
+                .amount(amount)
+                .status(paymentStatus)
+                .build();
+
+        paymentRepository.save(payment);
+
+        return paymentStatus;
     }
 
-//    public void makePayment(String payerId, String receiverId, String bookingId, BigDecimal amount) {
-//        // Get payment method for user
-//        PaymentMethodDto paymentMethodDto = getPaymentMethodDtoForUser(payerId);
-//
-//        // Update the balance and create the payment
-//        BigDecimal newBalance = new BigDecimal(paymentMethodDto.getBalance()).subtract(amount);
-//        paymentMethodDto.setBalance(String.valueOf(newBalance));
-//
-//        Payment payment = new Payment(UUID.randomUUID().toString(), payerId, receiverId, bookingId, amount, Payment.PaymentStatus.PENDING, LocalDateTime.now());
-//        paymentRepository.save(payment);
-//
-//        // Publish the payment result to the Kafka topic
-//        PaymentDto paymentDto = paymentMapper.toDto(payment);
-//        // requestId, userId, balance
-//        UserBalanceMessage userBalanceMessage = new UserBalanceMessage();
-//        userBalanceMessage.setRequestId("nfnnf");
-//        userBalanceMessage.setUserId(payerId);userBalanceMessage.setBalance("10");
-//        paymentDtoKafkaTemplate.send("balance-request", userBalanceMessage);
-//    }
 
-    @KafkaListener(topics = "user-response-topic", groupId = "payment-group",
-            containerFactory = "userRequestMessageListenerContainerFactory",
-            id = "user-message-listener")
-    public PaymentMethodDto getPaymentMethodDtoForUser(@Payload UserPaymentMethodResponseMessage message) {
-        String requestId = UUID.randomUUID().toString();
-        String userId = message.getUserId();
-        UserRequestMessage requestMessage = new UserRequestMessage(requestId, userId);
-        userRequestKafkaTemplate.send("user-request-topic", requestMessage);
+    public void updateBalance(String userId, String newBalanceStr) {
+        webClientBuilder.build()
+                .put()
+                .uri("http://localhost:8083/api/v1/users/" + userId + "/balance")
+                .bodyValue(newBalanceStr)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
 
-        try {
-            latch.await(15, TimeUnit.SECONDS);
-            if (userId.equals(message.getUserId())) {
-                return message.getPaymentMethodDTO();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Booking getBooking(String bookingId) {
+        return webClientBuilder
+                .build()
+                .get()
+                .uri("http://localhost:8086/api/v1/bookings/" + bookingId)
+                .retrieve()
+                .bodyToMono(Booking.class)
+                .block();
+    }
+
+    public String getPaymentMethodDtoForUser(String userId) {
+        return webClientBuilder
+                .build()
+                .get()
+                .uri("http://localhost:8083/api/v1/users/" + userId + "/balance")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
     }
 }

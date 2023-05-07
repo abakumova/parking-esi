@@ -1,18 +1,21 @@
 package edu.tartu.esi;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import edu.tartu.esi.mapper.EntityMapper;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
-public interface AnalyticsMapper {
+import java.util.List;
 
-    @Mappings({
-            @Mapping(source = "analytics.analyticsId", target = "analyticsId"),
-            @Mapping(source = "analytics.parkingSlotId", target = "parkingSlotId"),
-            @Mapping(source = "analytics.occupancy", target = "occupancy"),
-            @Mapping(source = "analytics.revenue", target = "revenue"),
-            @Mapping(source = "analytics.totalBookingDuration", target = "avgBookingDuration")
-    })
-    AnalyticsDTO toDto(Analytics analytics);
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface AnalyticsMapper extends EntityMapper<Analytics, AnalyticsDto> {
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    AnalyticsDto toDto(Analytics entity);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Analytics toEntity(AnalyticsDto dto);
+
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
+    List<Analytics> toEntities(List<AnalyticsDto> entityList);
 }

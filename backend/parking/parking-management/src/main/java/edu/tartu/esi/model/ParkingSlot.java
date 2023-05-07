@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity
 @Table(name = "parking_slots")
@@ -24,15 +23,12 @@ public class ParkingSlot {
     @NotBlank
     private String landlordId;
 
+    @Enumerated(EnumType.STRING)
     private SlotStatusEnum parkingSlotStatus;
 
     @NotBlank
     @Size(max = 50)
     private String price;
-    
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parking_restrictions_id")
-    private List<ParkingRestriction> parkingRestrictions;
 
     @Embedded
     private Location location;

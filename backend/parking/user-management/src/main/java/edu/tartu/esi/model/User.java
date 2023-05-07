@@ -22,6 +22,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private UserRoleEnum userRole;
 
     @NotBlank

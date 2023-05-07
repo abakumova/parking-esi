@@ -1,4 +1,4 @@
-package edu.tartu.esi.dto;
+package edu.tartu.esi;
 
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;

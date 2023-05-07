@@ -1,6 +1,7 @@
 package edu.tartu.esi;
 
-import edu.tartu.esi.dto.BookingDto;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 
 @Service
+@Slf4j
 public class AnalyticsService {
 
     @Autowired
@@ -17,8 +19,9 @@ public class AnalyticsService {
     @Autowired
     private AnalyticsMapper analyticsMapper;
 
+
     @Transactional
-    @KafkaListener(topics = "booking-created-topic", groupId = "analytics-group")
+    @KafkaListener(topics = "booking-topic", groupId = "analytics-group")
     public void onBookingCreated(BookingDto bookingDto) {
         String parkingSlotId = bookingDto.getParkingSlotId();
         Analytics analytics = analyticsRepository.findByParkingSlotId(parkingSlotId);
@@ -29,7 +32,7 @@ public class AnalyticsService {
         }
 
         double durationInHours = Duration.between(bookingDto.getTimeFrom(), bookingDto.getTimeUntil()).toMinutes() / 60.0;
-        double revenue = Double.parseDouble(bookingDto.getPrice());
+        double revenue = Double.parseDouble(bookingDto.getPrice()) * durationInHours;
         long totalBookingCount = analytics.getTotalBookingCount() + 1;
         long totalBookingDuration = analytics.getTotalBookingDuration() + (long) (durationInHours * 60);
 
@@ -41,7 +44,7 @@ public class AnalyticsService {
         analyticsRepository.save(analytics);
     }
 
-    public AnalyticsDTO getAnalytics(String parkingSlotId) {
+    public AnalyticsDto getAnalytics(String parkingSlotId) {
         Analytics analytics = analyticsRepository.findByParkingSlotId(parkingSlotId);
         if (analytics == null) {
             return null;

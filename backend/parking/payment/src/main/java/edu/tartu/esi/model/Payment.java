@@ -1,12 +1,14 @@
 package edu.tartu.esi.model;
 
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "payments")
+@Builder
 public class Payment {
 
     @Id
@@ -40,4 +43,5 @@ public class Payment {
 
     @CreationTimestamp
     private LocalDateTime time;
+
 }

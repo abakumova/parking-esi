@@ -2,6 +2,8 @@ package edu.tartu.esi.dto;
 
 import edu.tartu.esi.model.PaymentMethod;
 import edu.tartu.esi.model.UserRoleEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -16,7 +18,7 @@ public class UserDto {
 
     @Id
     private String id;
-    private UserRoleEnum userRoleEnum;
+    private UserRoleEnum userRole;
     private String firstName;
     private String lastName;
     private String email;

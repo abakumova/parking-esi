@@ -1,5 +1,8 @@
 package edu.tartu.esi.model;
 
+import lombok.*;
+
+@NoArgsConstructor
 public enum UserPermission {
 
     READ_OWN_DATA("user:read"),
@@ -9,7 +12,7 @@ public enum UserPermission {
     READ_LANDLORDS_DATA("landlords:read"),
     WRITE_LANDLORDS_DATA("landlords:write");
 
-    private final String permission;
+    private String permission;
 
     UserPermission(String permission) {
         this.permission = permission;

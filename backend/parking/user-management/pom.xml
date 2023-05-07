@@ -32,7 +32,14 @@
             <version>4.0.1</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.13</version>
+        </dependency>
+        <!-- Thanks for using https://jar-download.com -->
+
+        <!--        <dependency>-->
 <!--            <groupId>org.springframework.security</groupId>-->
 <!--            <artifactId>spring-security-test</artifactId>-->
 <!--            <scope>test</scope>-->

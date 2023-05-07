@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/analytics")
+@RequestMapping("/api/v1/analytics")
 public class AnalyticsController {
 
     @Autowired
     private AnalyticsService analyticsService;
 
     @GetMapping("/{parkingSlotId}")
-    public ResponseEntity<AnalyticsDTO> getAnalytics(@PathVariable String parkingSlotId) {
-        AnalyticsDTO analyticsDTO = analyticsService.getAnalytics(parkingSlotId);
+    public ResponseEntity<AnalyticsDto> getAnalytics(@PathVariable String parkingSlotId) {
+        AnalyticsDto analyticsDTO = analyticsService.getAnalytics(parkingSlotId);
         if (analyticsDTO == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

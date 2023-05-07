@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/backend/parking/analytics/.gitignore
+/backend/parking/location/.gitignore
+/backend/parking/payment/.gitignore

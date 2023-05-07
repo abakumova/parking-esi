@@ -1,13 +1,10 @@
 import axios from 'axios';
+import {API_LOCATION_ROUTE} from "@/api/routes";
+import HttpService from "@/api/HttpService";
 
-class LocationService {
-    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-    API_LOCATION_ROUTE = process.env.VUE_APP_API_LOCATION_ROUTE;
-
+class LocationService extends HttpService{
     constructor() {
-        this.http = axios.create({
-            baseURL: this.API_BASE_URL + this.API_LOCATION_ROUTE
-        });
+        super(API_LOCATION_ROUTE)
     }
 
     async getLocation(address) {

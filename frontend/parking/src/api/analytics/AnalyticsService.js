@@ -1,13 +1,10 @@
-import axios from 'axios';
+import HttpService from "@/api/HttpService";
+import {API_ANALYTICS_ROUTE} from "@/api/routes";
 
-class AnalyticsService {
-    API_BASE_URL=process.env.VUE_APP_API_BASE_URL;
-    API_ANALYTICS_ROUTE=process.env.VUE_APP_API_ANALYTICS_ROUTE;
+class AnalyticsService extends HttpService {
 
     constructor() {
-        this.http = axios.create({
-            baseURL: this.API_BASE_URL + this.API_ANALYTICS_ROUTE,
-        });
+        super(API_ANALYTICS_ROUTE)
     }
 
     getAnalyticsByParkingSlotId(parkingSlotId) {

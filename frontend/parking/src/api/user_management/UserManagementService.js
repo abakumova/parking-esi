@@ -1,13 +1,10 @@
-import axios from 'axios';
+import HttpService from "@/api/HttpService";
+import {API_USERS_ROUTE} from "@/api/routes";
 
-class UserManagementService {
-    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-    API_USERS_ROUTE = process.env.VUE_APP_API_USERS_ROUTE;
+class UserManagementService extends HttpService{
 
     constructor() {
-        this.http = axios.create({
-            baseURL: this.API_BASE_URL + this.API_USERS_ROUTE
-        });
+        super(API_USERS_ROUTE)
     }
 
     async getUserById(id) {
@@ -35,12 +32,12 @@ class UserManagementService {
     }
 
     async getUsers() {
-        const response = await this.http.get('');
+        const response = await this.http.get('/');
         return response.data;
     }
 
     async createUser(user) {
-        const response = await this.http.post('', user);
+        const response = await this.http.post('/', user);
         return response.data;
     }
 }

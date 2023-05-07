@@ -5,14 +5,13 @@ import LocationService from "@/api/location/LocationService";
 import AnalyticsService from "@/api/analytics/AnalyticsService";
 import PaymentService from "@/api/payment/PaymentService"
 
-
 const ApiService = {
     user: UserManagementService,
     parking: ParkingManagementService,
     booking: BookingService,
     location: LocationService,
     analytics: AnalyticsService,
-    payment: PaymentService
+    payment: PaymentService,
 };
 
 export default ApiService;

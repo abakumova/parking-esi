@@ -1,13 +1,11 @@
 import axios from 'axios';
+import HttpService from "@/api/HttpService";
+import {API_PARKING_ROUTE} from "@/api/routes";
 
-class ParkingManagementService {
-    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-    API_PARKING_ROUTE = process.env.VUE_APP_API_PARKING_ROUTE;
+class ParkingManagementService extends HttpService{
 
     constructor() {
-        this.http = axios.create({
-            baseURL: this.API_BASE_URL + this.API_PARKING_ROUTE
-        });
+        super(API_PARKING_ROUTE)
     }
     
     getParkingSlotById(id) {

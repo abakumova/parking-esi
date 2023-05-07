@@ -1,13 +1,9 @@
-import axios from 'axios';
+import HttpService from "@/api/HttpService";
+import {API_PAYMENT_ROUTE} from "@/api/routes";
 
-class PaymentService {
-    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-    API_PAYMENT_ROUTE = process.env.VUE_APP_API_PAYMENT_ROUTE;
-
+class PaymentService extends HttpService{
     constructor() {
-        this.http = axios.create({
-            baseURL: this.API_BASE_URL + this.API_PAYMENT_ROUTE
-        });
+        super(API_PAYMENT_ROUTE)
     }
 
     async makePayment(paymentData) {

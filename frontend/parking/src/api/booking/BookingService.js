@@ -1,13 +1,10 @@
 import axios from 'axios';
+import HttpService from "@/api/HttpService";
+import {API_BOOKING_ROUTE} from "@/api/routes";
 
-class BookingService {
-    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-    API_BOOKING_ROUTE = process.env.VUE_APP_API_BOOKING_ROUTE;
-
+class BookingService extends HttpService{
     constructor() {
-        this.http = axios.create({
-            baseURL: this.API_BASE_URL + this.API_BOOKING_ROUTE
-        });
+        super(API_BOOKING_ROUTE)
     }
 
     async getBooking(id) {

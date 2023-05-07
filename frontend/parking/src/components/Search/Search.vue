@@ -7,6 +7,7 @@
 
 <script>
 import './Search.css'
+import LocationService from "@/api/location/LocationService";
 export default {
     data() {
         return {
@@ -16,7 +17,16 @@ export default {
     methods: {
         search() {
             // TODO: perform search action
-            this.$router.push({ name: "search" });
+            LocationService.getLocation(this.searchTerm)
+                .then((response) => {
+                    console.log(response);
+                    // Handle the response from the LocationService
+                })
+                .catch((error) => {
+                    console.log(error);
+                    // Handle the error from the LocationService
+                });
+            // this.$router.push({ name: "search" });
         },
     },
 };

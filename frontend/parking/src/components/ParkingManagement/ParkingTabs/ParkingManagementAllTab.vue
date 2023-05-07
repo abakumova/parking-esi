@@ -9,7 +9,14 @@
 
             <div v-for="parking in parkings" :key="parking.id">
                 <div class="parking-card-container">
-                    <parking-card :parking="parking" />
+                    <parking-card
+                        :name="parking.name"
+                        :status="parking.status"
+                        :price="parking.price"
+                        :timeFrom="parking.timeFrom"
+                        :timeUntil="parking.timeUntil"
+                    />
+                    <button @click="editParking(parking.id)">Edit</button>
                     <button @click="deleteParking(parking.id)">Delete</button>
                 </div>
             </div>
@@ -39,11 +46,15 @@ export default {
             this.showAddForm = true;
         },
         addSlot(slot) {
-            this.$emit('add-slot', slot);
+            slot.id = this.parkings.length + 1;
+            this.parkings.push(slot);
             this.showAddForm = false;
         },
         cancelAddForm() {
             this.showAddForm = false;
+        },
+        editParking(id) {
+
         },
         deleteParking(id) {
             this.parkings = this.parkings.filter(parking => parking.id !== id)
@@ -58,24 +69,18 @@ export default {
                     name: "Parking 1",
                     status: "Available",
                     price: "$10",
-                    timeFrom: "2023-05-06T09:00:00Z",
-                    timeUntil: "2023-05-06T11:00:00Z",
                 },
                 {
                     id: 2,
                     name: "Parking 2",
                     status: "Unavailable",
                     price: "$15",
-                    timeFrom: "2023-05-06T10:00:00Z",
-                    timeUntil: "2023-05-06T12:00:00Z",
                 },
                 {
                     id: 3,
                     name: "Parking 3",
                     status: "Available",
                     price: "$20",
-                    timeFrom: "2023-05-06T11:00:00Z",
-                    timeUntil: "2023-05-06T13:00:00Z",
                 },
             ],
         };

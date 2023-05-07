@@ -1,3 +1,4 @@
+export const API_BASE_URL=process.env.VUE_APP_API_BASE_URL;
 export const API_ANALYTICS_ROUTE = process.env.VUE_APP_API_ANALYTICS_ROUTE;
 export const API_BOOKING_ROUTE = process.env.VUE_APP_API_BOOKING_ROUTE;
 export const API_LOCATION_ROUTE = process.env.VUE_APP_API_LOCATION_ROUTE;

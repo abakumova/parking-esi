@@ -33,7 +33,7 @@ public class BookingService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-//    private final KafkaTemplate<String, BookingMessage> kafkaTemplate;
+    private final KafkaTemplate<String, BookingMessage> kafkaTemplate;
 
 
     public String createBooking(BookingDto bookingDto) {
@@ -49,23 +49,26 @@ public class BookingService {
                 .build();
         bookingRepository.save(booking);
 
-//        BookingMessage message = new BookingMessage(
-//                UUID.randomUUID().toString(),
-//                booking.getId(),
-//                booking.getParkingSlotId(),
-//                booking.getTimeFrom(),
-//                booking.getTimeUntil(),
-//                null,
-//                null
-//        );
-//
-//        kafkaTemplate.send("booking-topic", message);
+
 
         log.info("Booking {} is added to the Database", booking.getId());
 
         PaymentStatusEnum status = requestPayment(booking.getId());
         if (status.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
+
+            BookingMessage message = new BookingMessage(
+                    UUID.randomUUID().toString(),
+                    booking.getId(),
+                    booking.getParkingSlotId(),
+                    booking.getTimeFrom(),
+                    booking.getTimeUntil(),
+                    null,
+                    null
+            );
+
+            kafkaTemplate.send("booking-topic", message);
+
             return "Booking completed.";
         } else {
             return "Payment rejected.";

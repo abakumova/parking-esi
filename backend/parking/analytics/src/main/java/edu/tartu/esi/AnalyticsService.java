@@ -1,6 +1,7 @@
 package edu.tartu.esi;
 
-import edu.tartu.esi.dto.BookingDto;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -9,12 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 
 @Service
+@Slf4j
 public class AnalyticsService {
 
     @Autowired
     private AnalyticsRepository analyticsRepository;
 
+    @Autowired
     private AnalyticsMapper analyticsMapper;
+
 
     @Transactional
     @KafkaListener(topics = "booking-topic", groupId = "analytics-group")
@@ -40,7 +44,7 @@ public class AnalyticsService {
         analyticsRepository.save(analytics);
     }
 
-    public AnalyticsDTO getAnalytics(String parkingSlotId) {
+    public AnalyticsDto getAnalytics(String parkingSlotId) {
         Analytics analytics = analyticsRepository.findByParkingSlotId(parkingSlotId);
         if (analytics == null) {
             return null;

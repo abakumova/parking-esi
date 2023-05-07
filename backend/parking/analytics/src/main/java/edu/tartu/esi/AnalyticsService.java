@@ -32,7 +32,7 @@ public class AnalyticsService {
         }
 
         double durationInHours = Duration.between(bookingDto.getTimeFrom(), bookingDto.getTimeUntil()).toMinutes() / 60.0;
-        double revenue = Double.parseDouble(bookingDto.getPrice());
+        double revenue = Double.parseDouble(bookingDto.getPrice()) * durationInHours;
         long totalBookingCount = analytics.getTotalBookingCount() + 1;
         long totalBookingDuration = analytics.getTotalBookingDuration() + (long) (durationInHours * 60);
 

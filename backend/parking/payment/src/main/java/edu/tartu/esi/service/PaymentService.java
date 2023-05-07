@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -30,11 +31,15 @@ public class PaymentService {
         Booking booking = getBooking(bookingId);
 
         String oldBalanceStr = getPaymentMethodDtoForUser(booking.getCustomerId());
-        String amountStr = booking.getPrice();
         PaymentStatusEnum paymentStatus;
 
+        Duration duration = Duration.between(booking.getTimeFrom(), booking.getTimeUntil());
+        BigDecimal hours = new BigDecimal(duration.toHours());
+
         BigDecimal oldBalance = new BigDecimal(oldBalanceStr);
-        BigDecimal amount = new BigDecimal(amountStr);
+        String pricePerHour = booking.getPrice();
+        BigDecimal price = new BigDecimal(pricePerHour);
+        BigDecimal amount = price.multiply(hours);
 
         if (oldBalance.compareTo(amount) >= 0) {
             BigDecimal newBalance = oldBalance.subtract(amount);

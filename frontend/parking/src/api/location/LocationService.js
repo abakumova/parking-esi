@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {API_LOCATION_ROUTE} from "@/api/routes";
 import HttpService from "@/api/HttpService";
 

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import HttpService from "@/api/HttpService";
 import {API_PARKING_ROUTE} from "@/api/routes";
 

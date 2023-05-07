@@ -4,12 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>edu.tartu.esi</groupId>
         <artifactId>parking</artifactId>
+        <groupId>edu.tartu.esi</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>booking</artifactId>
+    <description>Booking Service</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -57,7 +58,6 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
@@ -73,18 +73,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.tartu.esi</groupId>
-            <artifactId>payment</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.tartu.esi</groupId>
-            <artifactId>parking-management</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>edu.tartu.esi</groupId>

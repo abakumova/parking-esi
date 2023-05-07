@@ -15,9 +15,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -29,7 +27,7 @@ public class BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
-    private BookingMapper bookingMapper;
+    private final BookingMapper bookingMapper;
     @Autowired
     private WebClient.Builder webClientBuilder;
 
@@ -50,16 +48,13 @@ public class BookingService {
         bookingRepository.save(booking);
 
 
-
         log.info("Booking {} is added to the Database", booking.getId());
 
         PaymentStatusEnum status = requestPayment(booking.getId());
         if (status.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
 
-            BookingDto message = new BookingDto();
-
-            message.builder()
+            BookingDto message = BookingDto.builder()
                     .id(booking.getId())
                     .customerId(booking.getCustomerId())
                     .parkingSlotId(booking.getParkingSlotId())
@@ -88,7 +83,7 @@ public class BookingService {
     public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) {
         webClientBuilder.build()
                 .put()
-                .uri("http://localhost:8084/api/v1/parking-slots/"+ parkingSlotId + "/status")
+                .uri("http://localhost:8084/api/v1/parking-slots/" + parkingSlotId + "/status")
                 .bodyValue(status)
                 .retrieve()
                 .bodyToMono(Void.class)

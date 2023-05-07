@@ -1,0 +1,38 @@
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+}
+body{
+    margin:0;
+    padding: 0;
+}
+.wrapper {
+    max-height: 100vh;
+    max-width:80%;
+    margin: 0 auto;
+}
+
+#content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /*max-width: 80%;*/
+    padding: 0 40px 0 40px;
+    margin-bottom: 25px;
+}
+
+nav {
+    padding: 30px;
+}
+
+nav a {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+    color: #42b983;
+}

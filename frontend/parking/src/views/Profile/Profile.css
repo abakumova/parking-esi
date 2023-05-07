@@ -1,0 +1,77 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 30px;
+    width: 400px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 35px;
+    width: 100%;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    height: 30px;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-save {
+    background-color: #00ccff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    width: 100px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.btn-cancel {
+    background-color: #ffffff;
+    color: #00ccff;
+    border: 1px solid #00ccff;
+    border-radius: 5px;
+    height: 40px;
+    width: 100px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background-color: #00ccff;
+    color: #ffffff;
+}

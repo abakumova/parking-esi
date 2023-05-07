@@ -17,7 +17,7 @@ import java.util.Map;
 @ResponseBody
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {BookingNotFoundException.class, BookingException.class, IllegalArgumentException.class})
+    @ExceptionHandler(value = {BookingNotFoundException.class, BookingException.class, IllegalArgumentException.class, PaymentException.class})
     protected ResponseEntity<Object> handleException(Exception exception) {
         log.debug("--- handleException");
         HttpHeaders headers = new HttpHeaders();

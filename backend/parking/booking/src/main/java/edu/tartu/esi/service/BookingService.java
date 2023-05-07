@@ -7,14 +7,18 @@ import edu.tartu.esi.model.Booking;
 import edu.tartu.esi.model.PaymentStatusEnum;
 import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.BookingRepository;
+import io.vavr.control.Try;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +37,6 @@ public class BookingService {
 
     private final KafkaTemplate<String, BookingDto> kafkaTemplate;
 
-
     public String createBooking(BookingDto bookingDto) {
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
@@ -47,11 +50,16 @@ public class BookingService {
                 .build();
         bookingRepository.save(booking);
 
+        // Create a Circuit Breaker instance
+        CircuitBreakerConfig config = CircuitBreakerConfig.custom()
+                .failureRateThreshold(50)
+                .waitDurationInOpenState(Duration.ofSeconds(10))
+                .build();
+        CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
 
-        log.info("Booking {} is added to the Database", booking.getId());
-
-        PaymentStatusEnum status = requestPayment(booking.getId());
-        if (status.equals(PaymentStatusEnum.COMPLETED)) {
+        // Wrap the requestPayment method with the Circuit Breaker
+        PaymentStatusEnum result = circuitBreaker.executeSupplier(() -> requestPayment(booking.getId()));
+        if (result.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
 
             BookingDto message = BookingDto.builder()
@@ -91,13 +99,24 @@ public class BookingService {
     }
 
     public PaymentStatusEnum requestPayment(String bookingId) {
-        return webClientBuilder.build()
-                .post()
-                .uri("http://localhost:8087/api/v1/make-payment")
-                .bodyValue(bookingId)
-                .retrieve()
-                .bodyToMono(PaymentStatusEnum.class)
-                .block();
+        CircuitBreakerConfig config = CircuitBreakerConfig.custom()
+                .failureRateThreshold(50)
+                .waitDurationInOpenState(Duration.ofSeconds(30))
+                .build();
+        CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
+
+        return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> {
+            return webClientBuilder.build()
+                    .post()
+                    .uri("http://localhost:8087/api/v1/make-payment")
+                    .bodyValue(bookingId)
+                    .retrieve()
+                    .bodyToMono(PaymentStatusEnum.class)
+                    .block();
+        })).recover(throwable -> {
+            log.error("Error occurred while making payment: {}", throwable.getMessage());
+            return PaymentStatusEnum.DECLINED;
+        }).get();
     }
 
     public void updateBooking(String id, BookingDto bookingDto) {

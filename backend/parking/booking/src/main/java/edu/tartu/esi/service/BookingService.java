@@ -4,6 +4,7 @@ import edu.tartu.esi.dto.BookingDto;
 import edu.tartu.esi.exception.BookingNotFoundException;
 import edu.tartu.esi.mapper.BookingMapper;
 import edu.tartu.esi.model.Booking;
+import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.PaymentStatusEnum;
 import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.BookingRepository;
@@ -38,6 +39,10 @@ public class BookingService {
     private final KafkaTemplate<String, BookingDto> kafkaTemplate;
 
     public String createBooking(BookingDto bookingDto) {
+        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
+            return "Parking slot is closed.";
+        }
+
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
                 .id(bookingDto.getId())
@@ -117,6 +122,17 @@ public class BookingService {
             log.error("Error occurred while making payment: {}", throwable.getMessage());
             return PaymentStatusEnum.DECLINED;
         }).get();
+    }
+
+    public SlotStatusEnum getParkingSlotStatus(String slotId) {
+        return webClientBuilder
+                .build()
+                .get()
+                .uri("http://localhost:8084/api/v1/parking-slots/by-id/" + slotId)
+                .retrieve()
+                .bodyToMono(ParkingSlot.class)
+                .block()
+                .getParkingSlotStatus();
     }
 
     public void updateBooking(String id, BookingDto bookingDto) {

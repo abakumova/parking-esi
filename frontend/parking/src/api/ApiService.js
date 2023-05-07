@@ -1,4 +1,3 @@
-import axios from 'axios';
 import ParkingManagementService from "@/api/parking_management/ParkingManagementService";
 import BookingService from "@/api/booking/BookingService";
 import UserManagementService from "@/api/user_management/UserManagementService";

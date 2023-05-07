@@ -1,13 +1,12 @@
 import axios from 'axios';
 
-
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-const API_USERS_ROUTE = process.env.VUE_APP_API_BOOKING_ROUTE;
-
 class BookingService {
+    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+    API_BOOKING_ROUTE = process.env.VUE_APP_API_BOOKING_ROUTE;
+
     constructor() {
         this.http = axios.create({
-            baseURL: API_BASE_URL + API_USERS_ROUTE
+            baseURL: this.API_BASE_URL + this.API_BOOKING_ROUTE
         });
     }
 

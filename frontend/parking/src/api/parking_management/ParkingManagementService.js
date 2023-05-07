@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-const API_PARKING_ROUTE = process.env.VUE_APP_API_PARKING_ROUTE;
-
 class ParkingManagementService {
+    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+    API_PARKING_ROUTE = process.env.VUE_APP_API_PARKING_ROUTE;
+
     constructor() {
         this.http = axios.create({
-            baseURL: API_BASE_URL + API_PARKING_ROUTE
+            baseURL: this.API_BASE_URL + this.API_PARKING_ROUTE
         });
     }
     

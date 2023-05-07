@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-const API_LOCATION_ROUTE = process.env.VUE_APP_API_LOCATION_ROUTE;
-
 class LocationService {
+    API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+    API_LOCATION_ROUTE = process.env.VUE_APP_API_LOCATION_ROUTE;
+
     constructor() {
         this.http = axios.create({
-            baseURL: API_BASE_URL + API_LOCATION_ROUTE
+            baseURL: this.API_BASE_URL + this.API_LOCATION_ROUTE
         });
     }
 

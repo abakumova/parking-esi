@@ -30,6 +30,7 @@
 
 <script>
 import './SignUp.css'
+import ApiService from "@/api/ApiService";
 export default {
     name: "SignUp",
     data(){ return {
@@ -50,7 +51,6 @@ export default {
             }
         },
         openSignIn() {
-            console.log(process.env.SOMETHING)
             this.$router.push({ name: 'signin' })
         }
     }

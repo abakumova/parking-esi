@@ -20,7 +20,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -35,7 +41,8 @@ public class BookingService {
     private final BookingMapper bookingMapper;
     @Autowired
     private WebClient.Builder webClientBuilder;
-
+    @Autowired
+    private ScheduledExecutorService scheduledExecutorService;
     private final KafkaTemplate<String, BookingDto> kafkaTemplate;
 
     public String createBooking(BookingDto bookingDto) {
@@ -66,6 +73,7 @@ public class BookingService {
         PaymentStatusEnum result = circuitBreaker.executeSupplier(() -> requestPayment(booking.getId()));
         if (result.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
+            scheduleUpdateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.OPEN, booking.getTimeUntil());
 
             BookingDto message = BookingDto.builder()
                     .id(booking.getId())
@@ -166,5 +174,10 @@ public class BookingService {
             log.info("The body is missing");
             throw new IllegalArgumentException(msg);
         }
+    }
+
+    private void scheduleUpdateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status, LocalDateTime timeUntil) {
+        long delayInMillis = Duration.between(LocalDateTime.now(), timeUntil).toMillis();
+        scheduledExecutorService.schedule(() -> updateParkingSlotStatus(parkingSlotId, status), delayInMillis, TimeUnit.MILLISECONDS);
     }
 }

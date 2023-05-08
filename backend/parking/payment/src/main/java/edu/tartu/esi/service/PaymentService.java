@@ -8,6 +8,7 @@ import edu.tartu.esi.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -68,6 +69,7 @@ public class PaymentService {
     }
 
 
+    @LoadBalanced
     public void updateBalance(String userId, String newBalanceStr) {
         webClientBuilder.build()
                 .put()
@@ -78,6 +80,7 @@ public class PaymentService {
                 .block();
     }
 
+    @LoadBalanced
     public Booking getBooking(String bookingId) {
         return webClientBuilder
                 .build()
@@ -88,6 +91,7 @@ public class PaymentService {
                 .block();
     }
 
+    @LoadBalanced
     public String getPaymentMethodDtoForUser(String userId) {
         return webClientBuilder
                 .build()

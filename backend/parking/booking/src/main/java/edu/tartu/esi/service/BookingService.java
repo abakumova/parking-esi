@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -98,6 +99,7 @@ public class BookingService {
         return bookingMapper.toDto(booking);
     }
 
+    @LoadBalanced
     public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) {
         webClientBuilder.build()
                 .put()
@@ -108,6 +110,7 @@ public class BookingService {
                 .block();
     }
 
+    @LoadBalanced
     public PaymentStatusEnum requestPayment(String bookingId) {
         CircuitBreakerConfig config = CircuitBreakerConfig.custom()
                 .failureRateThreshold(50)
@@ -129,6 +132,7 @@ public class BookingService {
         }).get();
     }
 
+    @LoadBalanced
     public SlotStatusEnum getParkingSlotStatus(String slotId) {
         return webClientBuilder
                 .build()

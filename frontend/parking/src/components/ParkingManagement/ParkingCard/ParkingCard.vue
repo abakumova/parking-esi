@@ -1,10 +1,9 @@
 <template>
     <div class="parking-card">
         <h2>{{ name }}</h2>
+        <p>Location: {{ location.formattedAddress }}</p>
         <p>Status: {{ status }}</p>
         <p>Price: {{ price }} €</p>
-        <p>Time from: {{ timeFrom }}</p>
-        <p>Time until: {{ timeUntil }}</p>
     </div>
 </template>
 
@@ -21,16 +20,12 @@ export default {
             type: String,
             required: true
         },
+        location: {
+            type: Object,
+            required: true
+        },
         price: {
             type: Number,
-            required: true
-        },
-        timeFrom: {
-            type: String,
-            required: true
-        },
-        timeUntil: {
-            type: String,
             required: true
         }
     },

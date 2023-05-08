@@ -20,6 +20,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "*")
 public class ParkingSlotController {
 
     @Autowired

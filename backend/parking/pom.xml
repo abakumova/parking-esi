@@ -22,7 +22,6 @@
         <module>booking</module>
         <module>payment</module>
         <module>analytics</module>
-        <module>security</module>
     </modules>
 
     <properties>

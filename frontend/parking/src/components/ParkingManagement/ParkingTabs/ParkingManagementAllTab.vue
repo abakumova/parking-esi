@@ -2,14 +2,20 @@
     <div>
         <h1>All tab!</h1>
         <div class="parking-list">
-            <button @click="showAddForm = true">Add Slot</button>
+            <button @click="showAddForm = !showAddForm">Add Slot</button>
             <div v-if="showAddForm">
                 <parking-add-form @add-slot="addSlot" @cancel="cancelAddForm" />
             </div>
 
-            <div v-for="parking in parkings" :key="parking.id">
+            <div v-for="parking in slots" :key="parking.id">
                 <div class="parking-card-container">
-                    <parking-card :parking="parking" />
+                    <parking-card
+                        :name="parking.name"
+                        :status="parking.status"
+                        :price="parking.price"
+                        :location="parking.location"
+                    />
+                    <button @click="editParking(parking.id)">Edit</button>
                     <button @click="deleteParking(parking.id)">Delete</button>
                 </div>
             </div>
@@ -39,45 +45,23 @@ export default {
             this.showAddForm = true;
         },
         addSlot(slot) {
-            this.$emit('add-slot', slot);
+            slot.id = this.slots.length + 1;
+            this.slots.push(slot);
             this.showAddForm = false;
         },
         cancelAddForm() {
             this.showAddForm = false;
         },
+        editParking(id) {
+
+        },
         deleteParking(id) {
-            this.parkings = this.parkings.filter(parking => parking.id !== id)
+            this.slots = this.slots.filter(parking => parking.id !== id)
         },
     },
     data() {
         return {
             showAddForm: false,
-            parkings: [
-                {
-                    id: 1,
-                    name: "Parking 1",
-                    status: "Available",
-                    price: "$10",
-                    timeFrom: "2023-05-06T09:00:00Z",
-                    timeUntil: "2023-05-06T11:00:00Z",
-                },
-                {
-                    id: 2,
-                    name: "Parking 2",
-                    status: "Unavailable",
-                    price: "$15",
-                    timeFrom: "2023-05-06T10:00:00Z",
-                    timeUntil: "2023-05-06T12:00:00Z",
-                },
-                {
-                    id: 3,
-                    name: "Parking 3",
-                    status: "Available",
-                    price: "$20",
-                    timeFrom: "2023-05-06T11:00:00Z",
-                    timeUntil: "2023-05-06T13:00:00Z",
-                },
-            ],
         };
     },
 };

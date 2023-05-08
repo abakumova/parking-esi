@@ -6,8 +6,22 @@ import Profile from "@/views/Profile/Profile.vue";
 import SearchResult from "@/views/SearchResult/SearchResult.vue";
 import ParkingManagement from "@/views/ParkingManagement/ParkingManagement.vue";
 import Booking from "@/views/Booking/Booking.vue";
+import auth from "../auth";
 
 const routes = [
+  // {
+  //   path: "/",
+  //   name: "home",
+  //   component: HomeView,
+  //   beforeEnter: async(to, from, next) => {
+  //     let authResult = await auth.authenticated();
+  //     if (!authResult) {
+  //       next('/login')
+  //     } else {
+  //       next();
+  //     }
+  //   }
+  // },
   {
     path: '/',
     name: 'home',
@@ -42,6 +56,12 @@ const routes = [
     booking: '/booking/:id',
     name: 'booking',
     component: Booking,
+  },
+
+  { //will route to AllPosts view if none of the previous routes apply
+    path: "/:catchAll(.*)",
+    name: "home",
+    component: Home,
   }
 ];
 

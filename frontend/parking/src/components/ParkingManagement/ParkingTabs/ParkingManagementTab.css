@@ -12,8 +12,7 @@ label {
     font-weight: bold;
 }
 
-input[type="number"],
-input[type="text"] {
+input {
     margin-bottom: 10px;
     padding: 5px;
     border: 1px solid #ccc;
@@ -21,14 +20,14 @@ input[type="text"] {
     font-size: 14px;
 }
 
+button + button {
+    margin-left: 1rem;
+}
+
 .button-group {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
-}
-
-button {
-    margin-left: 10px;
 }
 
 .cancel {

@@ -7,9 +7,12 @@ class LocationService extends HttpService{
     }
 
     async getLocation(address) {
-        return this.http.get("/", {
-            headers: { "X-Address": address },
+        const response =  await this.http.get("", {
+            params: {
+                address: address
+            },
         });
+        return response.data
     }
 }
 

@@ -12,16 +12,8 @@ label {
     margin-bottom: 0.25rem;
 }
 
-input[type='number'] {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    border: 1px solid #ccc;
-}
-
-input[type='text'] {
-    width: 100%;
-    padding: 0.5rem;
+input {
+    padding: 0.25rem;
     border-radius: 0.25rem;
     border: 1px solid #ccc;
 }
@@ -30,22 +22,24 @@ input[type='text'] {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
-button[type='submit'] {
-    background-color: #4caf50;
+button {
+    background-color: #00ccff;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     cursor: pointer;
+    margin:0
 }
 
-button[type='button'] {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
+button:hover {
+    background-color: #0088b3;
+}
+
+.error-message {
+    color: red;
+    text-align: left;
 }

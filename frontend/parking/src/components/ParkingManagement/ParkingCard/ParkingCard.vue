@@ -1,6 +1,7 @@
 <template>
     <div class="parking-card">
         <h2>{{ name }}</h2>
+        <p>Location: {{ location.formattedAddress }}</p>
         <p>Status: {{ status }}</p>
         <p>Price: {{ price }} €</p>
     </div>
@@ -17,6 +18,10 @@ export default {
         },
         status: {
             type: String,
+            required: true
+        },
+        location: {
+            type: Object,
             required: true
         },
         price: {

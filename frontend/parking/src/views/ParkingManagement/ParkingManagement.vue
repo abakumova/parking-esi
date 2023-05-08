@@ -7,9 +7,9 @@
             <button @click="selectTab('history')" :class="{ active: selectedTab === 'history' }">History</button>
         </div>
         <div class="tab-content">
-            <component v-if="selectedTab === 'all'" :is='ParkingManagementAllTab'/>
-            <component v-if="selectedTab === 'active'" :is='ParkingManagementActiveTab'/>
-            <component v-if="selectedTab === 'history'" :is='ParkingManagementHistory'/>
+            <component v-if="selectedTab === 'all'" :is='ParkingManagementAllTab' :slots='parkings'/>
+            <component v-if="selectedTab === 'active'" :is='ParkingManagementActiveTab' :slots='parkings'/>
+            <component v-if="selectedTab === 'history'" :is='ParkingManagementHistory' :slots='parkings'/>
         </div>
     </div>
 </template>
@@ -30,7 +30,30 @@ export default {
                 'all': () => ParkingManagementAllTab,
                 'active': () => ParkingManagementActiveTab,
                 'history': () => ParkingManagementHistory
-            }
+            },
+            parkings: [
+                {
+                    id: 1,
+                    name: "Parking 1",
+                    status: "Available",
+                    price: "$10",
+                    location: "Raatuse 22"
+                },
+                {
+                    id: 2,
+                    name: "Parking 2",
+                    status: "Unavailable",
+                    price: "$15",
+                    location: "Narva mnt 27"
+                },
+                {
+                    id: 3,
+                    name: "Parking 3",
+                    status: "Available",
+                    price: "$20",
+                    location: "Marshala Tymoshenka 3"
+                },
+            ],
         };
     },
     computed: {

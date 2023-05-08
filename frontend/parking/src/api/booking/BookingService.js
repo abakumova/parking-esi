@@ -23,7 +23,7 @@ class BookingService extends HttpService{
     }
 
     async createBooking(bookingData) {
-        const response = await this.http.post(`/`, bookingData)
+        const response = await this.http.post(``, bookingData)
         return response.data
     }
 

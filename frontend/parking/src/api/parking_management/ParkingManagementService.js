@@ -24,7 +24,7 @@ class ParkingManagementService extends HttpService{
     }
 
     createParkingSlot(data) {
-        return this.http.post(`/`, data);
+        return this.http.post(``, data);
     }
 
     getParkingSlotsByStatus(status) {

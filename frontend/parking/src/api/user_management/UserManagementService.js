@@ -32,12 +32,12 @@ class UserManagementService extends HttpService{
     }
 
     async getUsers() {
-        const response = await this.http.get('/');
+        const response = await this.http.get('');
         return response.data;
     }
 
     async createUser(user) {
-        const response = await this.http.post('/', user);
+        const response = await this.http.post('', user);
         return response.data;
     }
 }

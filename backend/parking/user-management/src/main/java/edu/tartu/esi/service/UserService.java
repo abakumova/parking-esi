@@ -5,16 +5,16 @@ import edu.tartu.esi.dto.UserDto;
 import edu.tartu.esi.exception.EmailAlreadyExistsException;
 import edu.tartu.esi.exception.UserNotFoundException;
 import edu.tartu.esi.mapper.UserMapper;
-import edu.tartu.esi.model.User;
-import edu.tartu.esi.model.UserRoleEnum;
-import edu.tartu.esi.repository.UserRepository;
 import edu.tartu.esi.search.GenericSearchDto;
+import edu.tartu.esi.model.User;
+import edu.tartu.esi.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -32,6 +32,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public void createUser(UserDto userDto) {
         assertUserDto(userDto, "Can't create a user info when user is null");
@@ -41,10 +42,10 @@ public class UserService {
         }
         User newUser = User.builder()
                 .email(userDto.getEmail())
-                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDto.getPassword()))
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
-                .userRole(userDto.getUserRole())
+                .role(userDto.getRole())
                 .paymentMethod(userDto.getPaymentMethod())
                 .build();
         userRepository.save(newUser);
@@ -94,7 +95,7 @@ public class UserService {
                 .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDto.getPassword()))
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
-                .userRole(userDto.getUserRole())
+                .role(userDto.getRole())
                 .paymentMethod(userDto.getPaymentMethod())
                 .build();
         userRepository.save(newUser);

@@ -15,6 +15,7 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     Optional<User> findUserById(String id);
 
+    Optional<User> findByEmail(String email);
     Optional<User> findUserByEmail(String email);
 
     @Query("SELECT e from User e")

@@ -1,10 +1,13 @@
 package edu.tartu.esi.controller;
 
-import edu.tartu.esi.dto.PaginatedResponseDto;
 import edu.tartu.esi.dto.UserDto;
+import edu.tartu.esi.dto.PaginatedResponseDto;
 import edu.tartu.esi.search.GenericSearchDto;
 import edu.tartu.esi.service.UserService;
-import jakarta.annotation.security.RolesAllowed;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +50,12 @@ public class UserController {
     }
 
     //    @RolesAllowed(ADMIN_ROLE)
+    @Operation(summary = "Create user", security = {})
+    @SecurityRequirements(value = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Authentication successful"),
+            @ApiResponse(responseCode = "403", description = "Invalid credentials")
+    })
     @PostMapping(value = "/users", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) {
         userService.createUser(userDto);

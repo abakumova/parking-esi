@@ -20,7 +20,7 @@ public class BookingApplication {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource2() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080/")); //or add * to allow all origins
         configuration.setAllowCredentials(true);

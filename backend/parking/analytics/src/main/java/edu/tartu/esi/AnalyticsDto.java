@@ -1,12 +1,13 @@
 package edu.tartu.esi;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
+@Getter
+@Setter
 public class AnalyticsDto {
 
 

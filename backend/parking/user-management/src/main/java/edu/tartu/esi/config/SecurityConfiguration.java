@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                 //.requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
                 .requestMatchers(POST, "/api/v1/users").permitAll()
                 .requestMatchers(POST, "/api/v1/auth/authenticate").permitAll()
+                .requestMatchers(POST, "/api/v1/auth/register").permitAll()
 
 //                .requestMatchers(GET, "/api/v1/**").hasAnyAuthority(ADMIN_READ.name(), LANDLORD_READ.name(), USER.name())
 //                .requestMatchers(POST, "/api/v1/**").hasAnyAuthority(ADMIN_CREATE.name(), LANDLORD_CREATE.name(), USER.name())

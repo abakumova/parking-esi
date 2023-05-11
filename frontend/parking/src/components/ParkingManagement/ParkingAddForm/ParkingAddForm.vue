@@ -62,6 +62,9 @@ export default {
                 location: locationData,
                 status: this.status
             };
+            const resp = await ApiService.parking.createParkingSlot(slot)
+            console.log(resp)
+
             this.$emit('add-slot', slot);
             this.name = '';
             this.price = '';

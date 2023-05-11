@@ -8,7 +8,12 @@ import ParkingManagement from "@/views/ParkingManagement/ParkingManagement.vue";
 import Booking from "@/views/Booking/Booking.vue";
 import auth from "../auth";
 
+const ADMIN_ROLE = 'ADMIN'
+const USER_ROLE = 'USER'
+const LANDLORD_ROLE = 'LANDLORD'
+
 const routes = [
+
   // {
   //   path: "/",
   //   name: "home",
@@ -45,17 +50,29 @@ const routes = [
   {
     path: '/search',
     name: 'search',
-    component: SearchResult
+    component: SearchResult,
+    meta: {
+      requiresAuth: true,
+      roles: [USER_ROLE]
+    }
   },
   {
     path: '/parking',
     name: 'parking',
-    component: ParkingManagement
+    component: ParkingManagement,
+    meta: {
+      requiresAuth: true, // requires authentication
+      roles: [LANDLORD_ROLE, ADMIN_ROLE], // can access this route
+    },
   },
   {
     booking: '/booking/:id',
     name: 'booking',
     component: Booking,
+    meta: {
+      requiresAuth: true, // requires authentication
+      roles: [USER_ROLE]
+    }
   },
 
   { //will route to AllPosts view if none of the previous routes apply
@@ -65,9 +82,23 @@ const routes = [
   }
 ];
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = auth.isAuthenticated() // check if user is authenticated
+  const requiresAuth = to.matched.some((record: any) => record.meta.requiresAuth)  // check if route requires authentication
+  const roles = to.meta.roles // get the allowed roles for the route
+
+  if (requiresAuth && !isAuthenticated) {
+    next('/signin') // redirect to login page if route requires authentication and user is not authenticated
+  } else if (roles && !roles.includes(auth.getUserRole())) {
+    next('/') // redirect to home page if user does not have the appropriate role to access the route
+  } else {
+    next() // allow access to the route
+  }
+})
 
 export default router;

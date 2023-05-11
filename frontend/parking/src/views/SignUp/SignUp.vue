@@ -1,9 +1,12 @@
 <template>
     <div class="signup-container">
         <div class="signup-form">
-            <h1><router-link to="/">
-                <i class="arrow"/>
-            </router-link>Sign Up</h1>
+            <h1>
+                <router-link to="/">
+                    <i class="arrow"/>
+                </router-link>
+                Sign Up
+            </h1>
             <label for="email">Email</label>
             <input id="email" type="email" v-model="email" required>
 
@@ -32,16 +35,17 @@
 import './SignUp.css'
 import ApiService from "@/api/ApiService";
 import jwt_decode from "jwt-decode";
+
 export default {
     name: "SignUp",
-    data(){
-        return{
+    data() {
+        return {
             email: '',
             password: '',
             firstName: '',
             lastName: '',
             userRole: 'USER',
-            token:'',
+            token: '',
             decodedToken: ''
         }
     },
@@ -87,9 +91,21 @@ export default {
             //         console.log(e);
             //         console.log("error");
             //     });
+
+            // Check if the user role in the JWT is LANDLORD
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                const decodedToken = jwt_decode(token);
+                const roles = decodedToken.roles;
+                if (roles.includes('LANDLORD')) {
+                    this.$router.push({name: 'ParkingManagement'});
+                } else {
+                    this.$router.push({name: 'Home'});
+                }
+            }
         },
         openSignIn() {
-            this.$router.push({ name: 'signin' })
+            this.$router.push({name: 'signin'})
         }
     }
 }

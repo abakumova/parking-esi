@@ -2,6 +2,7 @@ package edu.tartu.esi.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tartu.esi.config.JwtService;
+import edu.tartu.esi.exception.EmailAlreadyExistsException;
 import edu.tartu.esi.model.User;
 import edu.tartu.esi.model.token.Token;
 import edu.tartu.esi.model.token.TokenRepository;
@@ -10,6 +11,7 @@ import edu.tartu.esi.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,8 +20,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+import static java.lang.String.format;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final UserRepository repository;
@@ -27,7 +32,12 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
     public AuthenticationResponse register(RegisterRequest request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            log.info("-- createUser; Email already exists");
+            throw new EmailAlreadyExistsException(format("Email %s already exists", request.getEmail()));
+        }
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -37,13 +47,12 @@ public class AuthenticationService {
                 .paymentMethod(request.getPaymentMethod())
                 .build();
         var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(savedUser);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .userId(savedUser.getId())
                 .build();
     }
 
@@ -58,7 +67,6 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .userId(user.getId())
                 .build();
     }
 
@@ -103,7 +111,6 @@ public class AuthenticationService {
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
-                        .userId(user.getId())
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }

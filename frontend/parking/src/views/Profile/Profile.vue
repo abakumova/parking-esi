@@ -23,11 +23,11 @@
 </template>
 
 <script>
-    import './Profile.css'
-    import UserManagementService from "@/api/user_management/UserManagementService";
-    import auth from "@/auth";
+import './Profile.css'
+import UserManagementService from "@/api/user_management/UserManagementService";
+import auth from "@/auth";
 
-    export default {
+export default {
     name: "Profile",
     data() {
         return {
@@ -48,11 +48,11 @@
         }
     },
     async mounted() {
-    const userData = await UserManagementService.getUserById(auth.user.userId, auth.getToken());
-    this.firstName = userData.firstName;
-    this.lastName = userData.lastName;
-    this.email = userData.email;
-    this.address = userData.address;
-}
+        const userData = await UserManagementService.getUserById(auth.user.userId, auth.getToken());
+        this.firstName = userData.firstName;
+        this.lastName = userData.lastName;
+        this.email = userData.email;
+        this.address = userData.address;
+    }
 };
 </script>

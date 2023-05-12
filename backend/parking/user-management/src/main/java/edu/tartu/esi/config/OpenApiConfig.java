@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
                         url = "http://"
                 ),
                 description = "OpenApi documentation for Spring Security",
-                title = "OpenApi specification",
+                title = "User Management & Auth",
                 version = "1.0",
                 license = @License(
                         name = "Licence name",

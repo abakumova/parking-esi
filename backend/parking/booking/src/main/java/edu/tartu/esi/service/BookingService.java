@@ -15,14 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -43,7 +50,13 @@ public class BookingService {
     private ScheduledExecutorService scheduledExecutorService;
     private final KafkaTemplate<String, BookingDto> kafkaTemplate;
 
-    public String createBooking(BookingDto bookingDto) {
+    @Value("webclient.email")
+    private String email;
+    @Value("webclient.password")
+    private String password;
+
+
+    public String createBooking(BookingDto bookingDto) throws JSONException {
         if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
             return "Parking slot is closed.";
         }
@@ -68,7 +81,13 @@ public class BookingService {
         CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
 
         // Wrap the requestPayment method with the Circuit Breaker
-        PaymentStatusEnum result = circuitBreaker.executeSupplier(() -> requestPayment(booking.getId()));
+        PaymentStatusEnum result = circuitBreaker.executeSupplier(() -> {
+            try {
+                return requestPayment(booking.getId());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        });
         if (result.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
             scheduleUpdateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.OPEN, booking.getTimeUntil());
@@ -100,10 +119,13 @@ public class BookingService {
     }
 
     @LoadBalanced
-    public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) {
+    public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) throws JSONException {
+        Map<String, String> jwtTokenMap = getToken(email, password);
+
         webClientBuilder.build()
                 .put()
-                .uri("http://localhost:8084/api/v1/parking-slots/" + parkingSlotId + "/status")
+                .uri("http://localhost:8089/api/v1/parking-slots/" + parkingSlotId + "/status")
+                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .bodyValue(status)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -111,33 +133,37 @@ public class BookingService {
     }
 
     @LoadBalanced
-    public PaymentStatusEnum requestPayment(String bookingId) {
+    public PaymentStatusEnum requestPayment(String bookingId) throws JSONException {
         CircuitBreakerConfig config = CircuitBreakerConfig.custom()
                 .failureRateThreshold(50)
                 .waitDurationInOpenState(Duration.ofSeconds(30))
                 .build();
         CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
 
-        return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> {
-            return webClientBuilder.build()
-                    .post()
-                    .uri("http://localhost:8087/api/v1/make-payment")
-                    .bodyValue(bookingId)
-                    .retrieve()
-                    .bodyToMono(PaymentStatusEnum.class)
-                    .block();
-        })).recover(throwable -> {
+        Map<String, String> jwtTokenMap = getToken(email, password);
+
+        return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> webClientBuilder.build()
+                .post()
+                .uri("http://localhost:8089/api/v1/make-payment")
+                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                .bodyValue(bookingId)
+                .retrieve()
+                .bodyToMono(PaymentStatusEnum.class)
+                .block())).recover(throwable -> {
             log.error("Error occurred while making payment: {}", throwable.getMessage());
             return PaymentStatusEnum.DECLINED;
         }).get();
     }
 
     @LoadBalanced
-    public SlotStatusEnum getParkingSlotStatus(String slotId) {
+    public SlotStatusEnum getParkingSlotStatus(String slotId) throws JSONException {
+        Map<String, String> jwtTokenMap = getToken(email, password);
+
         return webClientBuilder
                 .build()
                 .get()
-                .uri("http://localhost:8084/api/v1/parking-slots/by-id/" + slotId)
+                .uri("http://localhost:8089/api/v1/parking-slots/by-id/" + slotId)
+                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .retrieve()
                 .bodyToMono(ParkingSlot.class)
                 .block()
@@ -179,6 +205,27 @@ public class BookingService {
 
     private void scheduleUpdateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status, LocalDateTime timeUntil) {
         long delayInMillis = Duration.between(LocalDateTime.now(), timeUntil).toMillis();
-        scheduledExecutorService.schedule(() -> updateParkingSlotStatus(parkingSlotId, status), delayInMillis, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.schedule(() -> {
+            try {
+                updateParkingSlotStatus(parkingSlotId, status);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }, delayInMillis, TimeUnit.MILLISECONDS);
+    }
+
+    private  Map<String, String> getToken(String email, String password) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("email", email);
+        json.put("password", password);
+
+        Mono<Map<String, String>> jwtTokenMono = webClientBuilder.build().post()
+                .uri("/api/v1/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(json)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {});
+
+        return jwtTokenMono.block();
     }
 }

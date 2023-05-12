@@ -1,4 +1,4 @@
-package edu.tartu.esi.config;
+package edu.tartu.esi.security;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 

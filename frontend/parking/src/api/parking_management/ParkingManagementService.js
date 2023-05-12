@@ -35,9 +35,14 @@ class ParkingManagementService extends HttpService{
         return this.http.get(`/by-location/${lat}/${lon}`);
     }
 
-    getParkingSlotById(slotId) {
-        return this.http.get(`/by-id/${slotId}`);
+    getParkingSlotById(slotId, token) {
+        return this.http.get(`/by-id/${slotId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
     }
+
 }
 
 export default new ParkingManagementService();

@@ -35,7 +35,7 @@ public class ParkingSlotService {
                 .id(parkingSlotDto.getId())
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
-                .parkingSlotStatus(SlotStatusEnum.OPEN)
+                .status(SlotStatusEnum.OPEN)
                 .location(parkingSlotDto.getLocation())
                 .build();
         parkingSlotRepository.save(parkingSlot);
@@ -88,7 +88,7 @@ public class ParkingSlotService {
     public void updateParkingSlotStatus(String id, SlotStatusEnum status) {
         ParkingSlot parkingSlot = parkingSlotRepository.findById(id)
                 .orElseThrow(() -> new ParkingSlotNotFoundException(format("Parking slot with id = %s wasn't found", id)));
-        parkingSlot.setParkingSlotStatus(status);
+        parkingSlot.setStatus(status);
         parkingSlotRepository.save(parkingSlot);
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());
     }

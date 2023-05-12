@@ -25,18 +25,21 @@ import java.util.List;
 public class ParkingSlotSearchDto extends GenericSearchDto<ParkingSlot> {
 
     private String price;
-    private SlotStatusEnum parkingSlotStatus;
+    private String name;
+    private SlotStatusEnum status;
 
     protected void addFilters(Root<ParkingSlot> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, List<Predicate> filters) {
         if (StringUtils.isNotEmpty(price)) {
             Predicate priceAsPredicate = criteriaBuilder.equal(root.get("price"), price);
             filters.add(priceAsPredicate);
         }
-        if (StringUtils.isNotEmpty(parkingSlotStatus.getParkingStatusName())) {
-            Predicate parkingSlotsStatusAsPredicate = criteriaBuilder.equal(root.get("parkingSlotStatus"), parkingSlotStatus.getParkingStatusName());
+        if (StringUtils.isNotEmpty(name)) {
+            Predicate priceAsPredicate = criteriaBuilder.equal(root.get("name"), name);
+            filters.add(priceAsPredicate);
+        }
+        if (StringUtils.isNotEmpty(status.getParkingStatusName())) {
+            Predicate parkingSlotsStatusAsPredicate = criteriaBuilder.equal(root.get("parkingSlotStatus"), status.getParkingStatusName());
             filters.add(parkingSlotsStatusAsPredicate);
         }
-
-        //TODO: filter by restrictions
     }
 }

@@ -7,8 +7,12 @@ class UserManagementService extends HttpService{
         super(API_USERS_ROUTE)
     }
 
-    async getUserById(id) {
-        const response = await this.http.get(`/${id}`);
+    async getUserById(id, token) {
+        const response = await this.http.get(`/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         return response.data;
     }
 
@@ -17,8 +21,13 @@ class UserManagementService extends HttpService{
         return response.data;
     }
 
-    async deleteUser(id) {
-        await this.http.delete(`/${id}`);
+    async deleteUser(id, token) {
+        const response = await this.http.delete(`/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data;
     }
 
     async getUserBalance(id) {

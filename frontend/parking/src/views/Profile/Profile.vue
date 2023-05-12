@@ -19,8 +19,7 @@
                 <input type="text" id="address" v-model="address" disabled>
             </div>
             <div class="button-container">
-                <button class="btn-save" @click.prevent="saveProfile">Save</button>
-                <button class="btn-cancel" @click.prevent="cancelProfile">Cancel</button>
+                <button class="btn-close" @click="close">Close</button>
             </div>
         </div>
     </div>
@@ -39,8 +38,8 @@ export default {
         };
     },
     methods: {
-        saveProfile() {
-            //TODO: implement saving MIGHT BE NOT IMPLEMENTED
+        close() {
+            this.$router.push({name: 'home'})
         },
 
     },

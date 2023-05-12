@@ -29,8 +29,6 @@ export default {
         const router = useRouter();
 
         const openBooking = () => {
-            console.log("Hello");
-            console.log(props.id); // Debugging: Check if props.id is defined.
             router.push({ name: 'booking', params: { id: props.id }})
         }
 

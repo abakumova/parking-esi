@@ -36,6 +36,7 @@ public class ParkingSlotService {
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
                 .status(SlotStatusEnum.OPEN)
+                .name(parkingSlotDto.getName())
                 .location(parkingSlotDto.getLocation())
                 .build();
         parkingSlotRepository.save(parkingSlot);
@@ -56,6 +57,7 @@ public class ParkingSlotService {
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
                 .location(parkingSlotDto.getLocation())
+                .name(parkingSlotDto.getName())
                 .build();
         parkingSlotRepository.save(parkingSlot);
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());

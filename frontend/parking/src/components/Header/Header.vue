@@ -1,8 +1,8 @@
 <template>
     <header class="header">
         <div class="header-left">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/parking">Create Parking</router-link>
+            <router-link to="/">Home</router-link>
+            <router-link to="/parking" v-if="isLandlord">Create Parking</router-link>
         </div>
         <div class="header-middle">
             <Search />
@@ -26,11 +26,13 @@ import ProfileAvatar from "@/components/ProfileAvatar/ProfileAvatar.vue";
 
 import './Header.css'
 import auth from "@/auth";
+import {ROLES} from "@/constants/roles";
 export default {
     name:"Header",
     data() {
         return {
-            authenticated: auth.user.authenticated
+            authenticated: auth.user.authenticated,
+            isLandlord: auth.getUserRole() === ROLES.LANDLORD
         }
     },
     components: {

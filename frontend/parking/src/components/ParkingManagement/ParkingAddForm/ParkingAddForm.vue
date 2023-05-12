@@ -28,13 +28,14 @@
 <script>
 import "./ParkingAddForm.css"
 import ApiService from "@/api/ApiService";
+import auth from "@/auth";
 
 export default {
     name: "ParkingAddForm",
     props: {
         slots: {
             type: Array,
-            required: true,
+            required: false,
         },
     },
     data() {
@@ -42,7 +43,7 @@ export default {
             name: "",
             location: "",
             price: "",
-            status:"Available",
+            status:"OPEN",
             locationError: "",
         };
     },
@@ -57,6 +58,7 @@ export default {
             }
 
             const slot = {
+                landlordId: auth.user.userId,
                 name: this.name,
                 price: this.price,
                 location: locationData,

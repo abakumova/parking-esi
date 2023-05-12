@@ -1,9 +1,10 @@
 <template>
     <div class="parking-card">
-        <h2>{{ name }}</h2>
-        <p>Location: {{ location.formattedAddress }}</p>
-        <p>Status: {{ status }}</p>
-        <p>Price: {{ price }} €</p>
+        <h2>{{ slot.name }}</h2>
+        <p>Parking Id: {{ slot.id }}</p>
+        <p>Location: {{ slot.location.formattedAddress }}</p>
+        <p>Status: {{ slot.status }}</p>
+        <p>Price: {{ slot.price }} €</p>
     </div>
 </template>
 
@@ -12,21 +13,9 @@ import './ParkingCard.css'
 export default {
     name:"Parking Card",
     props: {
-        name: {
-            type: String,
-            required: true
-        },
-        status: {
-            type: String,
-            required: true
-        },
-        location: {
+        slot: {
             type: Object,
-            required: true
-        },
-        price: {
-            type: Number,
-            required: true
+            required: true,
         }
     },
 }

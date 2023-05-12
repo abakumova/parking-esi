@@ -6,6 +6,10 @@ class ParkingManagementService extends HttpService{
     constructor() {
         super(API_PARKING_ROUTE)
     }
+
+    getParkingSlotByLandlordId(landlordId) {
+        return this.http.get(`/by-landlord/${landlordId}`)
+    }
     
     getParkingSlotById(id) {
         return this.http.get(`/${id}`);
@@ -17,10 +21,6 @@ class ParkingManagementService extends HttpService{
 
     deleteParkingSlot(id) {
         return this.http.delete(`/${id}`);
-    }
-
-    updateParkingSlotStatus(id, data) {
-        return this.http.put(`/${id}/status`, data);
     }
 
     createParkingSlot(data) {

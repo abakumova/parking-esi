@@ -7,9 +7,13 @@
             <button @click="selectTab('history')" :class="{ active: selectedTab === 'history' }">History</button>
         </div>
         <div class="tab-content">
-            <component v-if="selectedTab === 'all'" :is='ParkingManagementAllTab' :slots='parkings'/>
-            <component v-if="selectedTab === 'active'" :is='ParkingManagementActiveTab' :slots='parkings'/>
-            <component v-if="selectedTab === 'history'" :is='ParkingManagementHistory' :slots='parkings'/>
+            <component v-if="selectedTab === 'all'"
+                       :is='ParkingManagementAllTab'
+                       :slots='slots'
+                       @delete-slot="deleteSlot"
+            />
+            <component v-if="selectedTab === 'active'" :is='ParkingManagementActiveTab' :slots='slots'/>
+            <component v-if="selectedTab === 'history'" :is='ParkingManagementHistory' :slots='slots'/>
         </div>
     </div>
 </template>
@@ -20,6 +24,8 @@ import './ParkingManagement.css'
 import ParkingManagementAllTab from "@/components/ParkingManagement/ParkingTabs/ParkingManagementAllTab.vue";
 import ParkingManagementActiveTab from "@/components/ParkingManagement/ParkingTabs/ParkingManagementActiveTab.vue";
 import ParkingManagementHistory from "@/components/ParkingManagement/ParkingTabs/ParkingManagementHistory.vue";
+import ApiService from "@/api/ApiService";
+import auth from "@/auth";
 
 export default {
     name: 'ParkingManagement',
@@ -31,29 +37,7 @@ export default {
                 'active': () => ParkingManagementActiveTab,
                 'history': () => ParkingManagementHistory
             },
-            parkings: [
-                {
-                    id: 1,
-                    name: "Parking 1",
-                    status: "Available",
-                    price: "$10",
-                    location: "Raatuse 22"
-                },
-                {
-                    id: 2,
-                    name: "Parking 2",
-                    status: "Unavailable",
-                    price: "$15",
-                    location: "Narva mnt 27"
-                },
-                {
-                    id: 3,
-                    name: "Parking 3",
-                    status: "Available",
-                    price: "$20",
-                    location: "Marshala Tymoshenka 3"
-                },
-            ],
+            slots: [],
         };
     },
     computed: {
@@ -70,7 +54,18 @@ export default {
     methods: {
         selectTab(tabName) {
             this.selectedTab = tabName;
+        },
+        async fetchSlots() {
+            const resp = await ApiService.parking.getParkingSlotByLandlordId(auth.user.userId)
+            this.slots = resp.data
+        },
+        async deleteSlot(id) {
+            await ApiService.parking.deleteParkingSlot(id)
+            this.slots = this.slots.filter(slot => slot.id !== id);
         }
-    }
+    },
+    mounted() {
+        this.fetchSlots().data
+    },
 };
 </script>

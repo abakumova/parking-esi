@@ -7,16 +7,12 @@
                 <parking-add-form @add-slot="addSlot" @cancel="cancelAddForm" />
             </div>
 
-            <div v-for="parking in slots" :key="parking.id">
+            <div v-for="slot in slots" :key="slot.id">
                 <div class="parking-card-container">
-                    <parking-card
-                        :name="parking.name"
-                        :status="parking.status"
-                        :price="parking.price"
-                        :location="parking.location"
-                    />
-                    <button @click="editParking(parking.id)">Edit</button>
-                    <button @click="deleteParking(parking.id)">Delete</button>
+                    <parking-card :slot="slot"/>
+                    <button @click="editParking(slot.id)">Edit</button>
+                    <button @click="$emit('delete-slot', slot.id)">Delete</button>
+<!--                    <button @click="deleteParking(slot.id)">Delete</button>-->
                 </div>
             </div>
         </div>
@@ -27,6 +23,7 @@
 import './ParkingManagementTab.css'
 import ParkingCard from "@/components/ParkingManagement/ParkingCard/ParkingCard.vue";
 import ParkingAddForm from "@/components/ParkingManagement/ParkingAddForm/ParkingAddForm.vue";
+import ApiService from "@/api/ApiService";
 
 export default {
     name:"ParkingManagementAllTab",
@@ -37,13 +34,10 @@ export default {
     props: {
         slots: {
             type: Array,
-            required: true,
+            required: false,
         },
     },
     methods: {
-        showAddForm() {
-            this.showAddForm = true;
-        },
         addSlot(slot) {
             slot.id = this.slots.length + 1;
             this.slots.push(slot);
@@ -55,14 +49,12 @@ export default {
         editParking(id) {
 
         },
-        deleteParking(id) {
-            this.slots = this.slots.filter(parking => parking.id !== id)
-        },
     },
     data() {
         return {
             showAddForm: false,
         };
     },
+
 };
 </script>

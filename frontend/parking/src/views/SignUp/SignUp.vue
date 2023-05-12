@@ -34,7 +34,6 @@
 <script>
 import './SignUp.css'
 import ApiService from "@/api/ApiService";
-import jwt_decode from "jwt-decode";
 
 export default {
     name: "SignUp",
@@ -46,7 +45,8 @@ export default {
             lastName: '',
             userRole: 'USER',
             token: '',
-            decodedToken: ''
+            decodedToken: '',
+            balance: '' //TODO: set default balance
         }
     },
     methods: {
@@ -61,48 +61,9 @@ export default {
                     balance: this.balance
                 }
             };
-            const response = await ApiService.auth.register(userData).then(resp => console.log(resp)).catch(er => console.error(er))
-            console.log(response)
-            // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
-            // await fetch("http://localhost:8090/api/auth/signup", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            //     credentials: 'include',
-            //     body: JSON.stringify(data),
-            // })
-            //     .then(response => response.text())
-            //     .then(response => {
-            //         //saving the jwt in the token variable
-            //         this.token = response;
-            //         if (this.token.startsWith("ey")){
-            //             //decoding the jwt and save it in the decodedToken variable
-            //             this.decodedToken = jwt_decode(this.token);
-            //             // saving the returned user role into the roles variable
-            //             this.roles = this.decodedToken.roles
-            //             console.log(this.decodedToken.roles);
-            //             // saving the token into the windows local storage
-            //             localStorage.setItem('jwtToken',  this.token);
-            //             console.log(localStorage.getItem('jwtToken'));
-            //             this.$router.push("/");
-            //         }})
-            //     .catch((e) => {
-            //         console.log(e);
-            //         console.log("error");
-            //     });
 
-            // Check if the user role in the JWT is LANDLORD
-            const token = localStorage.getItem('jwtToken');
-            if (token) {
-                const decodedToken = jwt_decode(token);
-                const roles = decodedToken.roles;
-                if (roles.includes('LANDLORD')) {
-                    this.$router.push({name: 'ParkingManagement'});
-                } else {
-                    this.$router.push({name: 'Home'});
-                }
-            }
+            await ApiService.auth.register(userData)
+            this.$router.push({name: 'home'})
         },
         openSignIn() {
             this.$router.push({name: 'signin'})

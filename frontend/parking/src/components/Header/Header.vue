@@ -25,11 +25,12 @@ import Search from "@/components/Search/Search.vue";
 import ProfileAvatar from "@/components/ProfileAvatar/ProfileAvatar.vue";
 
 import './Header.css'
+import auth from "@/auth";
 export default {
     name:"Header",
     data() {
         return {
-            authenticated: false
+            authenticated: auth.authenticated()
         }
     },
     components: {
@@ -44,10 +45,11 @@ export default {
             this.$router.push({ name: "signup" });
         },
         openProfile() {
-        this.$router.push({ name: "profile"})
+            this.$router.push({ name: "profile"})
         },
         signOut() {
-            // code to sign out user
+            auth.logout()
+            this.$router.push({ name: "signin"})
         }
     }
 }

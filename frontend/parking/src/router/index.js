@@ -30,7 +30,11 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: {
+      requiresAuth: false,
+      roles: [USER_ROLE, LANDLORD_ROLE, ADMIN_ROLE]
+    }
   },
   {
     path: '/signin',
@@ -45,16 +49,20 @@ const routes = [
   {
     path: '/profile',
     name: 'profile',
-    component: Profile
+    component: Profile,
+    meta: {
+      requiresAuth: true,
+      roles: [USER_ROLE, LANDLORD_ROLE]
+    }
   },
   {
     path: '/search',
     name: 'search',
     component: SearchResult,
-    meta: {
-      requiresAuth: true,
-      roles: [USER_ROLE]
-    }
+    // meta: {
+    //   requiresAuth: true,
+    //   roles: [USER_ROLE]
+    // }
   },
   {
     path: '/parking',
@@ -74,12 +82,12 @@ const routes = [
       roles: [USER_ROLE]
     }
   },
-
-  { //will route to AllPosts view if none of the previous routes apply
-    path: "/:catchAll(.*)",
-    name: "home",
-    component: Home,
-  }
+  // TODO: add new view with available routes in application
+  // { //will route to AllPosts view if none of the previous routes apply
+  //   path: "/:catchAll(.*)",
+  //   name: "home",
+  //   component: Home,
+  // }
 ];
 
 export const router = createRouter({
@@ -89,8 +97,12 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = auth.isAuthenticated() // check if user is authenticated
-  const requiresAuth = to.matched.some((record: any) => record.meta.requiresAuth)  // check if route requires authentication
+  const requiresAuth = to.matched.some((record ) => record.meta.requiresAuth)  // check if route requires authentication
   const roles = to.meta.roles // get the allowed roles for the route
+
+  console.log(`Page Roles: ${roles}`)
+  console.log(`IsAuth: ${isAuthenticated}`)
+  console.log(`User: ${JSON.stringify(auth.user)}`)
 
   if (requiresAuth && !isAuthenticated) {
     next('/signin') // redirect to login page if route requires authentication and user is not authenticated

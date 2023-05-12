@@ -1,6 +1,6 @@
 <template>
     <div class="profile-icon-container">
-        <i class="fas fa-user-circle profile-icon"></i>
+        <img class="fas fa-user-circle profile-icon" src="@/assets/avatar.png">
     </div>
 </template>
 <script>

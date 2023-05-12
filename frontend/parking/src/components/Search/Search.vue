@@ -17,16 +17,17 @@ export default {
     methods: {
         search() {
             // TODO: perform search action
-            LocationService.getLocation(this.searchTerm)
-                .then((response) => {
-                    console.log(response);
-                    // Handle the response from the LocationService
-                })
-                .catch((error) => {
-                    console.log(error);
-                    // Handle the error from the LocationService
-                });
-            // this.$router.push({ name: "search" });
+
+            // LocationService.getLocation(this.searchTerm)
+            //     .then((response) => {
+            //         console.log(response);
+            //         // Handle the response from the LocationService
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         // Handle the error from the LocationService
+            //     });
+            this.$router.push({ name: "search" });
         },
     },
 };

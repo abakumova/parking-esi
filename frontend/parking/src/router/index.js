@@ -64,16 +64,15 @@ const routes = [
       roles: [ROLES.ADMIN, ROLES.LANDLORD], // can access this route
     },
   },
-  // {
-  //   booking: '/booking/:id',
-  //   name: 'booking',
-  //   component: Booking,
-  //   meta: {
-  //     requiresAuth: true, // requires authentication
-  //     roles: [ROLES.USER]
-  //   }
-  // },
-  // TODO: add new view with available routes in application
+  {
+    path: '/booking/:id',
+    name: 'booking',
+    component: Booking,
+    meta: {
+      requiresAuth: true, // requires authentication
+      roles: [ROLES.USER]
+    }
+  },
   // { //will route to AllPosts view if none of the previous routes apply
   //   path: "/:catchAll(.*)",
   //   name: "home",

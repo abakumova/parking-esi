@@ -4,11 +4,11 @@
         <div class="booking-name">{{ name }}</div>
         <div class="price">{{ price }} EUR</div>
         <button class="book-button" @click="openBooking">Book</button>
-
     </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
 import './SearchResultCard.css'
 export default {
     name: "SearchResultCard",
@@ -25,9 +25,17 @@ export default {
             required: true
         }
     },
-    methods: {
-        openBooking() {
-            this.$router.push({ name: 'booking', params: { id: this.id }})
+    setup(props) {
+        const router = useRouter();
+
+        const openBooking = () => {
+            console.log("Hello");
+            console.log(props.id); // Debugging: Check if props.id is defined.
+            router.push({ name: 'booking', params: { id: props.id }})
+        }
+
+        return {
+            openBooking
         }
     }
 }

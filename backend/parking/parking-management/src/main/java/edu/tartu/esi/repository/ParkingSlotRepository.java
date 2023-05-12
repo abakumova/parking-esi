@@ -11,4 +11,7 @@ import java.util.List;
 public interface ParkingSlotRepository extends CrudRepository <ParkingSlot, String> {
     @Query("SELECT e FROM ParkingSlot e WHERE e.parkingSlotStatus = :status")
     List<ParkingSlot> findAllByStatus(SlotStatusEnum status);
+
+    @Query("SELECT e FROM ParkingSlot e WHERE e.landlordId = :landlordId")
+    List<ParkingSlot> findAllByLandlordId(String landlordId);
 }

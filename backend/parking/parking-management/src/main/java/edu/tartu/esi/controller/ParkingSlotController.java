@@ -44,6 +44,12 @@ public class ParkingSlotController {
         return parkingSlotService.getParkingSlotByLocation(lat, lon);
     }
 
+    @GetMapping(value = "/parking-slots/by-landlord/{landlordId}", produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParkingSlot> getParkingSlotByLandlord(@Valid @PathVariable String landlordId) {
+        return parkingSlotService.getParkingSlotByLandlord(landlordId);
+    }
+
     @PostMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> createParkingSlot(@Valid @RequestBody ParkingSlotDto parkingSlotDto) {

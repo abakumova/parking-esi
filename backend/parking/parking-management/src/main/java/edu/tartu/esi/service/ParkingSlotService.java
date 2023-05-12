@@ -93,6 +93,12 @@ public class ParkingSlotService {
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());
     }
 
+
+    public List<ParkingSlot> getParkingSlotByLandlord(String landlordId) {
+        log.debug("-- getParkingSlotByLandlord LandlordId {}", landlordId);
+        return parkingSlotRepository.findAllByLandlordId(landlordId);
+    }
+
     private void assertParkingSlotDto(ParkingSlotDto parking, String msg) {
         if (parking == null) {
             log.info("The body is missing");

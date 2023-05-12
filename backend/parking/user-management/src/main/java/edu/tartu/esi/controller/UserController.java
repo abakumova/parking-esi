@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//import static edu.tartu.esi.security.SecurityConstants.ADMIN_ROLE;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -49,7 +47,6 @@ public class UserController {
         userService.updateUserBalanceById(id, balance);
     }
 
-    //    @RolesAllowed(ADMIN_ROLE)
     @Operation(summary = "Create user", security = {})
     @SecurityRequirements(value = {})
     @ApiResponses(value = {

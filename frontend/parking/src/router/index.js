@@ -7,44 +7,35 @@ import SearchResult from "@/views/SearchResult/SearchResult.vue";
 import ParkingManagement from "@/views/ParkingManagement/ParkingManagement.vue";
 import Booking from "@/views/Booking/Booking.vue";
 import auth from "../auth";
-
-const ADMIN_ROLE = 'ADMIN'
-const USER_ROLE = 'USER'
-const LANDLORD_ROLE = 'LANDLORD'
+import {ROLES} from "@/constants/roles";
 
 const routes = [
-
-  // {
-  //   path: "/",
-  //   name: "home",
-  //   component: HomeView,
-  //   beforeEnter: async(to, from, next) => {
-  //     let authResult = await auth.authenticated();
-  //     if (!authResult) {
-  //       next('/login')
-  //     } else {
-  //       next();
-  //     }
-  //   }
-  // },
   {
     path: '/',
     name: 'home',
     component: Home,
     meta: {
       requiresAuth: false,
-      roles: [USER_ROLE, LANDLORD_ROLE, ADMIN_ROLE]
+      roles: [ROLES.ADMIN, ROLES.GUEST, ROLES.USER, ROLES.LANDLORD]
     }
   },
   {
     path: '/signin',
     name: 'signin',
-    component: SignIn
+    component: SignIn,
+    meta: {
+      // requiresAuth: false,
+      roles: [ROLES.GUEST]
+    }
   },
   {
     path: '/signup',
     name: 'signup',
-    component: SignUp
+    component: SignUp,
+    meta: {
+      // requiresAuth: false,
+      roles: [ROLES.GUEST]
+    }
   },
   {
     path: '/profile',
@@ -52,17 +43,17 @@ const routes = [
     component: Profile,
     meta: {
       requiresAuth: true,
-      roles: [USER_ROLE, LANDLORD_ROLE]
+      roles: [ROLES.USER, ROLES.LANDLORD],
     }
   },
   {
     path: '/search',
     name: 'search',
     component: SearchResult,
-    // meta: {
-    //   requiresAuth: true,
-    //   roles: [USER_ROLE]
-    // }
+    meta: {
+      // requiresAuth: false,
+      roles: [ROLES.ADMIN, ROLES.LANDLORD, ROLES.GUEST, ROLES.USER]
+    }
   },
   {
     path: '/parking',
@@ -70,18 +61,18 @@ const routes = [
     component: ParkingManagement,
     meta: {
       requiresAuth: true, // requires authentication
-      roles: [LANDLORD_ROLE, ADMIN_ROLE], // can access this route
+      roles: [ROLES.ADMIN, ROLES.LANDLORD], // can access this route
     },
   },
-  {
-    booking: '/booking/:id',
-    name: 'booking',
-    component: Booking,
-    meta: {
-      requiresAuth: true, // requires authentication
-      roles: [USER_ROLE]
-    }
-  },
+  // {
+  //   booking: '/booking/:id',
+  //   name: 'booking',
+  //   component: Booking,
+  //   meta: {
+  //     requiresAuth: true, // requires authentication
+  //     roles: [ROLES.USER]
+  //   }
+  // },
   // TODO: add new view with available routes in application
   // { //will route to AllPosts view if none of the previous routes apply
   //   path: "/:catchAll(.*)",
@@ -103,6 +94,7 @@ router.beforeEach((to, from, next) => {
   console.log(`Page Roles: ${roles}`)
   console.log(`IsAuth: ${isAuthenticated}`)
   console.log(`User: ${JSON.stringify(auth.user)}`)
+  console.log(to)
 
   if (requiresAuth && !isAuthenticated) {
     next('/signin') // redirect to login page if route requires authentication and user is not authenticated

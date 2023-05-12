@@ -30,7 +30,7 @@ export default {
     name:"Header",
     data() {
         return {
-            authenticated: auth.authenticated()
+            authenticated: auth.user.authenticated
         }
     },
     components: {

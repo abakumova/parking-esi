@@ -1,10 +1,11 @@
 import jwt_decode from 'jwt-decode';
 import jwtDecode from "jwt-decode";
+import {ROLES} from "@/constants/roles";
 
 export default {
     user: {
         authenticated: false,
-        role: '',
+        role: ROLES.GUEST,
         email: '',
         userId: ''
     },
@@ -12,8 +13,8 @@ export default {
         const token = localStorage.getItem('access_token');
         // if there is a token, get the user roles and ID, and try to authenticate
         if (token) {
-            this.user.role = this.decodeAccessToken().role
-            this.user.userId = this.decodeAccessToken().userId
+            // this.user.role = this.decodeAccessToken().role
+            // this.user.userId = this.decodeAccessToken().userId
             // // Set the Authorization header with the token value
             // const headers = {
             //     'Content-Type': 'application/json',
@@ -41,7 +42,7 @@ export default {
 
     logout: function () {
         localStorage.removeItem('access_token');
-        this.user = {role: "", email: "", authenticated: false, userId: ""};
+        this.user = {role: ROLES.GUEST, email: "", authenticated: false, userId: ""};
     },
 
     getUserRole: function () {

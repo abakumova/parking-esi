@@ -22,12 +22,8 @@ class BookingService extends HttpService{
         return response.data
     }
 
-    async createBooking(bookingData, token) {
-        const response = await this.http.post("", bookingData, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+    async createBooking(bookingData) {
+        const response = await this.http.post("", bookingData);
         return response.data;
     }
 

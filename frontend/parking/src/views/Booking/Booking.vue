@@ -14,7 +14,7 @@
         <div class="row">
             <div class="form-group">
                 <label for="timeFrom">Time From:</label>
-                <input type="datetime-local" id="timeFrom" v-model="timeFrom" required>
+                <input type="datetime-local" id="timeFrom" v-model="timeFrom" required disabled>
                 <span class="error-message" v-if="timeFromError">{{ timeFromError }}</span>
             </div>
 
@@ -76,6 +76,7 @@
 import './Booking.css'
 import auth from "@/auth";
 import ApiService from "@/api/ApiService";
+import {formatDateLocal} from "@/utils";
 
 export default {
     name: "Booking",
@@ -90,7 +91,7 @@ export default {
             expirationMonth: '',
             expirationYear: '',
             cvv: '',
-            timeFrom: '',
+            timeFrom: formatDateLocal(new Date()),
             timeUntil: '',
             timeFromError: '',
             timeUntilError: '',
@@ -102,14 +103,16 @@ export default {
     },
     mounted() {
         this.fetchParkingSlot();
+        setInterval(() => {
+            this.timeFrom = formatDateLocal(new Date());
+        }, 1000);
     },
     methods: {
         async fetchParkingSlot() {
             try {
-                const token = auth.getToken();
-                const response = await ApiService.parking.getParkingSlotById(this.parkingSlotId, token);
-                this.price = response.data.price;
-                this.location.formattedAddress = response.data.location.formattedAddress;
+                const response = await ApiService.parking.getParkingSlotById(this.parkingSlotId);
+                this.price = response.price;
+                this.location.formattedAddress = response.location.formattedAddress;
             } catch (error) {
                 console.error('Failed to fetch parking slot:', error);
             }
@@ -126,12 +129,11 @@ export default {
                     price: this.price,
                     timeFrom: this.timeFrom,
                     timeUntil: this.timeUntil,
-                    landlordId: await ApiService.parking.getParkingSlotById(this.parkingSlotId, token).data().landlordId
+                    landlordId: await ApiService.parking.getParkingSlotById(this.parkingSlotId).data.landlordId
                 };
 
                 try {
-                    const token = auth.getToken();
-                    const response = await this.createBooking(bookingPayload, token);
+                    const response = await this.createBooking(bookingPayload);
                     console.log("Booking submitted successfully:", response);
                 } catch (error) {
                     console.error("Failed to submit booking:", error);
@@ -140,18 +142,6 @@ export default {
         },
         async validateFields() {
             let isValid = true;
-
-            // Validate timeFrom
-            if(!this.timeFrom) {
-                this.timeFromError = 'Time from is required';
-                isValid = false;
-            } else if (new Date(this.timeFrom) < new Date()) {
-                this.timeFromError = 'Time from cannot be in the past';
-                isValid = false;
-            } else {
-                this.timeFromError = '';
-            }
-
 
             // Validate timeUntil
             if(!this.timeUntil) {
@@ -168,8 +158,8 @@ export default {
             if(!this.cardNumber) {
                 this.cardNumberError = 'Card number is required';
                 isValid = false;
-            } else if (!/^\d{12}$/.test(this.cardNumber)) {
-                this.cardNumberError = 'Card number must be 12 digits long';
+            } else if (!/^\d{16}$/.test(this.cardNumber)) {
+                this.cardNumberError = 'Card number must be 16 digits long';
                 isValid = false;
             } else {
                 this.cardNumberError = '';
@@ -192,6 +182,9 @@ export default {
                 isValid = false;
             } else if (!/^\d{4}$/.test(this.expirationYear)) {
                 this.expirationYearError = 'Expiration year must be 4 digits long';
+                isValid = false;
+            } else if (parseInt(this.expirationYear) < 2023 || parseInt(this.expirationYear) > 2030) {
+                this.expirationYearError = 'Expiration year must be between 2023 and 2030';
                 isValid = false;
             } else {
                 this.expirationYearError = '';

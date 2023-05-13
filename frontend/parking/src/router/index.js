@@ -53,7 +53,7 @@ const routes = [
     meta: {
       // requiresAuth: false,
       roles: [ROLES.ADMIN, ROLES.LANDLORD, ROLES.GUEST, ROLES.USER]
-    }
+    },
   },
   {
     path: '/parking',

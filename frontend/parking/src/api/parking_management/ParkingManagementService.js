@@ -31,8 +31,9 @@ class ParkingManagementService extends HttpService{
         return this.http.get(`/by-status/${status}`);
     }
 
-    getParkingSlotsByLocation(lat, lon) {
-        return this.http.get(`/by-location/${lat}/${lon}`);
+    async getParkingSlotsByLocation(lat, lon) {
+        console.log(`Lat ${lat} \t lon: ${lon}`)
+        return (await this.http.get(`/by-location/${lat}/${lon}`)).data;
     }
 
     getParkingSlotById(slotId, token) {

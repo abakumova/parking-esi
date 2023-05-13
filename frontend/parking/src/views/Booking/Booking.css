@@ -1,44 +1,71 @@
 .booking-form {
     display: flex;
     flex-direction: column;
-    width: 300px;
-    margin: auto;
+    width:100%;
 }
 
-.booking-form .form-group {
+.booking-form .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1rem 0;
+}
+
+.booking-form .form-group{
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-right: 1rem;
 }
 
-.booking-form .form-group label {
-    margin-bottom: 5px;
+.booking-form .form-group+.form-group{
+    margin-left: 3rem;
 }
 
-.booking-form .form-group input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.booking-form label {
+    margin-bottom: 0.5rem;
 }
 
-.booking-form .form-group input[type="datetime-local"] {
-    padding: 5px;
+.booking-form input {
+    padding: 0.5rem;
+    border: none;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+
+}
+
+input[type="text"]:focus,
+select:focus,
+input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: #555;
+}
+
+.booking-form select {
+    height:100%;
+    padding: 0.5rem;
+    border: none;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+input:disabled {
+    background-color: #f0f0f0;
+    color: #666;
 }
 
 .booking-form .submit-button {
-    padding: 10px 20px;
-    background-color: #4CAF50; /* Green */
+    padding: 1rem 1rem;
+    background-color: #00ccff;
     border: none;
     color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 20px 0;
+    border-radius: 5px;
     cursor: pointer;
-    border-radius: 4px;
+    font-size: 1rem;
+    margin-top: 1rem;
 }
 
 .booking-form .submit-button:hover {
-    background-color: #45a049;
+    background-color: #0088b3;
 }

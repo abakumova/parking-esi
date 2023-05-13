@@ -1,9 +1,8 @@
 <template>
-    <div class="search-result-card">
-        <div>{{slot.id}}</div>
-        <div class="booking-name">{{ slot.name }}</div>
-        <div class="location">{{ slot.location.formattedAddress }}</div>
+    <div class="card">
+        <div class="name">{{ slot.name }}</div>
         <div class="price">{{ slot.price }} EUR</div>
+        <div class="location">{{ slot.location.formattedAddress }}</div>
         <button class="book-button" @click="openBooking">Book</button>
     </div>
 </template>
@@ -22,7 +21,7 @@ export default {
         const router = useRouter();
 
         const openBooking = () => {
-            router.push({ name: 'booking', params: { id: props.id }})
+            router.push({ name: 'booking', params: { id: props.slot.id }})
         }
 
         return {

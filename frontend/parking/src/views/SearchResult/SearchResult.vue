@@ -3,7 +3,7 @@
         <h2>Search Results</h2>
         <div class="search-results-list">
             <div v-for="searchResult in searchResults" :key="searchResult.id">
-                <div class="search-result-container">
+                <div class="search-result-card-container">
                     <search-result-card :slot="searchResult"/>
                 </div>
             </div>

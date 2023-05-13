@@ -50,9 +50,9 @@ public class BookingService {
     private ScheduledExecutorService scheduledExecutorService;
     private final KafkaTemplate<String, BookingDto> kafkaTemplate;
 
-    @Value("webclient.email")
+    @Value("${webclient.email}")
     private String email;
-    @Value("webclient.password")
+    @Value("${webclient.password}")
     private String password;
 
 

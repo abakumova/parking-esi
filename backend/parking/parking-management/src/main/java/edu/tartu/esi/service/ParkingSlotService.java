@@ -3,7 +3,6 @@ package edu.tartu.esi.service;
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.exception.ParkingSlotNotFoundException;
 import edu.tartu.esi.mapper.ParkingSlotMapper;
-import edu.tartu.esi.model.Location;
 import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.ParkingSlotRepository;
@@ -13,10 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -74,14 +71,18 @@ public class ParkingSlotService {
         return parkingSlotRepository.findAllByStatus(status);
     }
 
-    public List<ParkingSlot> getParkingSlotByLocation(String lat, String lon) {
+    public List<ParkingSlot> getParkingSlotByLocation(String lat, String lon, Optional<String> distance) {
+        if (distance.isEmpty()) {
+            distance = "1.0".describeConstable();
+        }
         List<ParkingSlot> list = parkingSlotRepository.findAllByStatus(SlotStatusEnum.OPEN);
         log.debug("-- getParkingSlotByLocation Status OPEN {}", list);
+        String finalDistance = String.valueOf(distance);
         List<ParkingSlot> result = list
                 .stream()
                 .filter(slot -> distance(slot.getLocation().getLatitude(), slot.getLocation().getLongitude(),
-                        Double.parseDouble(lat), Double.parseDouble(lon)) < 1.0) //1 KM
-                .collect(Collectors.toList());
+                        Double.parseDouble(lat), Double.parseDouble(lon)) < Double.parseDouble(finalDistance))
+                .toList();
         log.warn("-- getParkingSlotByLocation LOCATION {}", result);
 
         return result;

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 import static edu.tartu.esi.security.Role.*;
 
@@ -42,10 +43,11 @@ public class ParkingSlotController {
         return parkingSlotService.getParkingSlotByStatus(status);
     }
 
-    @GetMapping(value = "/parking-slots/by-location/{lat}/{lon}", produces = {"application/json"})
+    @GetMapping(value = {"/parking-slots/by-location/{lat}/{lon}", "/parking-slots/by-location/{lat}/{lon}/{distance}"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public List<ParkingSlot> getParkingSlotByLocation(@Valid @PathVariable String lat, @Valid @PathVariable String lon) {
-        return parkingSlotService.getParkingSlotByLocation(lat, lon);
+    public List<ParkingSlot> getParkingSlotByLocation(@Valid @PathVariable String lat, @Valid @PathVariable String lon,
+                                                      @Valid @PathVariable(required = false) Optional<String> distance) {
+        return parkingSlotService.getParkingSlotByLocation(lat, lon, distance);
     }
 
     @JwtRole(roles = {LANDLORD, ADMIN})

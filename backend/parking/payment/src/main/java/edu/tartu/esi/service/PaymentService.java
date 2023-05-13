@@ -35,9 +35,9 @@ public class PaymentService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    @Value("webclient.email")
+    @Value("${webclient.email}")
     private String email;
-    @Value("webclient.password")
+    @Value("${webclient.password}")
     private String password;
 
     public PaymentStatusEnum makePayment(String bookingId) throws JSONException {

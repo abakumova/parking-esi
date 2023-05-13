@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum SlotStatusEnum {
+
     OPEN("Open", 1), //Parking management
     CLOSED("Closed", 2); //Parking management
-
 
     private String parkingStatusName;
     private int parkingStatusId;

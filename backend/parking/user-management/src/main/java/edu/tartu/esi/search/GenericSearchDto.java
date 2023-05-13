@@ -29,7 +29,7 @@ import java.util.List;
 @Slf4j
 public class GenericSearchDto<T> {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Value("spring.data.web.pageable.default-page-size")
+    @Value("${spring.data.web.pageable.default-page-size}")
     private Integer limit;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer page = 0;

@@ -13,7 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static org.springframework.http.HttpMethod.POST;
+import static edu.tartu.esi.model.Role.*;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -46,25 +47,18 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
 
+                .requestMatchers(GET, "api/v1/users").hasAnyRole(ADMIN.name())
+                .requestMatchers(GET, "api/v1/users/{id}").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+                .requestMatchers(GET, "api/v1/users/{id}/balance").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+                .requestMatchers(PUT, "api/v1/users/{id}/balance").hasAnyRole(ADMIN.name())
+                .requestMatchers(POST, "api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+                .requestMatchers(DELETE, "api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+                .requestMatchers(PUT, "api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
 
-                //.requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
                 .requestMatchers(POST, "/api/v1/users").permitAll()
                 .requestMatchers(POST, "/api/v1/auth/authenticate").permitAll()
                 .requestMatchers(POST, "/api/v1/auth/register").permitAll()
-
-//                .requestMatchers(GET, "/api/v1/**").hasAnyAuthority(ADMIN_READ.name(), LANDLORD_READ.name(), USER.name())
-//                .requestMatchers(POST, "/api/v1/**").hasAnyAuthority(ADMIN_CREATE.name(), LANDLORD_CREATE.name(), USER.name())
-//                .requestMatchers(PUT, "/api/v1/**").hasAnyAuthority(ADMIN_UPDATE.name(), LANDLORD_UPDATE.name(), USER.name())
-//                .requestMatchers(DELETE, "/api/v1/**").hasAnyAuthority(ADMIN_DELETE.name(), LANDLORD_DELETE.name(), USER.name())
-
-
-                /* .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
-
-                 .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
-                 .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
-                 .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-                 .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
-
+                .requestMatchers(POST, "/api/v1/auth/refresh-token").permitAll()
 
                 .anyRequest()
                 .authenticated()
@@ -77,8 +71,7 @@ public class SecurityConfiguration {
                 .logout()
                 .logoutUrl("/api/v1/auth/logout")
                 .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-        ;
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 
         return http.build();
     }

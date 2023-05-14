@@ -1,8 +1,10 @@
 package edu.tartu.esi.controller;
 
+import edu.tartu.esi.dto.PaginatedResponseDto;
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
+import edu.tartu.esi.search.GenericSearchDto;
 import edu.tartu.esi.service.ParkingSlotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +53,12 @@ public class ParkingSlotController {
     @ResponseStatus(HttpStatus.OK)
     public List<ParkingSlot> getParkingSlotByLandlord(@Valid @PathVariable String landlordId) {
         return parkingSlotService.getParkingSlotByLandlord(landlordId);
+    }
+
+    @GetMapping(value = "/parking-slots", produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public PaginatedResponseDto<ParkingSlotDto> getParkingSlots(GenericSearchDto<ParkingSlotDto> genericSearchDto) {
+        return parkingSlotService.getParkingSlots(genericSearchDto);
     }
 
     @PostMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})

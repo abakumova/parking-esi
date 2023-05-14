@@ -1,76 +1,69 @@
 <template>
     <div class="slot-card">
         <div>
-            <h2>User Details</h2>
+            <h2>Parking Details</h2>
             <div class="grid">
                 <div class="grid-item">
-                    <label for="slotId">User ID</label>
+                    <label for="slotId">Slot ID</label>
                     <input type="text" id="slotId" v-model="slot.id" placeholder="slot id" disabled>
                 </div>
                 <div class="grid-item">
-                    <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" v-model="slot.firstName" placeholder="first name">
-                    <span class="error-message" v-if="firstNameError">{{ firstNameError }}</span>
+                    <label for="landlordId">Landlord ID</label>
+                    <input type="text" id="landlordId" v-model="slot.landlordId" placeholder="landlord id" disabled>
                 </div>
                 <div class="grid-item">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" v-model="slot.lastName" placeholder="last name">
-                    <span class="error-message" v-if="lastNameError">{{ lastNameError }}</span>
+                    <label for="name">Slot name</label>
+                    <input type="text" id="name" v-model="slot.name" placeholder="slot name">
+<!--                    <span class="error-message" v-if="lastNameError">{{ lastNameError }}</span>-->
                 </div>
                 <div class="grid-item">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" v-model="slot.email" placeholder="email">
-                    <span class="error-message" v-if="emailError">{{ emailError }}</span>
-
+                    <label for="price">Price</label>
+                    <input type="number" id="price" v-model="slot.price" placeholder="price">
+<!--                    <span class="error-message" v-if="emailError">{{ emailError }}</span>-->
                 </div>
                 <div class="grid-item">
-                    <label for="role">Role</label>
-                    <select id="role" v-model="slot.role">
-                        <option value="LANDLORD">Landlord</option>
-                        <option value="USER">User</option>
-                        <option value="ADMIN">Admin</option>
+                    <label for="status">Status</label>
+                    <select id="status" v-model="slot.status">
+                        <option value="OPEN">Open</option>
+                        <option value="CLOSED">Closed</option>
                     </select>
                 </div>
             </div>
         </div>
         <div>
-            <h2>Payment Method</h2>
+            <h2>Location</h2>
             <div class="grid">
                 <div class="grid-item">
-                    <label for="cardNumber">Card Number</label>
-                    <input type="text" id="cardNumber" v-model="slot.paymentMethod.cardNumber" placeholder="card number">
-                    <span class="error-message" v-if="cardNumberError">{{ cardNumberError }}</span>
-
+                    <label for="formattedAddress">Formatted Address</label>
+                    <input type="text" id="formattedAddress" v-model="slot.location.formattedAddress" placeholder="formatted address">
+<!--                    <span class="error-message" v-if="cardNumberError">{{ cardNumberError }}</span>-->
                 </div>
                 <div class="grid-item">
-                    <label for="cardHolderName">Card Holder Name</label>
-                    <input type="text" id="cardHolderName" v-model="slot.paymentMethod.cardHolderName" placeholder="card holder name">
-                    <span class="error-message" v-if="cardHolderNameError">{{ cardHolderNameError }}</span>
-
+                    <label for="city">City</label>
+                    <input type="text" id="city" v-model="slot.location.city" placeholder="city" disabled>
+<!--                    <span class="error-message" v-if="cardHolderNameError">{{ cardHolderNameError }}</span>-->
                 </div>
                 <div class="grid-item">
-                    <label for="balance">Balance</label>
-                    <input type="text" id="balance" v-model="slot.paymentMethod.balance" placeholder="balance">
-                    <span class="error-message" v-if="balanceError">{{ balanceError }}</span>
-
+                    <label for="country">EE</label>
+                    <input type="text" id="country" v-model="slot.location.country" placeholder="country" disabled>
+<!--                    <span class="error-message" v-if="balanceError">{{ balanceError }}</span>-->
                 </div>
                 <div class="grid-item">
-                    <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" v-model="slot.paymentMethod.cvv" placeholder="cvv">
-                    <span class="error-message" v-if="cvvError">{{ cvvError }}</span>
-
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" id="postalCode" v-model="slot.location.postalCode" placeholder="postal code" disabled>
+                    <!--                    <span class="error-message" v-if="ibanError">{{ ibanError }}</span>-->
                 </div>
                 <div class="grid-item">
-                    <label for="expirationDate">Expiration Date</label>
-                    <input type="text" id="expirationDate" v-model="slot.paymentMethod.expirationDate" placeholder="expiration date">
-                    <span class="error-message" v-if="expirationDateError">{{ expirationDateError }}</span>
-
+                    <label for="latitude">Latitude</label>
+                    <input type="text" id="latitude" v-model="slot.location.latitude" placeholder="latitude" disabled>
+<!--                    <span class="error-message" v-if="cvvError">{{ cvvError }}</span>-->
                 </div>
                 <div class="grid-item">
-                    <label for="iban">IBAN</label>
-                    <input type="text" id="iban" v-model="slot.paymentMethod.iban" placeholder="IBAN">
-                    <span class="error-message" v-if="ibanError">{{ ibanError }}</span>
+                    <label for="longitude">Longitude</label>
+                    <input type="text" id="longitude" v-model="slot.location.longitude" placeholder="longitude" disabled>
+<!--                    <span class="error-message" v-if="expirationDateError">{{ expirationDateError }}</span>-->
                 </div>
+
             </div>
         </div>
     </div>
@@ -81,6 +74,7 @@
 </template>
 
 <script>
+import './SlotCard.css'
 export default {
     name: "SlotCard",
     props: {

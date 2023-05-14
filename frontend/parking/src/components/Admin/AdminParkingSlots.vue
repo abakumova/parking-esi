@@ -25,15 +25,20 @@ export default {
             required: false,
         },
     },
+    //TODO: fix bug, slot is not removing after deleting (emit bug??)
+    //TODO: add validations
+    //TODO: add validation for location. If it was't modified -> don't send the request to backend
     methods: {
         async deleteSlot(slotId) {
-            await ApiService.parking.deleteSlot(slotId);
+            await ApiService.parking.deleteParkingSlot(slotId);
             console.log("PARENT DELETE")
             this.slots = this.slots.filter(slot => slot.id !== slotId);
         },
 
         async updateSlot(updatedSlot) {
-            await ApiService.parking.updateSlot(updatedSlot.id, updatedSlot);
+            const newLocation = await ApiService.location.getLocation(updatedSlot.location.formattedAddress)
+            updatedSlot.location = newLocation
+            await ApiService.parking.updateParkingSlot(updatedSlot.id, updatedSlot);
             const index = this.slots.findIndex((slot) => slot.id === updatedSlot.id);
             this.$set(this.slots, index, updatedSlot);
         },

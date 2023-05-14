@@ -31,8 +31,14 @@ class ParkingManagementService extends HttpService{
         return this.http.get(`/by-status/${status}`);
     }
 
-    async getParkingSlots() {
-        return (await this.http.get(`/`)).data;
+    async getParkingSlots({limit, page}) {
+        const response = await this.http.get(``, {
+            params: {
+                limit: limit,
+                page: page
+            }
+        })
+        return response.data;
     }
 
     async getParkingSlotsByLocation(lat, lon) {

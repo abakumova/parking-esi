@@ -1,32 +1,32 @@
-.user-card {
+.slot-card {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
 
-.user-card .grid {
+.slot-card .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1rem;
 }
 
-.user-card .grid-item {
+.slot-card .grid-item {
     display: flex;
     flex-direction: column;
 }
 
-.user-card label {
+.slot-card label {
     text-align: left;
 }
 
-.user-card input {
+.slot-card input {
     text-align: left;
     border:none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 
 }
 
-.user-card select {
+.slot-card select {
     border: none;
     width:100%;
     font-size: 14px;

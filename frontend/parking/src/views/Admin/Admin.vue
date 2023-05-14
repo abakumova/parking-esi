@@ -8,15 +8,11 @@
         <div class="tab-content">
             <component v-if="selectedTab === 'users'"
                        :is='AdminUsers'
-                       :users='users'
-                       @update-user="updateUser"
-                       @delete-user="deleteUser"/>
+                       :users='users'/>
 
             <component v-if="selectedTab === 'slots'"
                        :is='AdminParkingSlots'
-                       :slots='slots'
-                       @update-user="updateSlot"
-                       @delete-user="deleteSlot"/>
+                       :slots='slots'/>
         </div>
     </div>
 </template>
@@ -27,7 +23,6 @@
 import AdminUsers from "@/components/Admin/AdminUsers.vue";
 import AdminParkingSlots from "@/components/Admin/AdminParkingSlots.vue";
 import ApiService from "@/api/ApiService";
-import auth from "@/auth";
 import {PARKING_STATUS} from "@/constants/parkingStatus";
 
 export default {
@@ -59,8 +54,13 @@ export default {
             this.selectedTab = tabName;
         },
         async fetchSlots() {
-            const resp = await ApiService.parking.getParkingSlots()
+            const params = {
+                limit:100000,
+                page:0,
+            }
+            const resp = await ApiService.parking.getParkingSlots(params)
             this.slots = resp.data
+
             console.warn(`Fetched parking slots:`)
             console.warn(this.slots)
         },
@@ -72,17 +72,15 @@ export default {
             }
             const resp = await ApiService.user.getUsers(params)
             this.users = resp.data
+
             console.warn(`Fetched users:`)
             console.warn(this.users)
         },
-        // async deleteSlot(id) {
-        //     await ApiService.parking.deleteParkingSlot(id)
-        //     this.slots = this.slots.filter(slot => slot.id !== id);
-        // }
+
     },
     async mounted() {
-        // this.fetchSlots()
         await this.fetchUsers()
+        await this.fetchSlots()
     },
 };
 </script>

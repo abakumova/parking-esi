@@ -21,12 +21,8 @@ class UserManagementService extends HttpService{
         return response.data;
     }
 
-    async deleteUser(id, token) {
-        const response = await this.http.delete(`/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+    async deleteUser(id) {
+        const response = await this.http.delete(`/${id}`);
         return response.data;
     }
 
@@ -40,8 +36,13 @@ class UserManagementService extends HttpService{
         return response.data;
     }
 
-    async getUsers() {
-        const response = await this.http.get('');
+    async getUsers({limit, page}) {
+        const response = await this.http.get(``, {
+            params: {
+                limit: limit,
+                page: page
+            }
+        });
         return response.data;
     }
 

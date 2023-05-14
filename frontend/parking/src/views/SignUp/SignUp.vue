@@ -181,8 +181,8 @@ export default {
             if(!this.password) {
                 this.passwordError = 'Password is required';
                 isValid = false;
-            } else if (this.password.length > 20) {
-                this.passwordError = 'Max length is 20 symbols';
+            } else if (this.password.length > 50) {
+                this.passwordError = 'Max length is 50 symbols';
                 isValid = false;
             } else if (this.password.length < 5) {
                 this.passwordError = 'Min length is 5 symbols';

@@ -1,18 +1,11 @@
 .profile-icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #00ccff;
     margin-right: 20px;
     cursor: pointer;
 }
 
 .profile-icon {
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
     object-fit: cover;
     border-radius: 50%;
 }

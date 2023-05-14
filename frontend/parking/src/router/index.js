@@ -8,6 +8,7 @@ import ParkingManagement from "@/views/ParkingManagement/ParkingManagement.vue";
 import Booking from "@/views/Booking/Booking.vue";
 import auth from "../auth";
 import {ROLES} from "@/constants/roles";
+import Admin from "@/views/Admin/Admin.vue";
 
 const routes = [
   {
@@ -43,7 +44,7 @@ const routes = [
     component: Profile,
     meta: {
       requiresAuth: true,
-      roles: [ROLES.USER, ROLES.LANDLORD],
+      roles: [ROLES.USER, ROLES.LANDLORD, ROLES.ADMIN],
     }
   },
   {
@@ -63,6 +64,15 @@ const routes = [
       requiresAuth: true, // requires authentication
       roles: [ROLES.ADMIN, ROLES.LANDLORD], // can access this route
     },
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: Admin,
+    meta: {
+      requiresAuth: true, // requires authentication
+      roles: [ROLES.ADMIN]
+    }
   },
   {
     path: '/booking/:id',

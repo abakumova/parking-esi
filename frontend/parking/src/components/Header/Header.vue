@@ -3,6 +3,7 @@
         <div class="header-left">
             <router-link to="/">Home</router-link>
             <router-link to="/parking" v-if="isLandlord">Create Parking</router-link>
+            <router-link to="/admin" v-if="isAdmin">Godlike</router-link>
         </div>
         <div class="header-middle">
             <Search />
@@ -32,7 +33,8 @@ export default {
     data() {
         return {
             authenticated: auth.user.authenticated,
-            isLandlord: auth.getUserRole() === ROLES.LANDLORD
+            isLandlord: auth.getUserRole() === ROLES.LANDLORD,
+            isAdmin: auth.getUserRole() === ROLES.ADMIN
         }
     },
     components: {

@@ -17,4 +17,6 @@ public class AnalyticsDto {
     private String parkingSlotId;
     private double occupancy;
     private double revenue;
+    private long totalBookingCount;
+    private long totalBookingDuration;
 }

@@ -46,6 +46,7 @@ public class AnalyticsService {
 
     public AnalyticsDto getAnalytics(String parkingSlotId) {
         Analytics analytics = analyticsRepository.findByParkingSlotId(parkingSlotId);
+        log.debug(analytics.toString());
         if (analytics == null) {
             return null;
         }

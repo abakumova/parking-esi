@@ -2,6 +2,8 @@
     <div class="analytics">
         <p>Occupancy: {{ occupancy }}</p>
         <p>Revenue: {{ revenue }}</p>
+        <p>Total Booking count: {{ totalBookingCount }}</p>
+        <p>Total Booking duration: {{ totalBookingDuration }}</p>
     </div>
 </template>
 
@@ -24,9 +26,11 @@ export default {
         };
     },
     async created() {
-        const response = await AnalyticsService.getAnalyticsByParkingSlotId;
+        const response = await AnalyticsService.getAnalyticsByParkingSlotId(this.slotId);
         this.occupancy = response.data.occupancy;
         this.revenue = response.data.revenue;
+        this.totalBookingCount = response.data.totalBookingCount;
+        this.totalBookingDuration = response.data.totalBookingDuration;
     }
 };
 </script>

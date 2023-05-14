@@ -60,8 +60,8 @@ public class PaymentService {
 
             paymentStatus = PaymentStatusEnum.COMPLETED;
 
-            BigDecimal balanceLandlord = new BigDecimal(getPaymentMethodDtoForUser(booking.getLandlordId()));
-            updateBalance(booking.getLandlordId(), balanceLandlord.add(amount).toString());
+//            BigDecimal balanceLandlord = new BigDecimal(getPaymentMethodDtoForUser(booking.getLandlordId()));
+//            updateBalance(booking.getLandlordId(), balanceLandlord.add(amount).toString());
         } else {
             paymentStatus = PaymentStatusEnum.DECLINED;
         }

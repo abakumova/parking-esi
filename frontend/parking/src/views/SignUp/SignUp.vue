@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input id="email" type="email" v-model="email" required>
+                    <input id="email" type="email" v-model="email" placeholder="email" required>
                     <span class="error-message" v-if="emailError">{{ emailError }}</span>
                 </div>
             </div>
@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input id="password" type="password" v-model="password" required>
+                    <input id="password" type="password" v-model="password" placeholder="password" required>
                     <span class="error-message" v-if="passwordError">{{ passwordError }}</span>
                 </div>
 
@@ -34,13 +34,13 @@
             <div class="row">
                 <div class="form-group">
                     <label for="firstName">First Name</label>
-                    <input id="firstName" type="text" v-model="firstName" required>
+                    <input id="firstName" type="text" v-model="firstName" placeholder="first name" required>
                     <span class="error-message" v-if="firstNameError">{{ firstNameError }}</span>
                 </div>
 
                 <div class="form-group">
                     <label for="lastName">Last Name</label>
-                    <input id="lastName" type="text" v-model="lastName" required>
+                    <input id="lastName" type="text" v-model="lastName" placeholder="last name" required>
                     <span class="error-message" v-if="lastNameError">{{ lastNameError }}</span>
                 </div>
             </div>
@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="form-group">
                     <label for="cardNumber">Card Number:</label>
-                    <input type="text" id="cardNumber" v-model="cardNumber" pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}" required>
+                    <input type="text" id="cardNumber" v-model="cardNumber" placeholder="card number" pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}" required>
                     <span class="error-message" v-if="cardNumberError">{{ cardNumberError }}</span>
                 </div>
             </div>
@@ -57,7 +57,6 @@
                 <div class="form-group">
                     <label for="expirationMonth">Expiration</label>
                     <select id="expirationMonth" v-model="expirationMonth" required>
-                        <option value="">-- Select Month --</option>
                         <option value="01">January</option>
                         <option value="02">February</option>
                         <option value="03">March</option>
@@ -76,13 +75,13 @@
 
                 <div class="form-group">
                     <label for="expirationYear">date</label>
-                    <input type="text" id="expirationYear" v-model="expirationYear" pattern="[0-9]{4}" required>
+                    <input type="text" id="expirationYear" v-model="expirationYear" placeholder="year" pattern="[0-9]{4}" required>
                     <span class="error-message" v-if="expirationYearError">{{ expirationYearError }}</span>
                 </div>
 
                 <div class="form-group">
                     <label for="cvv">CVV:</label>
-                    <input type="password" id="cvv" v-model="cvv" pattern="[0-9]{3,4}" required>
+                    <input type="password" id="cvv" v-model="cvv" placeholder="cvv" pattern="[0-9]{3,4}" required>
                     <span class="error-message" v-if="cvvError">{{ cvvError }}</span>
                 </div>
             </div>
@@ -112,7 +111,7 @@ export default {
             isValid: false,
 
             cardNumber: '',
-            expirationMonth: '',
+            expirationMonth: '01',
             expirationYear: '',
             cvv: '',
 

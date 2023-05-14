@@ -42,7 +42,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.btn-sign-in {
+.signin-container .btn-sign-in {
     background-color: #00ccff;
     color: #ffffff;
     border: none;
@@ -55,12 +55,12 @@
     margin-top: 20px;
 }
 
-.btn-sign-in:hover {
+.signin-container .btn-sign-in:hover {
     background-color: #0088b3;
 }
 
 
-.btn-go-to-sign-up {
+.signin-container .btn-go-to-sign-up {
     background-color: transparent;
     color: #00ccff;
     border: none;
@@ -70,11 +70,11 @@
     margin-top: 10px;
 }
 
-.btn-go-to-sign-up:hover {
+.signin-container .btn-go-to-sign-up:hover {
     color: #0088b3;
 }
 
-.arrow {
+.signin-container .arrow {
     display: inline-block;
     width: 0;
     height: 0;
@@ -84,6 +84,6 @@
     margin-right: 10px;
 }
 
-.arrow:hover {
+.signin-container .arrow:hover {
     border-color: transparent #0088b3 transparent transparent;
 }

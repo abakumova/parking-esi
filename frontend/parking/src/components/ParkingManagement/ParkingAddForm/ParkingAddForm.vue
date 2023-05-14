@@ -3,17 +3,17 @@
         <form @submit.prevent="save">
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" v-model="name">
+                <input type="text" id="name" v-model="name" placeholder="name">
                 <div v-if="!name" class="error-message">Name is required</div>
             </div>
             <div class="form-group">
                 <label for="price">Price:</label>
-                <input type="number" id="price" v-model="price">
+                <input type="number" id="price" v-model="price" placeholder="price">
                 <div v-if="!price" class="error-message">Price is required</div>
             </div>
             <div class="form-group">
                 <label for="location">Location:</label>
-                <input type="text" id="location" v-model="location">
+                <input type="text" id="location" v-model="location" placeholder="location">
                 <div v-if="!location" class="error-message">Location is required</div>
                 <div v-if="locationError" class="error-message">{{ locationError }}</div>
             </div>

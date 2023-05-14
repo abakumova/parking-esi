@@ -5,23 +5,23 @@
             <div class="grid">
                 <div class="grid-item">
                     <label for="userId">User ID</label>
-                    <input type="text" id="userId" v-model="user.id" disabled>
+                    <input type="text" id="userId" v-model="user.id" placeholder="user id" disabled>
                 </div>
                 <div class="grid-item">
                     <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" v-model="user.firstName">
+                    <input type="text" id="firstName" v-model="user.firstName" placeholder="first name">
                 </div>
                 <div class="grid-item">
                     <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" v-model="user.lastName">
+                    <input type="text" id="lastName" v-model="user.lastName" placeholder="last name">
                 </div>
                 <div class="grid-item">
                     <label for="email">Email</label>
-                    <input type="email" id="email" v-model="user.email">
+                    <input type="email" id="email" v-model="user.email" placeholder="last name">
                 </div>
                 <div class="grid-item">
                     <label for="role">Role</label>
-                    <input type="text" id="role" v-model="user.role">
+                    <input type="text" id="role" v-model="user.role" placeholder="role">
                 </div>
             </div>
         </div>
@@ -30,27 +30,27 @@
             <div class="grid">
                 <div class="grid-item">
                     <label for="cardNumber">Card Number</label>
-                    <input type="text" id="cardNumber" v-model="user.paymentMethod.cardNumber">
+                    <input type="text" id="cardNumber" v-model="user.paymentMethod.cardNumber" placeholder="card number">
                 </div>
                 <div class="grid-item">
                     <label for="cardHolderName">Card Holder Name</label>
-                    <input type="text" id="cardHolderName" v-model="user.paymentMethod.cardHolderName">
+                    <input type="text" id="cardHolderName" v-model="user.paymentMethod.cardHolderName" placeholder="card holder name">
                 </div>
                 <div class="grid-item">
                     <label for="balance">Balance</label>
-                    <input type="text" id="balance" v-model="user.paymentMethod.balance">
+                    <input type="text" id="balance" v-model="user.paymentMethod.balance" placeholder="balance">
                 </div>
                 <div class="grid-item">
                     <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" v-model="user.paymentMethod.cvv">
+                    <input type="text" id="cvv" v-model="user.paymentMethod.cvv" placeholder="cvv">
                 </div>
                 <div class="grid-item">
                     <label for="expirationDate">Expiration Date</label>
-                    <input type="text" id="expirationDate" v-model="user.paymentMethod.expirationDate">
+                    <input type="text" id="expirationDate" v-model="user.paymentMethod.expirationDate" placeholder="expiration date">
                 </div>
                 <div class="grid-item">
                     <label for="iban">IBAN</label>
-                    <input type="text" id="iban" v-model="user.paymentMethod.iban">
+                    <input type="text" id="iban" v-model="user.paymentMethod.iban" placeholder="IBAN">
                 </div>
             </div>
         </div>

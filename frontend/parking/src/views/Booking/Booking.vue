@@ -25,46 +25,6 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="form-group">
-                <label for="cardNumber">Card Number:</label>
-                <input type="text" id="cardNumber" v-model="cardNumber" pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}" required>
-                <span class="error-message" v-if="cardNumberError">{{ cardNumberError }}</span>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group">
-                <label for="expirationMonth">Expiration Month:</label>
-                <select id="expirationMonth" v-model="expirationMonth" required>
-                    <option value="">-- Select Month --</option>
-                    <option value="01">January</option>
-                    <option value="02">February</option>
-                    <option value="03">March</option>
-                    <option value="04">April</option>
-                    <option value="05">May</option>
-                    <option value="06">June</option>
-                    <option value="07">July</option>
-                    <option value="08">August</option>
-                    <option value="09">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                </select>
-                <span class="error-message" v-if="expirationMonthError">{{ expirationMonthError }}</span>
-            </div>
-
-            <div class="form-group">
-                <label for="expirationYear">Expiration Year:</label>
-                <input type="text" id="expirationYear" v-model="expirationYear" pattern="[0-9]{4}" required>
-                <span class="error-message" v-if="expirationYearError">{{ expirationYearError }}</span>
-            </div>
-            <div class="form-group">
-                <label for="cvv">CVV:</label>
-                <input type="text" id="cvv" v-model="cvv" pattern="[0-9]{3,4}" required>
-                <span class="error-message" v-if="cvvError">{{ cvvError }}</span>
-            </div>
-        </div>
 
         <button class="submit-button" @click="submitBooking">Submit Booking</button>
     </div>
@@ -87,25 +47,14 @@ export default {
             location: {
                 formattedAddress: ''
             },
-            cardNumber: '',
-            expirationMonth: '',
-            expirationYear: '',
-            cvv: '',
             timeFrom: formatDateLocal(new Date()),
             timeUntil: '',
             timeFromError: '',
             timeUntilError: '',
-            cardNumberError: '',
-            expirationYearError: '',
-            expirationMonthError: '',
-            cvvError: ''
         };
     },
     mounted() {
         this.fetchParkingSlot();
-        setInterval(() => {
-            this.timeFrom = formatDateLocal(new Date());
-        }, 1000);
     },
     methods: {
         async fetchParkingSlot() {
@@ -152,53 +101,6 @@ export default {
                 isValid = false;
             } else {
                 this.timeUntilError = '';
-            }
-
-            // Validate cardNumber
-            if(!this.cardNumber) {
-                this.cardNumberError = 'Card number is required';
-                isValid = false;
-            } else if (!/^\d{16}$/.test(this.cardNumber)) {
-                this.cardNumberError = 'Card number must be 16 digits long';
-                isValid = false;
-            } else {
-                this.cardNumberError = '';
-            }
-
-            //Validate expirationMonth
-            if(!this.expirationMonth) {
-                this.expirationMonthError = 'Expiration month is required';
-                isValid = false;
-            } else if(!this.expirationMonth) {
-                this.expirationMonthError = 'Expiration month is required'
-                isValid = false
-            } else {
-                this.expirationMonthError = ''
-            }
-
-            // Validate expirationYear
-            if(!this.expirationYear) {
-                this.expirationYearError = 'Expiration year is required';
-                isValid = false;
-            } else if (!/^\d{4}$/.test(this.expirationYear)) {
-                this.expirationYearError = 'Expiration year must be 4 digits long';
-                isValid = false;
-            } else if (parseInt(this.expirationYear) < 2023 || parseInt(this.expirationYear) > 2030) {
-                this.expirationYearError = 'Expiration year must be between 2023 and 2030';
-                isValid = false;
-            } else {
-                this.expirationYearError = '';
-            }
-
-            // Validate cvv
-            if(!this.cvv) {
-                this.cvvError = 'CVV is required';
-                isValid = false;
-            } else if (!/^\d{3}$/.test(this.cvv)) {
-                this.cvvError = 'CVV must be 3 digits long';
-                isValid = false;
-            } else {
-                this.cvvError = '';
             }
 
             return isValid;

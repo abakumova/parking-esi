@@ -11,8 +11,8 @@ public class RouteValidator {
 
     //TODO add open endpoints - search
     public static final List<String> openApiEndpoints = List.of(
-            "api/v1/auth/authenticate",
-            "api/v1/location",
+            "/api/v1/auth/authenticate",
+            "/api/v1/location",
             "/api/v1/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",

@@ -72,12 +72,9 @@ public class ParkingSlotService {
     }
 
     public List<ParkingSlot> getParkingSlotByLocation(String lat, String lon, Optional<String> distance) {
-        if (distance.isEmpty()) {
-            distance = "1.0".describeConstable();
-        }
+        String finalDistance = distance.orElse("1.0");
         List<ParkingSlot> list = parkingSlotRepository.findAllByStatus(SlotStatusEnum.OPEN);
         log.debug("-- getParkingSlotByLocation Status OPEN {}", list);
-        String finalDistance = String.valueOf(distance);
         List<ParkingSlot> result = list
                 .stream()
                 .filter(slot -> distance(slot.getLocation().getLatitude(), slot.getLocation().getLongitude(),

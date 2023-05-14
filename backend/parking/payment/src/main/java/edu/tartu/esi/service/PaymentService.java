@@ -127,7 +127,7 @@ public class PaymentService {
         json.put("password", password);
 
         Mono<Map<String, String>> jwtTokenMono = webClientBuilder.build().post()
-                .uri("/api/v1/authenticate")
+                .uri("http://localhost:8089/api/v1/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(json)
                 .retrieve()

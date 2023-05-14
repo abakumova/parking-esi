@@ -1,6 +1,5 @@
 package edu.tartu.esi.controller;
 
-import edu.tartu.esi.security.JwtRole;
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
@@ -17,8 +16,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-import static edu.tartu.esi.security.Role.*;
-
 @RestController
 @RequiredArgsConstructor
 @Validated
@@ -30,7 +27,6 @@ public class ParkingSlotController {
     @Autowired
     private ParkingSlotService parkingSlotService;
 
-    @JwtRole(roles = {LANDLORD, ADMIN})
     @GetMapping(value = "/parking-slots/by-id/{slotId}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ParkingSlotDto getParkingSlot(@Valid @PathVariable String slotId) {
@@ -43,21 +39,20 @@ public class ParkingSlotController {
         return parkingSlotService.getParkingSlotByStatus(status);
     }
 
-    @GetMapping(value = {"/parking-slots/by-location/{lat}/{lon}", "/parking-slots/by-location/{lat}/{lon}/{distance}"}, produces = {"application/json"})
+    @GetMapping(value = "/parking-slots/by-location/{lat}/{lon}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public List<ParkingSlot> getParkingSlotByLocation(@Valid @PathVariable String lat, @Valid @PathVariable String lon,
-                                                      @Valid @PathVariable(required = false) Optional<String> distance) {
-        return parkingSlotService.getParkingSlotByLocation(lat, lon, distance);
+                                                      @RequestParam(required = false) String distance) {
+        Optional<String> distanceOpt = Optional.ofNullable(distance);
+        return parkingSlotService.getParkingSlotByLocation(lat, lon, distanceOpt);
     }
 
-    @JwtRole(roles = {LANDLORD, ADMIN})
     @GetMapping(value = "/parking-slots/by-landlord/{landlordId}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public List<ParkingSlot> getParkingSlotByLandlord(@Valid @PathVariable String landlordId) {
         return parkingSlotService.getParkingSlotByLandlord(landlordId);
     }
 
-    @JwtRole(roles = {LANDLORD, ADMIN})
     @PostMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> createParkingSlot(@Valid @RequestBody ParkingSlotDto parkingSlotDto) {
@@ -65,7 +60,6 @@ public class ParkingSlotController {
         return ResponseEntity.ok("Parking slot has been created");
     }
 
-    @JwtRole(roles = {LANDLORD, ADMIN})
     @PutMapping(value = "/parking-slots/{id}", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> updateParkingSlot(@Valid @PathVariable String id, @Valid @RequestBody ParkingSlotDto parkingSlotDto) {
@@ -73,7 +67,6 @@ public class ParkingSlotController {
         return ResponseEntity.ok("Parking slot has been updated");
     }
 
-    @JwtRole(roles = {LANDLORD, ADMIN})
     @PutMapping(value = "/parking-slots/{id}/status")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> updateParkingSlotStatus(@Valid @PathVariable String id, @Valid @RequestBody SlotStatusEnum status) {
@@ -81,7 +74,6 @@ public class ParkingSlotController {
         return ResponseEntity.ok("Parking slot status has been updated");
     }
 
-    @JwtRole(roles = {LANDLORD, ADMIN})
     @DeleteMapping(value = "/parking-slots/{id}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deleteParkingStatus(@Valid @PathVariable String id) {

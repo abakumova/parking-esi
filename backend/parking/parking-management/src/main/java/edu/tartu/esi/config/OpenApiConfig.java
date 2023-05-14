@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
                 version = "1.0",
                 license = @License(
                         name = "Licence name",
-                        url = "https://some-url.com"
+                        url = "http://some-url.com"
                 ),
                 termsOfService = "Terms of service"
         ),

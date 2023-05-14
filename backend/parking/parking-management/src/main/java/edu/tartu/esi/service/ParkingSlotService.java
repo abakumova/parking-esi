@@ -1,19 +1,24 @@
 package edu.tartu.esi.service;
 
+import edu.tartu.esi.dto.PaginatedResponseDto;
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.exception.ParkingSlotNotFoundException;
 import edu.tartu.esi.mapper.ParkingSlotMapper;
 import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.ParkingSlotRepository;
+import edu.tartu.esi.search.GenericSearchDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -97,6 +102,22 @@ public class ParkingSlotService {
     public List<ParkingSlot> getParkingSlotByLandlord(String landlordId) {
         log.debug("-- getParkingSlotByLandlord LandlordId {}", landlordId);
         return parkingSlotRepository.findAllByLandlordId(landlordId);
+    }
+
+    public PaginatedResponseDto<ParkingSlotDto> getParkingSlots(GenericSearchDto<ParkingSlotDto> searchDto) {
+        log.info("-- getParkingSlots");
+        Page<ParkingSlot> userList = parkingSlotRepository.findAll(searchDto.getSpecification(), searchDto.getPageable());
+        List<ParkingSlotDto> userDtos = parkingSlotMapper.toDtos(userList.getContent());
+
+        return PaginatedResponseDto.<ParkingSlotDto>builder()
+                .page(searchDto.getPage())
+                .size(userDtos.size())
+                .sortingFields(Arrays.stream(searchDto.getSort())
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", ")))
+                .sortDirection(searchDto.getDir().name())
+                .data(userDtos)
+                .build();
     }
 
     private void assertParkingSlotDto(ParkingSlotDto parking, String msg) {

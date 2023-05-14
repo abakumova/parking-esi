@@ -57,7 +57,7 @@
     </div>
     <div>
         <button @click="$emit('update-user', user)">Update</button>
-        <button @click="$emit('delete-user', user.id)">Delete</button>
+        <button @click="$emit('delete-user', this.user.id)">Delete</button>
     </div>
 </template>
 

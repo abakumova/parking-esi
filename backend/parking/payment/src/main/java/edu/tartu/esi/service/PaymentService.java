@@ -83,12 +83,12 @@ public class PaymentService {
 
     @LoadBalanced
     public void updateBalance(String userId, String newBalanceStr) throws JSONException {
-        Map<String, String> jwtTokenMap = getToken(email, password);
+        //Map<String, String> jwtTokenMap = getToken(email, password);
 
         webClientBuilder.build()
                 .put()
                 .uri("http://localhost:8089/api/v1/users/" + userId + "/balance")
-                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .bodyValue(newBalanceStr)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -97,12 +97,12 @@ public class PaymentService {
 
     @LoadBalanced
     public Booking getBooking(String bookingId) throws JSONException {
-        Map<String, String> jwtTokenMap = getToken(email, password);
+        //Map<String, String> jwtTokenMap = getToken(email, password);
         return webClientBuilder
                 .build()
                 .get()
                 .uri("http://localhost:8089/api/v1/bookings/" + bookingId)
-                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .retrieve()
                 .bodyToMono(Booking.class)
                 .block();
@@ -110,29 +110,29 @@ public class PaymentService {
 
     @LoadBalanced
     public String getPaymentMethodDtoForUser(String userId) throws JSONException {
-        Map<String, String> jwtTokenMap = getToken(email, password);
+       // Map<String, String> jwtTokenMap = getToken(email, password);
         return webClientBuilder
                 .build()
                 .get()
                 .uri("http://localhost:8089/api/v1/users/" + userId + "/balance")
-                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
     }
 
-    private  Map<String, String> getToken(String email, String password) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("email", email);
-        json.put("password", password);
-
-        Mono<Map<String, String>> jwtTokenMono = webClientBuilder.build().post()
-                .uri("http://localhost:8089/api/v1/auth/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(json)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {});
-
-        return jwtTokenMono.block();
-    }
+//    private  Map<String, String> getToken(String email, String password) throws JSONException {
+//        JSONObject json = new JSONObject();
+//        json.put("email", email);
+//        json.put("password", password);
+//
+//        Mono<Map<String, String>> jwtTokenMono = webClientBuilder.build().post()
+//                .uri("http://localhost:8089/api/v1/auth/authenticate")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .bodyValue(json)
+//                .retrieve()
+//                .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {});
+//
+//        return jwtTokenMono.block();
+//    }
 }

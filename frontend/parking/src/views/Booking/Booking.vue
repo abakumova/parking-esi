@@ -37,6 +37,7 @@ import './Booking.css'
 import auth from "@/auth";
 import ApiService from "@/api/ApiService";
 import {formatDateLocal} from "@/utils";
+import BookingService from "@/api/booking/BookingService";
 
 export default {
     name: "Booking",
@@ -51,6 +52,7 @@ export default {
             timeUntil: '',
             timeFromError: '',
             timeUntilError: '',
+            landlordId: '',
         };
     },
     mounted() {
@@ -78,11 +80,11 @@ export default {
                     price: this.price,
                     timeFrom: this.timeFrom,
                     timeUntil: this.timeUntil,
-                    landlordId: await ApiService.parking.getParkingSlotById(this.parkingSlotId).data.landlordId
+                    landlordId: this.landlordId
                 };
 
                 try {
-                    const response = await this.createBooking(bookingPayload);
+                    const response = await BookingService.createBooking(bookingPayload);
                     console.log("Booking submitted successfully:", response);
                 } catch (error) {
                     console.error("Failed to submit booking:", error);

@@ -57,9 +57,9 @@ public class BookingService {
 
 
     public String createBooking(BookingDto bookingDto) throws JSONException {
-        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
-            return "Parking slot is closed.";
-        }
+//        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
+//            return "Parking slot is closed.";
+//        }
 
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
@@ -120,12 +120,12 @@ public class BookingService {
 
     @LoadBalanced
     public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) throws JSONException {
-        Map<String, String> jwtTokenMap = getToken(email, password);
+        //Map<String, String> jwtTokenMap = getToken(email, password);
 
         webClientBuilder.build()
                 .put()
                 .uri("http://localhost:8089/api/v1/parking-slots/" + parkingSlotId + "/status")
-                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .bodyValue(status)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -140,12 +140,12 @@ public class BookingService {
                 .build();
         CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
 
-        Map<String, String> jwtTokenMap = getToken(email, password);
+        //Map<String, String> jwtTokenMap = getToken(email, password);
 
         return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> webClientBuilder.build()
                 .post()
                 .uri("http://localhost:8089/api/v1/make-payment")
-                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .bodyValue(bookingId)
                 .retrieve()
                 .bodyToMono(PaymentStatusEnum.class)
@@ -157,13 +157,13 @@ public class BookingService {
 
     @LoadBalanced
     public SlotStatusEnum getParkingSlotStatus(String slotId) throws JSONException {
-        Map<String, String> jwtTokenMap = getToken(email, password);
+        //Map<String, String> jwtTokenMap = getToken(email, password);
 
         return webClientBuilder
                 .build()
                 .get()
                 .uri("http://localhost:8089/api/v1/parking-slots/by-id/" + slotId)
-                .header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .retrieve()
                 .bodyToMono(ParkingSlot.class)
                 .block()
@@ -214,18 +214,18 @@ public class BookingService {
         }, delayInMillis, TimeUnit.MILLISECONDS);
     }
 
-    private  Map<String, String> getToken(String email, String password) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("email", email);
-        json.put("password", password);
-
-        Mono<Map<String, String>> jwtTokenMono = webClientBuilder.build().post()
-                .uri("http://localhost:8089/api/v1/auth/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(json)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {});
-
-        return jwtTokenMono.block();
-    }
+//    private  Map<String, String> getToken(String email, String password) throws JSONException {
+//        JSONObject json = new JSONObject();
+//        json.put("email", email);
+//        json.put("password", password);
+//
+//        Mono<Map<String, String>> jwtTokenMono = webClientBuilder.build().post()
+//                .uri("http://localhost:8089/api/v1/auth/authenticate")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .bodyValue(json)
+//                .retrieve()
+//                .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {});
+//
+//        return jwtTokenMono.block();
+//    }
 }

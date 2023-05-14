@@ -34,7 +34,7 @@ public class BookingController {
         return bookingService.getBookingById(id);
     }
 
-    @PostMapping(value = "/bookings", consumes = {"application/json"}, produces = {"application/json"})
+    @PostMapping(value = "/bookings")//, consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> createBooking(@Valid @RequestBody BookingDto bookingDto) throws JSONException {
         String response = bookingService.createBooking(bookingDto);

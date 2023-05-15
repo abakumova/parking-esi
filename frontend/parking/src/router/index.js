@@ -79,7 +79,7 @@ const routes = [
     component: Booking,
     meta: {
       requiresAuth: true,
-      roles: [ROLES.USER]
+      roles: [ROLES.USER, ROLES.LANDLORD, ROLES.ADMIN]
     }
   },
   // { //will route to AllPosts view if none of the previous routes apply

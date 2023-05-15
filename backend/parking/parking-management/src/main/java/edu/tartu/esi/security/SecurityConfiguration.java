@@ -22,7 +22,7 @@ import static org.springframework.http.HttpMethod.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    //private final JwtAuthenticationFilter jwtAuthFilter;
+    private final JwtAuthenticationFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/api/v1/**",
+                        //"/api/v1/**",
                         "/api/v1/auth/**",
                         "/v2/api-docs",
                         "/v3/api-docs",
@@ -46,35 +46,39 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
 
-//                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyRole(ADMIN.name(), LANDLORD.name())
-//                .requestMatchers(GET, "/api/v1/parking-slots/by-status/**").permitAll()
-//                .requestMatchers(GET, "/api/v1/parking-slots/by-location/**").permitAll()
-//                .requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyRole(ADMIN.name(), LANDLORD.name())
-//                .requestMatchers(POST, "/api/v1/parking-slots").hasAnyRole(ADMIN.name(), LANDLORD.name())
-//                .requestMatchers(PUT, "/api/v1/parking-slots/**").hasAnyRole(ADMIN.name(), LANDLORD.name())
-//                .requestMatchers(DELETE, "/api/v1/parking-slots/**").hasAnyRole(ADMIN.name(), LANDLORD.name())
+                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(GET, "/api/v1/parking-slots/by-status/**").permitAll()
+                .requestMatchers(GET, "/api/v1/parking-slots/by-location/**").permitAll()
+                .requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(POST, "/api/v1/parking-slots").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(PUT, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(GET, "/api/v1/parking-slots").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(GET, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(DELETE, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
 
-//                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasRole("LANDLORD")
-//                .requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyRole("ADMIN", "LANDLORD")
-//                .requestMatchers(POST, "/api/v1/parking-slots").hasAnyRole("ADMIN", "LANDLORD")
-//                .requestMatchers(PUT, "/api/v1/parking-slots/**").hasAnyRole("ADMIN", "LANDLORD")
-//                .requestMatchers(DELETE, "/api/v1/parking-slots/**").hasAnyRole("ADMIN", "LANDLORD")
+                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyAuthority("ROLE_LANDLORD")
+                .requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(POST, "/api/v1/parking-slots").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(PUT, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(DELETE, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
 
                 //.requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
 
 //                .anyRequest()
 //                .authenticated()
 //
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
                 .anyRequest()
                 .authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
 }

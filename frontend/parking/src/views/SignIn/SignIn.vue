@@ -5,11 +5,16 @@
         <h1><router-link to="/">
             <i class="arrow"></i>
         </router-link>Sign In</h1>
-        <label for="email">Email</label>
-        <input id="email" type="email" v-model="email" placeholder="email" required>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" v-model="email" placeholder="email" required>
+        </div>
 
-        <label for="password">Password</label>
-        <input id="password" type="password" v-model="password" placeholder="password" required>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" v-model="password" placeholder="password" required>
+        </div>
 
         <button class="btn-sign-in" @click="signIn">Sign In</button>
         <button class="btn-go-to-sign-up" @click="openSignUp">Go To Sign Up</button>

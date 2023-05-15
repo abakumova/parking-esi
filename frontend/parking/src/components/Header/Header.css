@@ -4,8 +4,20 @@
     align-items: center;
     height: 80px;
     padding: 0 40px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     margin-bottom: 25px;
+
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+}
+
+.header a {
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.header a+a {
+    margin-left:1rem;
 }
 
 .header-left {
@@ -30,21 +42,6 @@
     height:100%;
     align-items: center;
     justify-content: center;
-}
-
-.header-right button {
-    margin-left: 10px;
-    background-color: #00ccff;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.header-right button:hover {
-    background-color: #0088b3;
 }
 
 .header-right li {

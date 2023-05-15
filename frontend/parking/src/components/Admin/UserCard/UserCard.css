@@ -21,17 +21,4 @@
 
 .user-card input {
     text-align: left;
-    border:none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-
-}
-
-.user-card select {
-    border: none;
-    width:100%;
-    font-size: 14px;
-    border-radius: 3px;
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-
 }

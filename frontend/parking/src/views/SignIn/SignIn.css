@@ -6,84 +6,25 @@
 }
 
 .signin-form {
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 30px;
-    width: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
-.signin-form h1 {
-    margin-bottom: 30px;
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-}
-
-.signin-form label {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: left;
-    width: 100%;
-}
-
-.signin-form input {
-    height: 30px;
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
-
-.signin-container .btn-sign-in {
-    background-color: #00ccff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    height: 40px;
-    width: 100%;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-.signin-container .btn-sign-in:hover {
-    background-color: #0088b3;
-}
-
-
-.signin-container .btn-go-to-sign-up {
-    background-color: transparent;
-    color: #00ccff;
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.signin-container .btn-go-to-sign-up:hover {
-    color: #0088b3;
-}
-
-.signin-container .arrow {
+.arrow {
     display: inline-block;
     width: 0;
     height: 0;
     border-style: solid;
     border-width: 10px 15px 10px 0;
-    border-color: transparent #00ccff transparent transparent;
+    border-color: transparent #8c4a2c transparent transparent;
+    transition: all 0.3s ease-in-out;
     margin-right: 10px;
 }
 
-.signin-container .arrow:hover {
-    border-color: transparent #0088b3 transparent transparent;
+.arrow:hover {
+    border-color: transparent white transparent transparent;
 }

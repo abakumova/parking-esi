@@ -7,19 +7,6 @@ form {
     flex-direction: column;
 }
 
-label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-input {
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
 button + button {
     margin-left: 1rem;
 }
@@ -41,10 +28,10 @@ button + button {
 }
 
 .parking-card-container {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 25px;
+    margin-top: 3rem;
+    padding: 40px;
+    background-color: rgba(55, 33, 17, 0.33);
+    border-radius: 25px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+
 }

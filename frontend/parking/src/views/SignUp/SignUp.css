@@ -8,11 +8,17 @@
 }
 
 .signup-form {
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 30px;
-    width: 400px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+}
+
+.signup-form label {
+    text-align: left;
+    width:100%;
 }
 
 .signup-form .row {
@@ -33,74 +39,10 @@
     margin-left: 3rem;
 }
 
-.signup-form label {
-    margin-top: 1rem;
-    font-weight: bold;
-    height:100%;
-    width:100%;
-    font-size: 1.6rem;
-    color: #333;
-}
-
-.signup-form input {
-    padding: 0.5rem;
-    border: none;
-    font-size: 1rem;
-    width: 100%;
-    border-radius: 3px;
-    color: #333;
-}
-
 input[type="text"]:focus,
 select:focus,
 input[type="datetime-local"]:focus {
     outline: none;
     border-color: #555;
     background-color: #fff;
-}
-
-.signup-form select {
-    border: none;
-    width:100%;
-    height: 100%;
-    font-size: 1rem;
-    border-radius: 3px;
-    color: #333;
-}
-
-.signup-form .btn-sign-up {
-    background-color: #00ccff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    height: 40px;
-    width: 100%;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-.signup-form .btn-sign-up:hover {
-    background-color: #0088b3;
-}
-
-.signup-form .error-message {
-    color: red;
-    font-weight: bold;
-    margin-top: 0.1rem;
-}
-
-.signup-container .btn-go-to-sign-in {
-    background-color: transparent;
-    color: #00ccff;
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 1rem;
-}
-
-.btn-go-to-sign-in:hover {
-    color: #0088b3;
 }

@@ -2,6 +2,9 @@
     display: flex;
     flex-direction: column;
     width:100%;
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .booking-form .row {
@@ -26,11 +29,11 @@
 }
 
 .booking-form input {
-    padding: 0.5rem;
-    border: none;
-    font-size: 1rem;
     margin-bottom: 1rem;
-    width: 100%;
+}
+
+.booking-form button {
+    margin-bottom: 3rem;
 }
 
 input[type="text"]:focus,
@@ -38,33 +41,4 @@ select:focus,
 input[type="datetime-local"]:focus {
     outline: none;
     border-color: #555;
-}
-
-.booking-form select {
-    padding: 0.5rem;
-    border: none;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    width: 100%;
-    height: 3rem;
-}
-
-input:disabled {
-    background-color: #f0f0f0;
-    color: #666;
-}
-
-.booking-form .submit-button {
-    padding: 1rem 1rem;
-    background-color: #00ccff;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-top: 1rem;
-}
-
-.booking-form .submit-button:hover {
-    background-color: #0088b3;
 }

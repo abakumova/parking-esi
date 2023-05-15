@@ -27,7 +27,6 @@ const routes = [
     name: 'signin',
     component: SignIn,
     meta: {
-      // requiresAuth: false,
       roles: [ROLES.GUEST]
     }
   },
@@ -36,7 +35,6 @@ const routes = [
     name: 'signup',
     component: SignUp,
     meta: {
-      // requiresAuth: false,
       roles: [ROLES.GUEST]
     }
   },
@@ -54,7 +52,6 @@ const routes = [
     name: 'search',
     component: SearchResult,
     meta: {
-      // requiresAuth: false,
       roles: [ROLES.ADMIN, ROLES.LANDLORD, ROLES.GUEST, ROLES.USER]
     },
   },
@@ -63,8 +60,8 @@ const routes = [
     name: 'parking',
     component: ParkingManagement,
     meta: {
-      requiresAuth: true, // requires authentication
-      roles: [ROLES.ADMIN, ROLES.LANDLORD], // can access this route
+      requiresAuth: true,
+      roles: [ROLES.ADMIN, ROLES.LANDLORD],
     },
   },
   {
@@ -72,7 +69,7 @@ const routes = [
     name: 'admin',
     component: Admin,
     meta: {
-      requiresAuth: true, // requires authentication
+      requiresAuth: true,
       roles: [ROLES.ADMIN]
     }
   },
@@ -81,7 +78,7 @@ const routes = [
     name: 'booking',
     component: Booking,
     meta: {
-      requiresAuth: true, // requires authentication
+      requiresAuth: true,
       roles: [ROLES.USER]
     }
   },
@@ -98,19 +95,19 @@ export const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = auth.isAuthenticated() // check if user is authenticated
-  const requiresAuth = to.matched.some((record ) => record.meta.requiresAuth)  // check if route requires authentication
-  const roles = to.meta.roles // get the allowed roles for the route
+  const isAuthenticated = auth.isAuthenticated()
+  const requiresAuth = to.matched.some((record ) => record.meta.requiresAuth)
+  const roles = to.meta.roles
 
 
   if (requiresAuth && !isAuthenticated) {
-    next('/signin') // redirect to login page if route requires authentication and user is not authenticated
+    next('/signin')
     toast.info("You need to be authorized to visit this page")
   } else if (roles && !roles.includes(auth.getUserRole())) {
-    next('/') // redirect to home page if user does not have the appropriate role to access the route
+    next('/')
     toast.info("You don't have required roles to visit this page")
   } else {
-    next() // allow access to the route
+    next()
   }
 })
 

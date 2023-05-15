@@ -22,9 +22,6 @@ class BookingService extends HttpService{
                 autoClose:TOAST_CLOSE_TIME
             })
         }
-
-
-
     }
 
     async updateBooking(id, bookingData) {
@@ -57,7 +54,6 @@ class BookingService extends HttpService{
                 autoClose:TOAST_CLOSE_TIME
             })
         }
-
     }
 
     async createBooking(bookingData) {

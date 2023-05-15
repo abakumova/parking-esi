@@ -36,8 +36,7 @@ export default {
         },
 
         async updateSlot(updatedSlot) {
-            const newLocation = await ApiService.location.getLocation(updatedSlot.location.formattedAddress)
-            updatedSlot.location = newLocation
+            updatedSlot.location = await ApiService.location.getLocation(updatedSlot.location.formattedAddress)
             await ApiService.parking.updateParkingSlot(updatedSlot.id, updatedSlot);
             const index = this.slots.findIndex((slot) => slot.id === updatedSlot.id);
             this.$set(this.slots, index, updatedSlot);
@@ -48,8 +47,9 @@ export default {
 
 <style scoped>
 .admin-slot-container {
-    border-radius: 8px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     padding: 20px;
     margin-bottom: 25px;
 }

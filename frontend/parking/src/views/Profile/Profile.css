@@ -8,10 +8,11 @@
 .form-container {
     display: flex;
     flex-direction: column;
-    border-radius: 20px;
     padding: 30px;
     width: 400px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .form-group {
@@ -22,21 +23,8 @@
 }
 
 .form-group label {
-    margin-bottom: 5px;
-    font-size: 1.2rem;
-    font-weight: bold;
     text-align: left;
     width: 100%;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    height: 30px;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 
@@ -46,28 +34,28 @@
     align-items: center;
 }
 
-.btn-close {
-     background-color: #00ccff;
-     color: #ffffff;
-     border: none;
-     border-radius: 5px;
-     height: 40px;
-     width: 100px;
-     font-size: 1.2rem;
-     font-weight: bold;
-     cursor: pointer;
-     margin-right: 20px;
- }
+/*.btn-close {*/
+/*     background-color: #00ccff;*/
+/*     color: #ffffff;*/
+/*     border: none;*/
+/*     border-radius: 5px;*/
+/*     height: 40px;*/
+/*     width: 100px;*/
+/*     font-size: 1.2rem;*/
+/*     font-weight: bold;*/
+/*     cursor: pointer;*/
+/*     margin-right: 20px;*/
+/* }*/
 
-.btn-delete {
-    background-color: #00ccff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    height: 40px;
-    width: 100px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-right: 20px;
-}
+/*.btn-delete {*/
+/*    background-color: #00ccff;*/
+/*    color: #ffffff;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    height: 40px;*/
+/*    width: 100px;*/
+/*    font-size: 1.2rem;*/
+/*    font-weight: bold;*/
+/*    cursor: pointer;*/
+/*    margin-right: 20px;*/
+/*}*/

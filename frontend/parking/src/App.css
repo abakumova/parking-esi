@@ -1,13 +1,125 @@
+@font-face {
+    font-family: 'Rocher';
+    src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+}
+@font-palette-values --Gray {
+    font-family: Rocher;
+    base-palette: 9;
+}
+@font-palette-values --Yellow {
+    font-family: Rocher;
+    base-palette: 8;
+}
+@font-palette-values --Mint {
+    font-family: Rocher;
+    base-palette: 7;
+}
+@font-palette-values --Purple {
+    font-family: Rocher;
+    base-palette: 6;
+}
+@font-palette-values --WhiteYellow {
+    font-family: Rocher;
+    base-palette: 5;
+}
+@font-palette-values --Blue {
+    font-family: Rocher;
+    base-palette: 4;
+}
+@font-palette-values --White {
+    font-family: Rocher;
+    base-palette: 3;
+}
+@font-palette-values --Green {
+    font-family: Rocher;
+    base-palette: 2;
+}
+@font-palette-values --Pink {
+    font-family: Rocher;
+    base-palette: 1;
+}
+
+* {
+    font-family: Rocher;
+}
+
+.Toastify__toast {
+    background-color: #8c4a2c;
+}
+
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: Rocher, Helvetica, Arial, sans-serif;
+    letter-spacing: 2px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    height: 100vh;
+
 }
+
+.error-message {
+    font-palette: --Mint;
+    font-size: 14px;
+}
+
+button {
+    border: none;
+    padding: 15px 30px;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #8c4a2c;
+    color: #fff;
+    border-radius: 25px;
+    text-shadow: 2px 2px 2px #000;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #fff;
+    color: #8c4a2c;
+    text-shadow: none;
+    box-shadow: none;
+    transform: scale(1.1);
+}
+
+input, select{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    background-color: #8c4a2c;
+    border-radius: 25px;
+    text-shadow: 2px 2px 2px #000;
+    box-shadow: 4px 4px 4px #000;
+    transition: all 0.3s ease-in-out;
+    display: block;
+    margin-bottom: 20px;
+}
+input:hover{
+    transition: all 0.3s ease-in-out;
+    background: #b65528;
+}
+input::placeholder {
+    font-palette: --Gray;
+}
+input:disabled{
+    background-color: #4f2b1a;
+}
+
+label {
+    margin-left: 0.75rem;
+}
+
 body{
     margin:0;
     padding: 0;
+    background-image: url("https://i.ytimg.com/vi/nDIKMYPmL8E/maxresdefault.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 .wrapper {
     max-height: 100vh;

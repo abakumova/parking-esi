@@ -21,7 +21,7 @@
             </div>
             <div class="header-right-auth" v-if="authenticated">
                 <img class="profile-icon" src="@/assets/avatar.png" @click="openProfile">
-                <p>{{this.userBalance}} €</p>
+                <p>{{this.userBalance}}€</p>
                 <li><button @click="signOut">Sign Out</button></li>
             </div>
         </div>

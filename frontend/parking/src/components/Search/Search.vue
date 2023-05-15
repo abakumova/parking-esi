@@ -8,6 +8,7 @@
 <script>
 import './Search.css'
 import ApiService from "@/api/ApiService";
+import {toast} from "vue3-toastify";
 export default {
     data() {
         return {
@@ -16,6 +17,10 @@ export default {
     },
     methods: {
         async search() {
+            if(!this.searchTerm) {
+                toast.error("Search string should not be empty")
+                return
+            }
             const locationData = await ApiService.location.getLocation(this.searchTerm)
             this.$router.push({ name: "search",
                 query: {

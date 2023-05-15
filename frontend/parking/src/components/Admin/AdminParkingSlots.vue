@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="slot in slots" :key="slot.id">
+        <div v-for="slot in this.slots" :key="slot.id">
             <div class="admin-slot-container">
                 <slot-card
                         :slot="slot"
@@ -19,14 +19,11 @@ import ApiService from "@/api/ApiService";
 export default {
     name: "AdminParkingSlots",
     components: {SlotCard},
-    props: {
-        slots: {
-            type: Array,
-            required: false,
-        },
-    },
-    //TODO: fix bug, slot is not removing after deleting (emit bug??)
-    //TODO: add validations
+    data() {
+        return {
+            slots: []
+        }
+    }, //TODO: add validations
     //TODO: add validation for location. If it was't modified -> don't send the request to backend
     methods: {
         async deleteSlot(slotId) {
@@ -41,6 +38,20 @@ export default {
             const index = this.slots.findIndex((slot) => slot.id === updatedSlot.id);
             this.$set(this.slots, index, updatedSlot);
         },
+        async fetchSlots() {
+            const params = {
+                limit:100000,
+                page:0,
+            }
+            const resp = await ApiService.parking.getParkingSlots(params)
+            this.slots = resp.data
+
+            console.warn(`Fetched parking slots:`)
+            console.warn(this.slots)
+        },
+    },
+    async mounted() {
+        await this.fetchSlots()
     },
 }
 </script>

@@ -7,12 +7,10 @@
         </div>
         <div class="tab-content">
             <component v-if="selectedTab === 'users'"
-                       :is='AdminUsers'
-                       :users='users'/>
+                       :is='AdminUsers'/>
 
             <component v-if="selectedTab === 'slots'"
-                       :is='AdminParkingSlots'
-                       :slots='slots'/>
+                       :is='AdminParkingSlots'/>
         </div>
     </div>
 </template>
@@ -34,8 +32,6 @@ export default {
                 'users': () => AdminUsers,
                 'slots': () => AdminParkingSlots,
             },
-            slots: [],
-            users: []
         };
     },
     computed: {
@@ -52,35 +48,7 @@ export default {
     methods: {
         selectTab(tabName) {
             this.selectedTab = tabName;
-        },
-        async fetchSlots() {
-            const params = {
-                limit:100000,
-                page:0,
-            }
-            const resp = await ApiService.parking.getParkingSlots(params)
-            this.slots = resp.data
-
-            console.warn(`Fetched parking slots:`)
-            console.warn(this.slots)
-        },
-
-        async fetchUsers() {
-            const params = {
-                limit:100000,
-                page:0,
-            }
-            const resp = await ApiService.user.getUsers(params)
-            this.users = resp.data
-
-            console.warn(`Fetched users:`)
-            console.warn(this.users)
-        },
-
-    },
-    async mounted() {
-        await this.fetchUsers()
-        await this.fetchSlots()
-    },
+        }
+    }
 };
 </script>

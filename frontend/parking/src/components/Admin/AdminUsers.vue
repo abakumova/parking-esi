@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div v-for="user in users" :key="user.id">
+      <div v-for="user in this.users" :key="user.id">
           <div class="admin-user-container">
               <user-card
                       :user="user"
@@ -13,18 +13,16 @@
 </template>
 
 <script>
-//TODO: in-time user deletion. Bug: user is deleted, but props list is not updated
 import UserCard from "@/components/Admin/UserCard/UserCard.vue";
 import ApiService from "@/api/ApiService";
 
 export default {
     name: "AdminUsers",
     components: {UserCard},
-    props: {
-        users: {
-            type: Array,
-            required: false,
-        },
+    data() {
+        return {
+            users: []
+        }
     },
     methods: {
         async deleteUser(userId) {
@@ -38,12 +36,21 @@ export default {
             const index = this.users.findIndex((user) => user.id === updatedUser.id);
             this.$set(this.users, index, updatedUser);
         },
+        async fetchUsers() {
+            const params = {
+                limit:100000,
+                page:0,
+            }
+            const resp = await ApiService.user.getUsers(params)
+            this.users = resp.data
+
+            console.warn(`Fetched users:`)
+            console.warn(this.users)
+        },
     },
-    // mounted() {
-    //     this.$root.$on("delete-user", (userId) => {
-    //         this.users = this.users.filter((user) => user.id !== userId);
-    //     });
-    // },
+    async mounted() {
+        await this.fetchUsers()
+    },
 }
 </script>
 

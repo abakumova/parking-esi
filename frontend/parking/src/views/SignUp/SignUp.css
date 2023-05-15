@@ -16,6 +16,14 @@
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
+.signup-form input {
+    width:100%;
+}
+
+.signup-form select {
+    width: 100%;
+}
+
 .signup-form label {
     text-align: left;
     width:100%;

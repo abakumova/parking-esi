@@ -1,6 +1,7 @@
 import HttpService from "@/api/HttpService";
 import {API_AUTH_ROUTE} from "@/api/routes";
 import auth from "@/auth";
+import { TOAST_CLOSE_TIME} from "@/constants/toast";
 
 class AuthService extends HttpService {
     constructor() {
@@ -8,23 +9,41 @@ class AuthService extends HttpService {
     }
 
     async register(body) {
-        const response = await this.http.post(`/register`, body)
-        const token = response.data.access_token
-        localStorage.setItem("access_token", token)
-        auth.setUserByCurrentToken(token)
+        try {
+            const response = await this.http.post(`/register`, body)
+            const token = response.data.access_token
+            localStorage.setItem("access_token", token)
+            auth.setUserByCurrentToken(token)
 
-        return response.data
+            this.toast.success(`Successfully signed up!`, {
+                autoClose:TOAST_CLOSE_TIME
+            })
+
+            return response.data
+        } catch (e) {
+            this.toast.error(`Sign up failed! ${e.toString()}`, {
+                autoClose:TOAST_CLOSE_TIME
+            })
+        }
     }
 
     async authenticate(body) {
-        console.log(body)
+        try {
+            const response = await this.http.post(`/authenticate`, body)
+            const token = response.data.access_token
+            localStorage.setItem("access_token", token)
+            auth.setUserByCurrentToken(token)
 
-        const response = await this.http.post(`/authenticate`, body)
-        const token = response.data.access_token
-        localStorage.setItem("access_token", token)
-        auth.setUserByCurrentToken(token)
+            this.toast.success(`Successfully signed in!`,{
+                autoClose:TOAST_CLOSE_TIME
+            })
 
-        return response.data
+            return response.data
+        } catch (e) {
+            this.toast.error(`Sign in failed\n${e.toString()}`,{
+                autoClose:TOAST_CLOSE_TIME
+            })
+        }
     }
 }
 

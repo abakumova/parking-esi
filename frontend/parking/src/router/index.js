@@ -9,6 +9,8 @@ import Booking from "@/views/Booking/Booking.vue";
 import auth from "../auth";
 import {ROLES} from "@/constants/roles";
 import Admin from "@/views/Admin/Admin.vue";
+import {toast} from 'vue3-toastify'
+
 
 const routes = [
   {
@@ -100,15 +102,13 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record ) => record.meta.requiresAuth)  // check if route requires authentication
   const roles = to.meta.roles // get the allowed roles for the route
 
-  console.log(`Page Roles: ${roles}`)
-  console.log(`IsAuth: ${isAuthenticated}`)
-  console.log(`User: ${JSON.stringify(auth.user)}`)
-  console.log(to)
 
   if (requiresAuth && !isAuthenticated) {
     next('/signin') // redirect to login page if route requires authentication and user is not authenticated
+    toast.info("You need to be authorized to visit this page")
   } else if (roles && !roles.includes(auth.getUserRole())) {
     next('/') // redirect to home page if user does not have the appropriate role to access the route
+    toast.info("You don't have required roles to visit this page")
   } else {
     next() // allow access to the route
   }

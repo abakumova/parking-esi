@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>All tabasdas!</h1>
+        <h1>All parking slots!</h1>
         <div class="parking-list">
             <button @click="showAddForm = !showAddForm">Add Slot</button>
             <div v-if="showAddForm">

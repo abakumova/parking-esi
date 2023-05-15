@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>History tab!</h1>
+        <h1>Closed parking slots!</h1>
         <div class="parking-list">
             <div v-for="slot in slots" :key="slot.id">
                 <div class="parking-card-container">

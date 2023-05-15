@@ -14,6 +14,7 @@
     "jwt-decode": "^3.1.2",
     "vue": "^3.2.13",
     "vue-router": "^4.1.6",
+    "vue3-toastify": "^0.1.8",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

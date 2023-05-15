@@ -8,7 +8,12 @@ class AnalyticsService extends HttpService {
     }
 
     getAnalyticsByParkingSlotId(parkingSlotId) {
-        return this.http.get(`/${parkingSlotId}`);
+        try {
+            const response = this.http.get(`/${parkingSlotId}`);
+            return response
+        } catch (e) {
+            this.toast.error(`Analytics receiving failed\n ${e.toString()}`)
+        }
     }
 }
 

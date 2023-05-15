@@ -13,7 +13,7 @@ export default {
         const token = localStorage.getItem('access_token');
         // if there is a token, get the user roles and ID, and try to authenticate
         if (token) {
-            setUserByCurrentToken()
+            this.setUserByCurrentToken()
             // this.user.role = this.decodeAccessToken().role
             // this.user.userId = this.decodeAccessToken().userId
             // // Set the Authorization header with the token value

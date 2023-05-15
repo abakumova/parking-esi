@@ -1,10 +1,12 @@
 import axios from "axios";
 import {API_BASE_URL} from "@/api/routes";
 import auth from "@/auth";
+import {toast} from 'vue3-toastify'
 
 
 export default class HttpService {
     constructor(route) {
+        this.toast = toast
         this.ROUTE=route
 
         this.http = axios.create({

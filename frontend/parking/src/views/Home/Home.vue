@@ -25,7 +25,8 @@ export default {
     font-family: 'Rocher';
     text-align: left;
     height: 50px;
-    font-size: 72px;
+    width: 100%;
+    font-size: 32px;
     animation: car-move 10s linear infinite;
     animation-delay: 0s;
     position: absolute;

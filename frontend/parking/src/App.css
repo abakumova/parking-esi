@@ -55,6 +55,8 @@
 }
 
 .error-message {
+    margin-left: 0.75rem;
+    text-align: left;
     font-palette: --Mint;
     font-size: 14px;
 }

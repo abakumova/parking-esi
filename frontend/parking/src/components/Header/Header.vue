@@ -20,7 +20,7 @@
                 <li><button @click="openSignUp">Sign Up</button></li>
             </div>
             <div class="header-right-auth" v-if="authenticated">
-                <ProfileAvatar @click="openProfile"/>
+                <img class="profile-icon" src="@/assets/avatar.png" @click="openProfile">
                 <li><button @click="signOut">Sign Out</button></li>
             </div>
         </div>
@@ -29,7 +29,6 @@
 
 <script>
 import Search from "@/components/Search/Search.vue";
-import ProfileAvatar from "@/components/ProfileAvatar/ProfileAvatar.vue";
 
 import './Header.css'
 import auth from "@/auth";
@@ -45,7 +44,6 @@ export default {
         }
     },
     components: {
-        ProfileAvatar,
         Search,
     },
     methods: {

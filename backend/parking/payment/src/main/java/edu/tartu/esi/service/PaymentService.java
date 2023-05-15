@@ -162,6 +162,6 @@ public class PaymentService {
                 .block();
 
         log.warn("!!!!!!!!!!!!!!!!!!!!!! {}", jwtTokenMono);
-        return jwtTokenMono.toString();
+        return jwtTokenMono.asText();
     }
 }

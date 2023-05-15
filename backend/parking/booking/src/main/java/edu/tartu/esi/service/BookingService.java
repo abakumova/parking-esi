@@ -64,9 +64,9 @@ public class BookingService {
 
 
     public ResponseEntity createBooking(BookingDto bookingDto) throws JSONException {
-        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
-            return ResponseEntity.badRequest().body("Parking slot is closed.");
-        }
+//        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
+//            return ResponseEntity.badRequest().body("Parking slot is closed.");
+//        }
 
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
@@ -239,6 +239,6 @@ public class BookingService {
                 .block();
 
         log.warn("!!!!!!!!!!!!!!!!!!!!!! {}", jwtTokenMono);
-        return jwtTokenMono.toString();
+        return jwtTokenMono.asText();
     }
 }

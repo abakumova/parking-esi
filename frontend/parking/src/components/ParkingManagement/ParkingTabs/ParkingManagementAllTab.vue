@@ -36,7 +36,6 @@ export default {
     },
     methods: {
         addSlot(slot) {
-            //TODO: change to EMIT
             this.slots.push(slot);
             this.showAddForm = false;
         },

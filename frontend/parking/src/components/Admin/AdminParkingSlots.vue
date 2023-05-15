@@ -23,8 +23,7 @@ export default {
         return {
             slots: []
         }
-    }, //TODO: add validations
-    //TODO: add validation for location. If it was't modified -> don't send the request to backend
+    },
     methods: {
         async deleteSlot(slotId) {
             await ApiService.parking.deleteParkingSlot(slotId);

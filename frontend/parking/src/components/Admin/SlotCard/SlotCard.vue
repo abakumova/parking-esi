@@ -100,15 +100,5 @@ export default {
             ibanError:''
         }
     },
-    methods: {
-        //TODO: Add emit methods and add validations
-        // async updateUser() {
-        // },
-        // async deleteUser() {
-        //     console.warn(`USER HAS BEEN DELETED: ${this.slot.id}`)
-        //     console.warn(this.slot)
-        //     await this.$emit('delete-slot', this.slot.id)
-        // },
-    },
 }
 </script>

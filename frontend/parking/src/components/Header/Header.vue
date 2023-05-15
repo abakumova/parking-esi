@@ -21,6 +21,7 @@
             </div>
             <div class="header-right-auth" v-if="authenticated">
                 <img class="profile-icon" src="@/assets/avatar.png" @click="openProfile">
+                <p>{{this.userBalance}} €</p>
                 <li><button @click="signOut">Sign Out</button></li>
             </div>
         </div>
@@ -33,6 +34,7 @@ import Search from "@/components/Search/Search.vue";
 import './Header.css'
 import auth from "@/auth";
 import {ROLES} from "@/constants/roles";
+import ApiService from "@/api/ApiService";
 export default {
     name:"Header",
     data() {
@@ -41,6 +43,7 @@ export default {
             isLandlord: auth.getUserRole() === ROLES.LANDLORD,
             isAdmin: auth.getUserRole() === ROLES.ADMIN,
             musicPlaying: false,
+            userBalance: null,
         }
     },
     components: {
@@ -70,6 +73,12 @@ export default {
                 this.musicPlaying = false;
             }
 
+        }
+    },
+    async mounted() {
+        if(auth.getToken()) {
+            this.userBalance = (await ApiService.user.getUserById(auth.decodeAccessToken().userId)).paymentMethod.balance
+            console.log(this.userBalance)
         }
     }
 }

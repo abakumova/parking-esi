@@ -64,6 +64,7 @@ export default {
                 const response = await ApiService.parking.getParkingSlotById(this.parkingSlotId);
                 this.price = response.price;
                 this.location.formattedAddress = response.location.formattedAddress;
+                this.landlordId = response.landlordId;
             } catch (error) {
                 console.error('Failed to fetch parking slot:', error);
             }
@@ -73,7 +74,7 @@ export default {
             if(isValid) {
                 const expirationDate = `${this.expirationYear}-${this.expirationMonth}-01`;
                 const localDate = new Date(expirationDate).toISOString().slice(0, 10);
-
+                console.log(this.landlordId);
                 const bookingPayload = {
                     customerId: auth.user.userId,
                     parkingSlotId: this.parkingSlotId,

@@ -1,7 +1,5 @@
 package edu.tartu.esi.security;
 
-//import edu.tartu.esi.config.JwtAuthenticationFilter;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +10,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static edu.tartu.esi.security.Role.ADMIN;
-import static edu.tartu.esi.security.Role.LANDLORD;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -46,9 +42,9 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
 
-                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
-                .requestMatchers(GET, "/api/v1/parking-slots/by-status/**").permitAll()
-                .requestMatchers(GET, "/api/v1/parking-slots/by-location/**").permitAll()
+                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
+                .requestMatchers(GET, "/api/v1/parking-slots/by-status/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
+                .requestMatchers(GET, "/api/v1/parking-slots/by-location/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
                 .requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
                 .requestMatchers(POST, "/api/v1/parking-slots").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
                 .requestMatchers(PUT, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
@@ -56,17 +52,12 @@ public class SecurityConfiguration {
                 .requestMatchers(GET, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
                 .requestMatchers(DELETE, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
 
-                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyAuthority("ROLE_LANDLORD")
-                .requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
-                .requestMatchers(POST, "/api/v1/parking-slots").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
-                .requestMatchers(PUT, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
-                .requestMatchers(DELETE, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                //.requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyAuthority("ROLE_LANDLORD")
+                //.requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                //.requestMatchers(POST, "/api/v1/parking-slots").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                //.requestMatchers(PUT, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                //.requestMatchers(DELETE, "/api/v1/parking-slots/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
 
-                //.requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
-
-//                .anyRequest()
-//                .authenticated()
-//
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -74,11 +65,7 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         return http.build();
     }
 }

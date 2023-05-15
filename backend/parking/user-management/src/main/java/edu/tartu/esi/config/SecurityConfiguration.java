@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static edu.tartu.esi.model.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -33,7 +32,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/api/v1/**",
+                        "/api/v1/auth/**",
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
@@ -47,19 +46,35 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
 
-                .requestMatchers(GET, "/api/v1/users").hasRole(ADMIN.name())
-                .requestMatchers(GET, "/api/v1/users/{id}").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
-                .requestMatchers(GET, "/api/v1/users/{id}/balance").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
-                .requestMatchers(PUT, "/api/v1/users/{id}/balance").hasRole(ADMIN.name())
-                .requestMatchers(POST, "/api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
-                .requestMatchers(DELETE, "/api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
-                .requestMatchers(PUT, "/api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+                .requestMatchers(GET, "/api/v1/users").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/api/v1/users/{id}").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
+                .requestMatchers(GET, "/api/v1/users/{id}/balance").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
+                .requestMatchers(PUT, "/api/v1/users/{id}/balance").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(POST, "/api/v1/users").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
+                .requestMatchers(DELETE, "/api/v1/users").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
+                .requestMatchers(PUT, "/api/v1/users").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
 
                 .requestMatchers(POST, "/api/v1/users").permitAll()
-                .requestMatchers(POST, "/api/v1/auth/authenticate").permitAll()
-                .requestMatchers(GET, "/api/v1/auth/user-details").permitAll()
-                .requestMatchers(POST, "/api/v1/auth/register").permitAll()
-                .requestMatchers(POST, "/api/v1/auth/refresh-token").permitAll()
+                // .requestMatchers(POST, "/api/v1/auth/authenticate").permitAll()
+                //.requestMatchers(POST, "/api/v1/auth/authenticate").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
+                // .requestMatchers(GET, "/api/v1/auth/user-details").permitAll()
+                //.requestMatchers(POST, "/api/v1/auth/register").permitAll()
+                // .requestMatchers(POST, "/api/v1/auth/refresh-token").permitAll()
+
+
+//                .requestMatchers(GET, "/api/v1/users").hasRole(ADMIN.name())
+//                .requestMatchers(GET, "/api/v1/users/{id}").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+//                .requestMatchers(GET, "/api/v1/users/{id}/balance").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+//                .requestMatchers(PUT, "/api/v1/users/{id}/balance").hasRole(ADMIN.name())
+//                .requestMatchers(POST, "/api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+//                .requestMatchers(DELETE, "/api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+//                .requestMatchers(PUT, "/api/v1/users").hasAnyRole(ADMIN.name(), USER.name(), LANDLORD.name())
+//
+//                .requestMatchers(POST, "/api/v1/users").permitAll()
+//                .requestMatchers(POST, "/api/v1/auth/authenticate").permitAll()
+//                .requestMatchers(GET, "/api/v1/auth/user-details").permitAll()
+//                .requestMatchers(POST, "/api/v1/auth/register").permitAll()
+//                .requestMatchers(POST, "/api/v1/auth/refresh-token").permitAll()
 
                 .anyRequest()
                 .authenticated()
@@ -67,7 +82,7 @@ public class SecurityConfiguration {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(authenticationProvider)
+                // .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .logoutUrl("/api/v1/auth/logout")

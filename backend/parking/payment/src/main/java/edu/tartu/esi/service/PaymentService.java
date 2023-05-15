@@ -1,26 +1,28 @@
 package edu.tartu.esi.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tartu.esi.mapper.PaymentEntityMapper;
 import edu.tartu.esi.model.Booking;
 import edu.tartu.esi.model.Payment;
 import edu.tartu.esi.model.PaymentStatusEnum;
 import edu.tartu.esi.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -59,9 +61,8 @@ public class PaymentService {
             updateBalance(booking.getCustomerId(), newBalance.toString());
 
             paymentStatus = PaymentStatusEnum.COMPLETED;
-
-//            BigDecimal balanceLandlord = new BigDecimal(getPaymentMethodDtoForUser(booking.getLandlordId()));
-//            updateBalance(booking.getLandlordId(), balanceLandlord.add(amount).toString());
+            BigDecimal balanceLandlord = new BigDecimal(getPaymentMethodDtoForUser(booking.getLandlordId()));
+            updateBalance(booking.getLandlordId(), balanceLandlord.add(amount).toString());
         } else {
             paymentStatus = PaymentStatusEnum.DECLINED;
         }
@@ -82,13 +83,16 @@ public class PaymentService {
 
 
     @LoadBalanced
+    @SneakyThrows
     public void updateBalance(String userId, String newBalanceStr) throws JSONException {
-        //Map<String, String> jwtTokenMap = getToken(email, password);
-
+        String token = getToken(email, password);
+        String urlBuilder = "http://localhost:8089/api/v1/users/" +
+                userId +
+                "/balance";
         webClientBuilder.build()
                 .put()
-                .uri("http://localhost:8089/api/v1/users/" + userId + "/balance")
-                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                .uri(urlBuilder)
+                .header("Authorization", "Bearer " + token)
                 .bodyValue(newBalanceStr)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -96,43 +100,58 @@ public class PaymentService {
     }
 
     @LoadBalanced
+    @SneakyThrows
     public Booking getBooking(String bookingId) throws JSONException {
-        //Map<String, String> jwtTokenMap = getToken(email, password);
+        String token = getToken(email, password);
         return webClientBuilder
                 .build()
                 .get()
                 .uri("http://localhost:8089/api/v1/bookings/" + bookingId)
-                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .bodyToMono(Booking.class)
                 .block();
     }
 
     @LoadBalanced
-    public String getPaymentMethodDtoForUser(String userId) throws JSONException {
-       // Map<String, String> jwtTokenMap = getToken(email, password);
+    @SneakyThrows
+    public String getPaymentMethodDtoForUser(String userId) {
+        String token = getToken(email, password);
+        String urlBuilder = "http://localhost:8089/api/v1/users/" +
+                userId +
+                "/balance";
         return webClientBuilder
                 .build()
                 .get()
-                .uri("http://localhost:8089/api/v1/users/" + userId + "/balance")
-                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
+                .uri(urlBuilder)
+                .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
     }
 
-//    private  Map<String, String> getToken(String email, String password) throws JSONException {
-//        JSONObject json = new JSONObject();
-//        json.put("email", email);
-//        json.put("password", password);
-//
-//        Mono<Map<String, String>> jwtTokenMono = webClientBuilder.build().post()
-//                .uri("http://localhost:8089/api/v1/auth/authenticate")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .bodyValue(json)
-//                .retrieve()
-//                .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {});
-//
-//        return jwtTokenMono.block();
-//    }
+    @SneakyThrows
+    private String getToken(String email, String password) {
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(params);
+        log.warn("!!!!!!!!!!!!!!!!!!!!!! {}", json);
+
+        JsonNode jwtTokenMono = webClientBuilder
+                .build()
+                .post()
+                .uri("http://localhost:8089/api/v1/auth/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(json))
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .map(s -> s.path("access_token"))
+                .block();
+
+        log.warn("!!!!!!!!!!!!!!!!!!!!!! {}", jwtTokenMono);
+        return jwtTokenMono.toString();
+    }
 }

@@ -1,6 +1,12 @@
 <template>
     <header class="header">
         <div class="header-left">
+            <i @click="play" id="audio" class="audio">
+                <audio id="audio" ref="audioPlayer" style="display:none" controls autoplay loop>
+                    <source src="@/assets/alexander-nakarada-frost.mp3" type="audio/mp3">
+                </audio>
+            </i>
+
             <router-link to="/">Home</router-link>
             <router-link to="/parking" v-if="isLandlord">Create Parking</router-link>
             <router-link to="/admin" v-if="isAdmin">Godlike</router-link>
@@ -34,7 +40,8 @@ export default {
         return {
             authenticated: auth.user.authenticated,
             isLandlord: auth.getUserRole() === ROLES.LANDLORD,
-            isAdmin: auth.getUserRole() === ROLES.ADMIN
+            isAdmin: auth.getUserRole() === ROLES.ADMIN,
+            musicPlaying: false,
         }
     },
     components: {
@@ -54,6 +61,17 @@ export default {
         signOut() {
             auth.logout()
             this.$router.push({ name: "signin"})
+        },
+        play() {
+            if(!this.musicPlaying) {
+                this.$refs.audioPlayer.play()
+                this.musicPlaying = true;
+            }
+            else {
+                this.$refs.audioPlayer.pause()
+                this.musicPlaying = false;
+            }
+
         }
     }
 }

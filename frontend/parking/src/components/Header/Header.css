@@ -66,3 +66,37 @@
 .header-right-no-auth {
     display: flex;
 }
+
+.audio,
+.audio::after,
+.audio::before {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid #8c4a2c;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+.audio {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 0;
+    margin-top: -4px;
+    position: relative;
+    width: 14px;
+    height: 16px
+}
+.audio::after,
+.audio::before {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    top: 9px;
+    left: -7px;
+    transform: skewY(15deg);
+    border-radius: 10px
+}
+.audio::after {
+    left: 5px
+}
+

@@ -24,7 +24,6 @@ export default {
 .car {
     font-family: 'Rocher';
     text-align: left;
-    width: 100%;
     height: 50px;
     font-size: 72px;
     animation: car-move 10s linear infinite;

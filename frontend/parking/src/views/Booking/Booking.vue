@@ -83,6 +83,7 @@ export default {
 
                 try {
                     const response = await BookingService.createBooking(bookingPayload);
+                    this.$router.push({ name: "home" });
                     console.log("Booking submitted successfully:", response);
                 } catch (error) {
                     console.error("Failed to submit booking:", error);

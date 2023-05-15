@@ -41,8 +41,8 @@ export default {
         close() {
             this.$router.push({name: 'home'})
         },
-        deleteAccount() {
-            console.log(UserManagementService.deleteUser(auth.user.userId, auth.getToken()));
+        async deleteAccount() {
+            await UserManagementService.deleteUser(auth.user.userId);
             auth.logout();
             this.$router.push({ name: "signin"});
         }

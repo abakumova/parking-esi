@@ -80,7 +80,7 @@ export default {
                     parkingSlotId: this.parkingSlotId,
                     price: this.price,
                     timeFrom: this.timeFrom,
-                    timeUntil: this.timeUntil,
+                    timeUntil: localDate,
                     landlordId: this.landlordId
                 };
 

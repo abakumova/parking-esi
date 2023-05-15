@@ -21,8 +21,10 @@ export default {
     },
     data() {
         return {
-            occupancy: null,
-            revenue: null
+            occupancy: 0,
+            revenue: 0,
+            totalBookingCount: 0,
+            totalBookingDuration: 0
         };
     },
     async created() {

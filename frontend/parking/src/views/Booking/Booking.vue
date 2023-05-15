@@ -72,15 +72,12 @@ export default {
         async submitBooking() {
             const isValid = await this.validateFields();
             if(isValid) {
-                const expirationDate = `${this.expirationYear}-${this.expirationMonth}-01`;
-                const localDate = new Date(expirationDate).toISOString().slice(0, 10);
-                console.log(this.landlordId);
                 const bookingPayload = {
                     customerId: auth.user.userId,
                     parkingSlotId: this.parkingSlotId,
                     price: this.price,
                     timeFrom: this.timeFrom,
-                    timeUntil: localDate,
+                    timeUntil: this.timeUntil,
                     landlordId: this.landlordId
                 };
 

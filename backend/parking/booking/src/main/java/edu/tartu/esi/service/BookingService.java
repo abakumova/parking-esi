@@ -1,5 +1,7 @@
 package edu.tartu.esi.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tartu.esi.dto.BookingDto;
 import edu.tartu.esi.exception.BookingNotFoundException;
 import edu.tartu.esi.mapper.BookingMapper;
@@ -11,18 +13,30 @@ import edu.tartu.esi.repository.BookingRepository;
 import io.vavr.control.Try;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -43,10 +57,16 @@ public class BookingService {
     private ScheduledExecutorService scheduledExecutorService;
     private final KafkaTemplate<String, BookingDto> kafkaTemplate;
 
-    public String createBooking(BookingDto bookingDto) {
-        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
-            return "Parking slot is closed.";
-        }
+    @Value("${webclient.email}")
+    private String email;
+    @Value("${webclient.password}")
+    private String password;
+
+
+    public ResponseEntity createBooking(BookingDto bookingDto) throws JSONException {
+//        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
+//            return ResponseEntity.badRequest().body("Parking slot is closed.");
+//        }
 
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
@@ -68,7 +88,9 @@ public class BookingService {
         CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
 
         // Wrap the requestPayment method with the Circuit Breaker
-        PaymentStatusEnum result = circuitBreaker.executeSupplier(() -> requestPayment(booking.getId()));
+        PaymentStatusEnum result = circuitBreaker.executeSupplier(() -> {
+            return requestPayment(booking.getId());
+        });
         if (result.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
             scheduleUpdateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.OPEN, booking.getTimeUntil());
@@ -85,9 +107,9 @@ public class BookingService {
 
             kafkaTemplate.send("booking-topic", message);
 
-            return "Booking completed.";
+            return ResponseEntity.ok("Booking completed.");
         } else {
-            return "Payment rejected.";
+            return ResponseEntity.badRequest().body("Payment rejected.");
         }
     }
 
@@ -100,10 +122,13 @@ public class BookingService {
     }
 
     @LoadBalanced
-    public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) {
+    public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) throws JSONException {
+        String token = getToken(email, password);
+
         webClientBuilder.build()
                 .put()
-                .uri("http://localhost:8084/api/v1/parking-slots/" + parkingSlotId + "/status")
+                .uri("http://localhost:8089/api/v1/parking-slots/" + parkingSlotId + "/status")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .bodyValue(status)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -111,22 +136,22 @@ public class BookingService {
     }
 
     @LoadBalanced
+    @SneakyThrows
     public PaymentStatusEnum requestPayment(String bookingId) {
         CircuitBreakerConfig config = CircuitBreakerConfig.custom()
                 .failureRateThreshold(50)
                 .waitDurationInOpenState(Duration.ofSeconds(30))
                 .build();
         CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
-
-        return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> {
-            return webClientBuilder.build()
-                    .post()
-                    .uri("http://localhost:8087/api/v1/make-payment")
-                    .bodyValue(bookingId)
-                    .retrieve()
-                    .bodyToMono(PaymentStatusEnum.class)
-                    .block();
-        })).recover(throwable -> {
+        String token = getToken(email, password);
+        return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> webClientBuilder.build()
+                .post()
+                .uri("http://localhost:8089/api/v1/make-payment")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .bodyValue(bookingId)
+                .retrieve()
+                .bodyToMono(PaymentStatusEnum.class)
+                .block())).recover(throwable -> {
             log.error("Error occurred while making payment: {}", throwable.getMessage());
             return PaymentStatusEnum.DECLINED;
         }).get();
@@ -134,10 +159,14 @@ public class BookingService {
 
     @LoadBalanced
     public SlotStatusEnum getParkingSlotStatus(String slotId) {
+        String token = getToken(email, password);
+        log.warn("!@%#^&#&#& TOKEN {}", token);
+
         return webClientBuilder
                 .build()
                 .get()
-                .uri("http://localhost:8084/api/v1/parking-slots/by-id/" + slotId)
+                .uri("http://localhost:8089/api/v1/parking-slots/by-id/" + slotId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
                 .bodyToMono(ParkingSlot.class)
                 .block()
@@ -179,6 +208,37 @@ public class BookingService {
 
     private void scheduleUpdateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status, LocalDateTime timeUntil) {
         long delayInMillis = Duration.between(LocalDateTime.now(), timeUntil).toMillis();
-        scheduledExecutorService.schedule(() -> updateParkingSlotStatus(parkingSlotId, status), delayInMillis, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.schedule(() -> {
+            try {
+                updateParkingSlotStatus(parkingSlotId, status);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }, delayInMillis, TimeUnit.MILLISECONDS);
+    }
+
+    @SneakyThrows
+    private String getToken(String email, String password) {
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(params);
+        log.warn("!!!!!!!!!!!!!!!!!!!!!! {}", json);
+
+        JsonNode jwtTokenMono = webClientBuilder
+                .build()
+                .post()
+                .uri("http://localhost:8089/api/v1/auth/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(json))
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .map(s -> s.path("access_token"))
+                .block();
+
+        log.warn("!!!!!!!!!!!!!!!!!!!!!! {}", jwtTokenMono);
+        return jwtTokenMono.asText();
     }
 }

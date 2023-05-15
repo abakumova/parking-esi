@@ -1,19 +1,21 @@
 package edu.tartu.esi.service;
 
+import edu.tartu.esi.dto.PaginatedResponseDto;
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.exception.ParkingSlotNotFoundException;
 import edu.tartu.esi.mapper.ParkingSlotMapper;
-import edu.tartu.esi.model.Location;
 import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
 import edu.tartu.esi.repository.ParkingSlotRepository;
+import edu.tartu.esi.search.GenericSearchDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +37,8 @@ public class ParkingSlotService {
                 .id(parkingSlotDto.getId())
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
-                .parkingSlotStatus(SlotStatusEnum.OPEN)
+                .status(SlotStatusEnum.OPEN)
+                .name(parkingSlotDto.getName())
                 .location(parkingSlotDto.getLocation())
                 .build();
         parkingSlotRepository.save(parkingSlot);
@@ -56,6 +59,7 @@ public class ParkingSlotService {
                 .landlordId(parkingSlotDto.getLandlordId())
                 .price(parkingSlotDto.getPrice())
                 .location(parkingSlotDto.getLocation())
+                .name(parkingSlotDto.getName())
                 .build();
         parkingSlotRepository.save(parkingSlot);
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());
@@ -72,14 +76,15 @@ public class ParkingSlotService {
         return parkingSlotRepository.findAllByStatus(status);
     }
 
-    public List<ParkingSlot> getParkingSlotByLocation(String lat, String lon) {
+    public List<ParkingSlot> getParkingSlotByLocation(String lat, String lon, Optional<String> distance) {
+        String finalDistance = distance.orElse("1.0");
         List<ParkingSlot> list = parkingSlotRepository.findAllByStatus(SlotStatusEnum.OPEN);
         log.debug("-- getParkingSlotByLocation Status OPEN {}", list);
         List<ParkingSlot> result = list
                 .stream()
                 .filter(slot -> distance(slot.getLocation().getLatitude(), slot.getLocation().getLongitude(),
-                        Double.parseDouble(lat), Double.parseDouble(lon)) < 1.0) //1 KM
-                .collect(Collectors.toList());
+                        Double.parseDouble(lat), Double.parseDouble(lon)) < Double.parseDouble(finalDistance))
+                .toList();
         log.warn("-- getParkingSlotByLocation LOCATION {}", result);
 
         return result;
@@ -88,9 +93,31 @@ public class ParkingSlotService {
     public void updateParkingSlotStatus(String id, SlotStatusEnum status) {
         ParkingSlot parkingSlot = parkingSlotRepository.findById(id)
                 .orElseThrow(() -> new ParkingSlotNotFoundException(format("Parking slot with id = %s wasn't found", id)));
-        parkingSlot.setParkingSlotStatus(status);
+        parkingSlot.setStatus(status);
         parkingSlotRepository.save(parkingSlot);
         log.info("-- Parking Slot {} has been updated", parkingSlot.getId());
+    }
+
+
+    public List<ParkingSlot> getParkingSlotByLandlord(String landlordId) {
+        log.debug("-- getParkingSlotByLandlord LandlordId {}", landlordId);
+        return parkingSlotRepository.findAllByLandlordId(landlordId);
+    }
+
+    public PaginatedResponseDto<ParkingSlotDto> getParkingSlots(GenericSearchDto<ParkingSlotDto> searchDto) {
+        log.info("-- getParkingSlots");
+        Page<ParkingSlot> userList = parkingSlotRepository.findAll(searchDto.getSpecification(), searchDto.getPageable());
+        List<ParkingSlotDto> userDtos = parkingSlotMapper.toDtos(userList.getContent());
+
+        return PaginatedResponseDto.<ParkingSlotDto>builder()
+                .page(searchDto.getPage())
+                .size(userDtos.size())
+                .sortingFields(Arrays.stream(searchDto.getSort())
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", ")))
+                .sortDirection(searchDto.getDir().name())
+                .data(userDtos)
+                .build();
     }
 
     private void assertParkingSlotDto(ParkingSlotDto parking, String msg) {

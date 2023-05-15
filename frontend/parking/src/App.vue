@@ -9,9 +9,7 @@
 
 <script>
 import Header from '@/components/Header/Header.vue';
-
 import './App.css'
-import ApiService from "@/api/ApiService";
 
 export default {
     name: 'App',

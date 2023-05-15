@@ -1,0 +1,44 @@
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+}
+
+.booking-form .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1rem 0;
+}
+
+.booking-form .form-group{
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+}
+
+.booking-form .form-group+.form-group{
+    margin-left: 3rem;
+}
+
+.booking-form label {
+    margin-bottom: 0.5rem;
+}
+
+.booking-form input {
+    margin-bottom: 1rem;
+}
+
+.booking-form button {
+    margin-bottom: 3rem;
+}
+
+input[type="text"]:focus,
+select:focus,
+input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: #555;
+}

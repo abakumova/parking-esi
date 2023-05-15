@@ -4,6 +4,7 @@ import edu.tartu.esi.model.PaymentStatusEnum;
 import edu.tartu.esi.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,10 +21,16 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @PostMapping(value = "/make-payment")
-    public ResponseEntity<PaymentStatusEnum> createTransaction(@RequestBody String bookingId) {
-
+    public ResponseEntity<PaymentStatusEnum> createTransaction(@RequestBody String bookingId) throws JSONException {
         PaymentStatusEnum payment = paymentService.makePayment(bookingId);
 
-        return new ResponseEntity<PaymentStatusEnum>(payment, HttpStatus.OK);
+        HttpStatus httpStatus = switch (payment) {
+            case COMPLETED -> HttpStatus.OK;
+            case PENDING -> HttpStatus.ACCEPTED;
+            case DECLINED -> HttpStatus.BAD_REQUEST;
+            default -> HttpStatus.INTERNAL_SERVER_ERROR;
+        };
+
+        return ResponseEntity.status(httpStatus).body(payment);
     }
 }

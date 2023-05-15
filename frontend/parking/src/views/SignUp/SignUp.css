@@ -1,99 +1,56 @@
 .signup-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 70%;
     height: 100vh;
 }
 
 .signup-form {
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 30px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
-}
-
-.signup-form h1 {
-    margin-bottom: 30px;
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-}
-
-.signup-form label {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: left;
-    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 25px;
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .signup-form input {
-    height: 30px;
-    width: 100%;
-    margin-bottom: 30px;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    width:100%;
 }
 
 .signup-form select {
-    height: 30px;
     width: 100%;
-    margin-bottom: 20px;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.btn-sign-up {
-    background-color: #00ccff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    height: 40px;
-    width: 100%;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
+.signup-form label {
+    text-align: left;
+    width:100%;
 }
 
-.btn-sign-up:hover {
-    background-color: #0088b3;
+.signup-form .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1rem 0;
 }
 
-.btn-go-to-sign-in {
-    background-color: transparent;
-    color: #00ccff;
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+.signup-form .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    height:100%;
 }
 
-.btn-go-to-sign-in:hover {
-    color: #0088b3;
+.signup-form .form-group+.form-group {
+    margin-left: 3rem;
 }
 
-.arrow {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 15px 10px 0;
-    border-color: transparent #00ccff transparent transparent;
-    margin-right: 10px;
+input[type="text"]:focus,
+select:focus,
+input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: #555;
+    background-color: #fff;
 }
-
-.arrow:hover {
-    border-color: transparent #0088b3 transparent transparent;
-}
-

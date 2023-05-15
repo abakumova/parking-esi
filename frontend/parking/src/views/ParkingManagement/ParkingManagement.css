@@ -2,7 +2,8 @@
     padding: 20px;
     margin: 20px;
     width: 100%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    background-color: rgba(55, 33, 17, 0.19);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .tab-panel {
@@ -11,27 +12,10 @@
     margin-bottom: 20px;
 }
 
-.tab-panel button {
-    background-color: #00ccff;
-    color: white;
-    margin-right: 10px;
-    cursor: pointer;
-    width: 33.33%;
-    box-sizing: border-box;
-    padding: 10px;
-    border: none;
-    font-size: 16px;
-}
-
-.tab-panel button:hover {
-    background-color: #0088b3;
-}
-
 .tab-panel .active {
     background-color: greenyellow;
 }
 
 .tab-content {
-    border: 1px solid #ccc;
     padding: 20px;
 }

@@ -54,7 +54,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Token> tokens;
 
     @Override

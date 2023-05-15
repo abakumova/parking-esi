@@ -1,33 +1,31 @@
 <template>
-    <div class="search-result-card">
-        <div>{{id}}</div>
-        <div class="booking-name">{{ name }}</div>
-        <div class="price">{{ price }} EUR</div>
+    <div class="card">
+        <div class="name">{{ slot.name }}</div>
+        <div class="price">{{ slot.price }} EUR</div>
+        <div class="location">{{ slot.location.formattedAddress }}</div>
         <button class="book-button" @click="openBooking">Book</button>
-
     </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
 import './SearchResultCard.css'
 export default {
     name: "SearchResultCard",
     props: {
-        id: {
-            type: String
-        },
-        name: {
-            type: String,
-            required: true
-        },
-        price: {
-            type: Number,
-            required: true
+        slot: {
+            type: Object
         }
     },
-    methods: {
-        openBooking() {
-            this.$router.push({ name: 'booking', params: { id: this.id }})
+    setup(props) {
+        const router = useRouter();
+
+        const openBooking = () => {
+            router.push({ name: 'booking', params: { id: props.slot.id }})
+        }
+
+        return {
+            openBooking
         }
     }
 }

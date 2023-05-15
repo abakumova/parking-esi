@@ -1,9 +1,22 @@
-import { createStore } from "vuex";
+import { createStore } from 'vuex'
 
 export default createStore({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
-});
+  state: {
+    toasts: []
+  },
+  getters: {
+  },
+  mutations: {
+    addToast(state, toast) {
+      state.toasts.push(toast);
+    },
+    clearToast(state, title) {
+      const index = state.toasts.findIndex((toast) => toast.title === title); // find toast
+      state.toasts.splice(index, 1); // remove toast from array
+    }
+  },
+  actions: {
+  },
+  modules: {
+  }
+})

@@ -1,8 +1,10 @@
 package edu.tartu.esi.controller;
 
+import edu.tartu.esi.dto.PaginatedResponseDto;
 import edu.tartu.esi.dto.ParkingSlotDto;
 import edu.tartu.esi.model.ParkingSlot;
 import edu.tartu.esi.model.SlotStatusEnum;
+import edu.tartu.esi.search.GenericSearchDto;
 import edu.tartu.esi.service.ParkingSlotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,8 +43,22 @@ public class ParkingSlotController {
 
     @GetMapping(value = "/parking-slots/by-location/{lat}/{lon}", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public List<ParkingSlot> getParkingSlotByLocation(@Valid @PathVariable String lat, @Valid @PathVariable String lon) {
-        return parkingSlotService.getParkingSlotByLocation(lat, lon);
+    public List<ParkingSlot> getParkingSlotByLocation(@Valid @PathVariable String lat, @Valid @PathVariable String lon,
+                                                      @RequestParam(required = false) String distance) {
+        Optional<String> distanceOpt = Optional.ofNullable(distance);
+        return parkingSlotService.getParkingSlotByLocation(lat, lon, distanceOpt);
+    }
+
+    @GetMapping(value = "/parking-slots/by-landlord/{landlordId}", produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParkingSlot> getParkingSlotByLandlord(@Valid @PathVariable String landlordId) {
+        return parkingSlotService.getParkingSlotByLandlord(landlordId);
+    }
+
+    @GetMapping(value = "/parking-slots", produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public PaginatedResponseDto<ParkingSlotDto> getParkingSlots(GenericSearchDto<ParkingSlotDto> genericSearchDto) {
+        return parkingSlotService.getParkingSlots(genericSearchDto);
     }
 
     @PostMapping(value = "/parking-slots", consumes = {"application/json"}, produces = {"application/json"})

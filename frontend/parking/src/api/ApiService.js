@@ -4,6 +4,7 @@ import UserManagementService from "@/api/user_management/UserManagementService";
 import LocationService from "@/api/location/LocationService";
 import AnalyticsService from "@/api/analytics/AnalyticsService";
 import PaymentService from "@/api/payment/PaymentService"
+import AuthService from "@/api/auth/AuthService";
 
 const ApiService = {
     user: UserManagementService,
@@ -12,6 +13,7 @@ const ApiService = {
     location: LocationService,
     analytics: AnalyticsService,
     payment: PaymentService,
+    auth: AuthService
 };
 
 export default ApiService;

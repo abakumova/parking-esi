@@ -4,6 +4,7 @@ import edu.tartu.esi.dto.BookingDto;
 import edu.tartu.esi.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,11 +34,10 @@ public class BookingController {
         return bookingService.getBookingById(id);
     }
 
-    @PostMapping(value = "/bookings", consumes = {"application/json"}, produces = {"application/json"})
+    @PostMapping(value = "/bookings")//, consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> createBooking(@Valid @RequestBody BookingDto bookingDto) {
-        String response = bookingService.createBooking(bookingDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity createBooking(@Valid @RequestBody BookingDto bookingDto) throws JSONException {
+        return bookingService.createBooking(bookingDto);
     }
 
     @PutMapping(value = "/bookings/{id}", consumes = {"application/json"}, produces = {"application/json"})

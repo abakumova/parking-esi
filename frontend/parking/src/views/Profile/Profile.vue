@@ -14,13 +14,9 @@
                 <label for="email">Email</label>
                 <input type="email" id="email" v-model="email" disabled>
             </div>
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" id="address" v-model="address" disabled>
-            </div>
             <div class="button-container">
-                <button class="btn-save" @click.prevent="saveProfile">Save</button>
-                <button class="btn-cancel" @click.prevent="cancelProfile">Cancel</button>
+                <button class="btn-close" @click="close">Close</button>
+                <button class="btn-delete" @click="deleteAccount">Delete</button>
             </div>
         </div>
     </div>
@@ -28,6 +24,9 @@
 
 <script>
 import './Profile.css'
+import UserManagementService from "@/api/user_management/UserManagementService";
+import auth from "@/auth";
+
 export default {
     name: "Profile",
     data() {
@@ -39,13 +38,21 @@ export default {
         };
     },
     methods: {
-        saveProfile() {
-            //TODO: implement saving MIGHT BE NOT IMPLEMENTED
+        close() {
+            this.$router.push({name: 'home'})
         },
-
+        deleteAccount() {
+            console.log(UserManagementService.deleteUser(auth.user.userId, auth.getToken()));
+            auth.logout();
+            this.$router.push({ name: "signin"});
+        }
     },
-    mounted() {
-        // Fetch user data from server and populate data properties
+    async mounted() {
+        const userData = await UserManagementService.getUserById(auth.user.userId, auth.getToken());
+        this.firstName = userData.firstName;
+        this.lastName = userData.lastName;
+        this.email = userData.email;
+        this.address = userData.address;
     }
 };
 </script>

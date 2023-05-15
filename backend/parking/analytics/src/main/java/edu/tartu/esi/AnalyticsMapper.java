@@ -6,7 +6,8 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {AnalyticsMapper.class})
 public interface AnalyticsMapper extends EntityMapper<Analytics, AnalyticsDto> {
     @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

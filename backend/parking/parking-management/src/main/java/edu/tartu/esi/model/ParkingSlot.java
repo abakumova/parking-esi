@@ -23,8 +23,11 @@ public class ParkingSlot {
     @NotBlank
     private String landlordId;
 
+    @NotBlank
+    private String name;
+
     @Enumerated(EnumType.STRING)
-    private SlotStatusEnum parkingSlotStatus;
+    private SlotStatusEnum status;
 
     @NotBlank
     @Size(max = 50)

@@ -20,7 +20,8 @@ public class ParkingSlotDto {
     private String id;
     private String landlordId;
     private String price;
+    private String name;
     private Location location;
     @Enumerated(EnumType.STRING)
-    private SlotStatusEnum parkingSlotStatus;
+    private SlotStatusEnum status;
 }

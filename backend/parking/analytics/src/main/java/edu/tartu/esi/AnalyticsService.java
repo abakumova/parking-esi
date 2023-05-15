@@ -1,6 +1,5 @@
 package edu.tartu.esi;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -46,6 +45,7 @@ public class AnalyticsService {
 
     public AnalyticsDto getAnalytics(String parkingSlotId) {
         Analytics analytics = analyticsRepository.findByParkingSlotId(parkingSlotId);
+        log.debug(analytics.toString());
         if (analytics == null) {
             return null;
         }

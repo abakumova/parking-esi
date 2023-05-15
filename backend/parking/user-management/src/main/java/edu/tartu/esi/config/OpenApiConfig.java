@@ -8,17 +8,17 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.annotations.servers.Server;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
                         name = "Team 7",
                         email = "email",
-                        url = "https://"
+                        url = "http://"
                 ),
                 description = "OpenApi documentation for Spring Security",
-                title = "OpenApi specification",
+                title = "User Management & Auth",
                 version = "1.0",
                 license = @License(
                         name = "Licence name",
@@ -27,14 +27,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 termsOfService = "Terms of service"
         ),
         servers = {
-                @Server(
-                        description = "Local ENV",
-                        url = "http://localhost:8083"
-                ),
-                @Server(
-                        description = "PROD ENV",
-                        url = "https:"
-                )
         },
         security = {
                 @SecurityRequirement(
@@ -50,5 +42,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
         bearerFormat = "JWT",
         in = SecuritySchemeIn.HEADER
 )
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class OpenApiConfig {
 }

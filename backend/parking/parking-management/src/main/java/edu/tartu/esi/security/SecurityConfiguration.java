@@ -42,7 +42,7 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
 
-                .requestMatchers(GET, "/api/v1/parking-slots/by-id").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
+                .requestMatchers(GET, "/api/v1/parking-slots/by-id/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
                 .requestMatchers(GET, "/api/v1/parking-slots/by-status/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
                 .requestMatchers(GET, "/api/v1/parking-slots/by-location/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
                 .requestMatchers(GET, "/api/v1/parking-slots/by-landlord/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")

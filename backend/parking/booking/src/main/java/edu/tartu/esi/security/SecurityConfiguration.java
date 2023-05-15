@@ -52,8 +52,8 @@ public class SecurityConfiguration {
                 //.requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
                 .requestMatchers(GET, "/api/v1/bookings/by-user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
 //                .requestMatchers(GET, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
-                .requestMatchers(POST, "/api/v1/bookings").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                .requestMatchers(PUT, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .requestMatchers(POST, "/api/v1/bookings").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
+                .requestMatchers(PUT, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_LANDLORD")
                 .requestMatchers(DELETE, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN")
 
 

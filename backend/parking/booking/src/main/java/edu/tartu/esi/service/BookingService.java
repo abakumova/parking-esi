@@ -23,6 +23,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -88,11 +89,7 @@ public class BookingService {
 
         // Wrap the requestPayment method with the Circuit Breaker
         PaymentStatusEnum result = circuitBreaker.executeSupplier(() -> {
-            try {
-                return requestPayment(booking.getId());
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            return requestPayment(booking.getId());
         });
         if (result.equals(PaymentStatusEnum.COMPLETED)) {
             updateParkingSlotStatus(booking.getParkingSlotId(), SlotStatusEnum.CLOSED);
@@ -127,13 +124,11 @@ public class BookingService {
     @LoadBalanced
     public void updateParkingSlotStatus(String parkingSlotId, SlotStatusEnum status) throws JSONException {
         String token = getToken(email, password);
-        //Map<String, String> jwtTokenMap = getToken(email, password);
 
         webClientBuilder.build()
                 .put()
                 .uri("http://localhost:8089/api/v1/parking-slots/" + parkingSlotId + "/status")
-                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .bodyValue(status)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -141,17 +136,18 @@ public class BookingService {
     }
 
     @LoadBalanced
-    public PaymentStatusEnum requestPayment(String bookingId) throws JSONException {
+    @SneakyThrows
+    public PaymentStatusEnum requestPayment(String bookingId) {
         CircuitBreakerConfig config = CircuitBreakerConfig.custom()
                 .failureRateThreshold(50)
                 .waitDurationInOpenState(Duration.ofSeconds(30))
                 .build();
         CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
         String token = getToken(email, password);
-                return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> webClientBuilder.build()
+        return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> webClientBuilder.build()
                 .post()
                 .uri("http://localhost:8089/api/v1/make-payment")
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .bodyValue(bookingId)
                 .retrieve()
                 .bodyToMono(PaymentStatusEnum.class)
@@ -162,16 +158,15 @@ public class BookingService {
     }
 
     @LoadBalanced
-    public SlotStatusEnum getParkingSlotStatus(String slotId) throws JSONException {
-        //Map<String, String> jwtTokenMap = getToken(email, password);
+    public SlotStatusEnum getParkingSlotStatus(String slotId) {
         String token = getToken(email, password);
+        log.warn("!@%#^&#&#& TOKEN {}", token);
 
         return webClientBuilder
                 .build()
                 .get()
                 .uri("http://localhost:8089/api/v1/parking-slots/by-id/" + slotId)
-                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
                 .bodyToMono(ParkingSlot.class)
                 .block()

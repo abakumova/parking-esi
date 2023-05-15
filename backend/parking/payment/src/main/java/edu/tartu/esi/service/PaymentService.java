@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -97,7 +98,7 @@ public class PaymentService {
         webClientBuilder.build()
                 .put()
                 .uri(urlBuilder)
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .bodyValue(newBalanceStr)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -114,7 +115,7 @@ public class PaymentService {
                 .build()
                 .get()
                 .uri("http://localhost:8089/api/v1/bookings/" + bookingId)
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
                 .bodyToMono(Booking.class)
                 .block();
@@ -133,7 +134,7 @@ public class PaymentService {
                 .build()
                 .get()
                 .uri(urlBuilder)
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

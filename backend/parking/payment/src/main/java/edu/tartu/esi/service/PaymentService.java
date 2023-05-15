@@ -106,7 +106,7 @@ public class PaymentService {
 
     @LoadBalanced
     @SneakyThrows
-    public Booking getBooking(String bookingId) throws JSONException {
+    public Booking getBooking(String bookingId) {
         log.warn("getBooking 1");
         String token = getToken(email, password);
         log.warn("getBooking 2 token {}", token);

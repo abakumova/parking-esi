@@ -10,7 +10,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static edu.tartu.esi.security.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -48,10 +47,11 @@ public class SecurityConfiguration {
 //                .requestMatchers(POST, "api/v1/bookings").hasAnyRole(ADMIN.name(), USER.name())
 //                .requestMatchers(PUT, "api/v1/bookings/**").hasAnyRole(ADMIN.name(), USER.name())
 //                .requestMatchers(DELETE, "api/v1/bookings/**").hasAnyRole(ADMIN.name())
-
+                .requestMatchers(GET, "/api/v1/bookings").permitAll()
+                .requestMatchers(GET, "/api/v1/bookings/**").permitAll()
                 //.requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
                 .requestMatchers(GET, "/api/v1/bookings/by-user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
-                .requestMatchers(GET, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
+//                .requestMatchers(GET, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
                 .requestMatchers(POST, "/api/v1/bookings").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .requestMatchers(PUT, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .requestMatchers(DELETE, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN")

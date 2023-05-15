@@ -26,12 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtService jwtService;
 
-    @Value("${webclient.email}")
-    private String email;
-
-    @Value("${webclient.password}")
-    private String password;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {

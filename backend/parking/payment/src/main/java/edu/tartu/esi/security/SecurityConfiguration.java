@@ -10,8 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static edu.tartu.esi.security.Role.*;
-import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +43,7 @@ public class SecurityConfiguration {
                 .permitAll()
 
 //                .requestMatchers(POST, "api/v1//make-payment").hasAnyRole(ADMIN.name(), USER.name())
-                .requestMatchers(POST, "/api/v1/make-payment").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .requestMatchers(POST, "/api/v1/make-payment").permitAll()//.hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
 
                 .anyRequest()
                 .authenticated()

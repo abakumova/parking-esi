@@ -36,9 +36,8 @@ public class BookingController {
 
     @PostMapping(value = "/bookings")//, consumes = {"application/json"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> createBooking(@Valid @RequestBody BookingDto bookingDto) throws JSONException {
-        String response = bookingService.createBooking(bookingDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity createBooking(@Valid @RequestBody BookingDto bookingDto) throws JSONException {
+        return bookingService.createBooking(bookingDto);
     }
 
     @PutMapping(value = "/bookings/{id}", consumes = {"application/json"}, produces = {"application/json"})

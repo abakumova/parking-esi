@@ -60,6 +60,9 @@ public class SecurityConfiguration {
                 // .requestMatchers(GET, "/api/v1/auth/user-details").permitAll()
                 //.requestMatchers(POST, "/api/v1/auth/register").permitAll()
                 // .requestMatchers(POST, "/api/v1/auth/refresh-token").permitAll()
+                .requestMatchers(POST, "/api/v1/auth/register").permitAll()
+                .requestMatchers(POST, "/api/v1/auth/refresh-token").permitAll()
+                .requestMatchers(POST, "/api/v1/auth/authenticate").permitAll()
 
 
 //                .requestMatchers(GET, "/api/v1/users").hasRole(ADMIN.name())

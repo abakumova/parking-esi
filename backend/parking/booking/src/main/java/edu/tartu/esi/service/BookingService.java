@@ -24,6 +24,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -61,10 +62,10 @@ public class BookingService {
     private String password;
 
 
-    public String createBooking(BookingDto bookingDto) throws JSONException {
-//        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
-//            return "Parking slot is closed.";
-//        }
+    public ResponseEntity createBooking(BookingDto bookingDto) throws JSONException {
+        if (getParkingSlotStatus(bookingDto.getParkingSlotId()).equals(SlotStatusEnum.CLOSED)) {
+            return ResponseEntity.badRequest().body("Parking slot is closed.");
+        }
 
         assertBookingDto(bookingDto, "Can't create a booking info when booking is null");
         Booking booking = Booking.builder()
@@ -109,9 +110,9 @@ public class BookingService {
 
             kafkaTemplate.send("booking-topic", message);
 
-            return "Booking completed.";
+            return ResponseEntity.ok("Booking completed.");
         } else {
-            return "Payment rejected.";
+            return ResponseEntity.badRequest().body("Payment rejected.");
         }
     }
 
@@ -147,13 +148,9 @@ public class BookingService {
                 .build();
         CircuitBreaker circuitBreaker = CircuitBreaker.of("payment", config);
         String token = getToken(email, password);
-
-        //Map<String, String> jwtTokenMap = getToken(email, password);
-
-        return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> webClientBuilder.build()
+                return Try.ofSupplier(CircuitBreaker.decorateSupplier(circuitBreaker, () -> webClientBuilder.build()
                 .post()
                 .uri("http://localhost:8089/api/v1/make-payment")
-                //.header("Authorization", "Bearer " + jwtTokenMap.get("access_token"))
                 .header("Authorization", "Bearer " + token)
                 .bodyValue(bookingId)
                 .retrieve()

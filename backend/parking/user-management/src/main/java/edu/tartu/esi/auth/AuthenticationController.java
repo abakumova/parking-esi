@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,18 +46,5 @@ public class AuthenticationController {
     public void refreshToken(HttpServletRequest request, HttpServletResponse response
     ) throws IOException {
         service.refreshToken(request, response);
-    }
-
-    @GetMapping("/user-details")
-    @SecurityRequirements(value = {})
-    public UserDetails getUserDetails(@RequestParam String email, HttpServletResponse response) throws IOException {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
-        if (userDetails == null) {
-            if (!response.isCommitted()) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "User not found");
-            }
-            return null;
-        }
-        return userDetails;
     }
 }

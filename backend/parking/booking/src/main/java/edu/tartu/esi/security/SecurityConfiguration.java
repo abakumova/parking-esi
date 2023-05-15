@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static edu.tartu.esi.security.Role.*;
 import static org.springframework.http.HttpMethod.*;
@@ -18,6 +19,8 @@ import static org.springframework.http.HttpMethod.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+    private final JwtAuthenticationFilter jwtAuthFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -25,7 +28,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/api/v1/**",
+                        //"/api/v1/**",
                         "/api/v1/auth/**",
                         "/v2/api-docs",
                         "/v3/api-docs",
@@ -40,7 +43,7 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
 
-//                .requestMatchers(GET, "api/v1/p/bookings/by-user/**").hasAnyRole(ADMIN.name(), LANDLORD.name())
+//
 //                .requestMatchers(GET, "api/v1/bookings/**").hasAnyRole(ADMIN.name(), LANDLORD.name(), USER.name())
 //                .requestMatchers(POST, "api/v1/bookings").hasAnyRole(ADMIN.name(), USER.name())
 //                .requestMatchers(PUT, "api/v1/bookings/**").hasAnyRole(ADMIN.name(), USER.name())
@@ -48,11 +51,20 @@ public class SecurityConfiguration {
 
                 //.requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
 
+                .requestMatchers(GET, "/api/v1/bookings/by-user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
+                .requestMatchers(GET, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
+                .requestMatchers(POST, "/api/v1/bookings").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .requestMatchers(PUT, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .requestMatchers(DELETE, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN")
+
+
                 .anyRequest()
                 .authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

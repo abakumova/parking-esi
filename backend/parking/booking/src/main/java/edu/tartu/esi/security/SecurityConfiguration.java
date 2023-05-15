@@ -50,7 +50,6 @@ public class SecurityConfiguration {
 //                .requestMatchers(DELETE, "api/v1/bookings/**").hasAnyRole(ADMIN.name())
 
                 //.requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
-
                 .requestMatchers(GET, "/api/v1/bookings/by-user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD")
                 .requestMatchers(GET, "/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_LANDLORD", "ROLE_USER")
                 .requestMatchers(POST, "/api/v1/bookings").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")

@@ -44,7 +44,7 @@ public class PaymentService {
 
     public PaymentStatusEnum makePayment(String bookingId) throws JSONException {
         Booking booking = getBooking(bookingId);
-
+        log.warn("Booking entity {}", booking);
         String oldBalanceStr = getPaymentMethodDtoForUser(booking.getCustomerId());
         PaymentStatusEnum paymentStatus;
 
@@ -58,10 +58,13 @@ public class PaymentService {
 
         if (oldBalance.compareTo(amount) >= 0) {
             BigDecimal newBalance = oldBalance.subtract(amount);
+            log.warn("PAYMENT 1");
             updateBalance(booking.getCustomerId(), newBalance.toString());
-
+            log.warn("PAYMENT 2");
             paymentStatus = PaymentStatusEnum.COMPLETED;
+            log.warn("PAYMENT 3");
             BigDecimal balanceLandlord = new BigDecimal(getPaymentMethodDtoForUser(booking.getLandlordId()));
+            log.warn("PAYMENT 3");
             updateBalance(booking.getLandlordId(), balanceLandlord.add(amount).toString());
         } else {
             paymentStatus = PaymentStatusEnum.DECLINED;
@@ -84,8 +87,10 @@ public class PaymentService {
 
     @LoadBalanced
     @SneakyThrows
-    public void updateBalance(String userId, String newBalanceStr) throws JSONException {
+    public void updateBalance(String userId, String newBalanceStr) {
+        log.warn("updateBalance 1");
         String token = getToken(email, password);
+        log.warn("updateBalance 2 token {}", token);
         String urlBuilder = "http://localhost:8089/api/v1/users/" +
                 userId +
                 "/balance";
@@ -102,7 +107,9 @@ public class PaymentService {
     @LoadBalanced
     @SneakyThrows
     public Booking getBooking(String bookingId) throws JSONException {
+        log.warn("getBooking 1");
         String token = getToken(email, password);
+        log.warn("getBooking 2 token {}", token);
         return webClientBuilder
                 .build()
                 .get()
@@ -116,7 +123,9 @@ public class PaymentService {
     @LoadBalanced
     @SneakyThrows
     public String getPaymentMethodDtoForUser(String userId) {
+        log.warn("getPaymentMethodDtoForUser 1");
         String token = getToken(email, password);
+        log.warn("getPaymentMethodDtoForUser 2 token {}", token);
         String urlBuilder = "http://localhost:8089/api/v1/users/" +
                 userId +
                 "/balance";

@@ -17,6 +17,7 @@ public class DatabaseInitializer {
 
     public static void initialize() {
         //TODO: update hardcoded values by reading from application.properties
+        // String url = "jdbc:postgresql://parking-docker-postgres-1:5432/";
         String url = "jdbc:postgresql://localhost:5432/";
         String username = "postgres";
         String password = "postgres";

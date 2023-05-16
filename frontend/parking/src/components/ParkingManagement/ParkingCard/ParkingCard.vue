@@ -1,32 +1,26 @@
 <template>
-    <div class="parking-card">
-        <h2>{{ name }}</h2>
-        <p>Location: {{ location.formattedAddress }}</p>
-        <p>Status: {{ status }}</p>
-        <p>Price: {{ price }} €</p>
+    <div className="parking-card">
+        <h2>{{ slot.name }}</h2>
+        <p>Location: {{ slot.location.formattedAddress }}</p>
+        <p>Status: {{ slot.status }}</p>
+        <p>Price: {{ slot.price }} €</p>
+        <Analytics :slotId="slot.id"/>
     </div>
 </template>
 
 <script>
 import './ParkingCard.css'
+import Analytics from "@/components/Analytics/Analytics.vue";
+
 export default {
-    name:"Parking Card",
+    name: "Parking Card",
+    components: {
+        Analytics
+    },
     props: {
-        name: {
-            type: String,
-            required: true
-        },
-        status: {
-            type: String,
-            required: true
-        },
-        location: {
+        slot: {
             type: Object,
-            required: true
-        },
-        price: {
-            type: Number,
-            required: true
+            required: true,
         }
     },
 }

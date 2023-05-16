@@ -7,7 +7,8 @@
 
 <script>
 import './Search.css'
-import LocationService from "@/api/location/LocationService";
+import ApiService from "@/api/ApiService";
+import {toast} from "vue3-toastify";
 export default {
     data() {
         return {
@@ -15,18 +16,18 @@ export default {
         };
     },
     methods: {
-        search() {
-            // TODO: perform search action
-            LocationService.getLocation(this.searchTerm)
-                .then((response) => {
-                    console.log(response);
-                    // Handle the response from the LocationService
-                })
-                .catch((error) => {
-                    console.log(error);
-                    // Handle the error from the LocationService
-                });
-            // this.$router.push({ name: "search" });
+        async search() {
+            if(!this.searchTerm) {
+                toast.error("Search string should not be empty")
+                return
+            }
+            const locationData = await ApiService.location.getLocation(this.searchTerm)
+            this.$router.push({ name: "search",
+                query: {
+                    latitude: locationData.latitude,
+                    longitude: locationData.longitude
+                }
+            });
         },
     },
 };

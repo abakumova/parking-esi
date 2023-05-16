@@ -1,0 +1,20 @@
+.slot-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.slot-card .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+}
+
+.slot-card .grid-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.slot-card label {
+    text-align: left;
+}

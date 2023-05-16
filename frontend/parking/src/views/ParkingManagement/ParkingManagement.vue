@@ -3,13 +3,22 @@
         <h1>Parking Management: {{selectedTab}} </h1>
         <div class="tab-panel">
             <button @click="selectTab('all')" :class="{ active: selectedTab === 'all' }">All Parkings</button>
-            <button @click="selectTab('active')" :class="{ active: selectedTab === 'active' }">Active Parkings</button>
-            <button @click="selectTab('history')" :class="{ active: selectedTab === 'history' }">History</button>
+            <button @click="selectTab('open')" :class="{ active: selectedTab === 'open' }">Open Parkings</button>
+            <button @click="selectTab('closed')" :class="{ active: selectedTab === 'closed' }">Closed Parkings</button>
         </div>
         <div class="tab-content">
-            <component v-if="selectedTab === 'all'" :is='ParkingManagementAllTab' :slots='parkings'/>
-            <component v-if="selectedTab === 'active'" :is='ParkingManagementActiveTab' :slots='parkings'/>
-            <component v-if="selectedTab === 'history'" :is='ParkingManagementHistory' :slots='parkings'/>
+            <component v-if="selectedTab === 'all'"
+                       :is='ParkingManagementAllTab'
+                       :slots='slots'
+                       @delete-slot="deleteSlot"/>
+
+            <component v-if="selectedTab === 'open'"
+                       :is='ParkingManagementOpenTab'
+                       :slots='slots.filter(slot => slot.status === PARKING_STATUS.OPEN)'/>
+
+            <component v-if="selectedTab === 'closed'"
+                       :is='ParkingManagementClosedTab'
+                       :slots='slots.filter(slot => slot.status === PARKING_STATUS.CLOSED)'/>
         </div>
     </div>
 </template>
@@ -18,8 +27,11 @@
 import './ParkingManagement.css'
 
 import ParkingManagementAllTab from "@/components/ParkingManagement/ParkingTabs/ParkingManagementAllTab.vue";
-import ParkingManagementActiveTab from "@/components/ParkingManagement/ParkingTabs/ParkingManagementActiveTab.vue";
-import ParkingManagementHistory from "@/components/ParkingManagement/ParkingTabs/ParkingManagementHistory.vue";
+import ParkingManagementOpenTab from "@/components/ParkingManagement/ParkingTabs/ParkingManagementOpenTab.vue";
+import ParkingManagementClosedTab from "@/components/ParkingManagement/ParkingTabs/ParkingManagementClosedTab.vue";
+import ApiService from "@/api/ApiService";
+import auth from "@/auth";
+import {PARKING_STATUS} from "@/constants/parkingStatus";
 
 export default {
     name: 'ParkingManagement',
@@ -28,40 +40,21 @@ export default {
             selectedTab: 'all',
             tabComponents: {
                 'all': () => ParkingManagementAllTab,
-                'active': () => ParkingManagementActiveTab,
-                'history': () => ParkingManagementHistory
+                'open': () => ParkingManagementOpenTab,
+                'closed': () => ParkingManagementClosedTab
             },
-            parkings: [
-                {
-                    id: 1,
-                    name: "Parking 1",
-                    status: "Available",
-                    price: "$10",
-                    location: "Raatuse 22"
-                },
-                {
-                    id: 2,
-                    name: "Parking 2",
-                    status: "Unavailable",
-                    price: "$15",
-                    location: "Narva mnt 27"
-                },
-                {
-                    id: 3,
-                    name: "Parking 3",
-                    status: "Available",
-                    price: "$20",
-                    location: "Marshala Tymoshenka 3"
-                },
-            ],
+            slots: [],
         };
     },
     computed: {
-        ParkingManagementHistory() {
-            return ParkingManagementHistory
+        PARKING_STATUS() {
+            return PARKING_STATUS
         },
-        ParkingManagementActiveTab() {
-            return ParkingManagementActiveTab
+        ParkingManagementClosedTab() {
+            return ParkingManagementClosedTab
+        },
+        ParkingManagementOpenTab() {
+            return ParkingManagementOpenTab
         },
         ParkingManagementAllTab() {
             return ParkingManagementAllTab
@@ -70,7 +63,20 @@ export default {
     methods: {
         selectTab(tabName) {
             this.selectedTab = tabName;
+        },
+        async fetchSlots() {
+            const resp = await ApiService.parking.getParkingSlotByLandlordId(auth.user.userId)
+            this.slots = resp.data
+            console.warn(`Fetched slots:`)
+            console.warn(this.slots)
+        },
+        async deleteSlot(id) {
+            await ApiService.parking.deleteParkingSlot(id)
+            this.slots = this.slots.filter(slot => slot.id !== id);
         }
-    }
+    },
+    mounted() {
+        this.fetchSlots().data
+    },
 };
 </script>

@@ -1,22 +1,16 @@
 <template>
     <div>
-        <h1>All tab!</h1>
+        <h1>All parking slots!</h1>
         <div class="parking-list">
             <button @click="showAddForm = !showAddForm">Add Slot</button>
             <div v-if="showAddForm">
                 <parking-add-form @add-slot="addSlot" @cancel="cancelAddForm" />
             </div>
 
-            <div v-for="parking in slots" :key="parking.id">
+            <div v-for="slot in slots" :key="slot.id">
                 <div class="parking-card-container">
-                    <parking-card
-                        :name="parking.name"
-                        :status="parking.status"
-                        :price="parking.price"
-                        :location="parking.location"
-                    />
-                    <button @click="editParking(parking.id)">Edit</button>
-                    <button @click="deleteParking(parking.id)">Delete</button>
+                    <parking-card :slot="slot"/>
+                    <button @click="$emit('delete-slot', slot.id)">Delete</button>
                 </div>
             </div>
         </div>
@@ -37,26 +31,16 @@ export default {
     props: {
         slots: {
             type: Array,
-            required: true,
+            required: false,
         },
     },
     methods: {
-        showAddForm() {
-            this.showAddForm = true;
-        },
         addSlot(slot) {
-            slot.id = this.slots.length + 1;
             this.slots.push(slot);
             this.showAddForm = false;
         },
         cancelAddForm() {
             this.showAddForm = false;
-        },
-        editParking(id) {
-
-        },
-        deleteParking(id) {
-            this.slots = this.slots.filter(parking => parking.id !== id)
         },
     },
     data() {
@@ -64,5 +48,6 @@ export default {
             showAddForm: false,
         };
     },
+
 };
 </script>

@@ -7,39 +7,3 @@
     flex-direction: column;
     margin-bottom: 0.5rem;
 }
-
-label {
-    margin-bottom: 0.25rem;
-}
-
-input {
-    padding: 0.25rem;
-    border-radius: 0.25rem;
-    border: 1px solid #ccc;
-}
-
-.form-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
-button {
-    background-color: #00ccff;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    margin:0
-}
-
-button:hover {
-    background-color: #0088b3;
-}
-
-.error-message {
-    color: red;
-    text-align: left;
-}

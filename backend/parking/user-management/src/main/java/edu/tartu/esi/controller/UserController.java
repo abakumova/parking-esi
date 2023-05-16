@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//import static edu.tartu.esi.security.SecurityConstants.ADMIN_ROLE;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -33,7 +31,6 @@ public class UserController {
         return userService.getUsers(genericSearchDto);
     }
 
-    //    @RolesAllowed(ADMIN_ROLE)
     @GetMapping(value = "/users/{id}", produces = {"application/json"})
     public UserDto fetchUser(@Valid @PathVariable String id) {
         return userService.getUserById(id);
@@ -49,7 +46,6 @@ public class UserController {
         userService.updateUserBalanceById(id, balance);
     }
 
-    //    @RolesAllowed(ADMIN_ROLE)
     @Operation(summary = "Create user", security = {})
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
@@ -62,14 +58,12 @@ public class UserController {
         return ResponseEntity.ok("User was created");
     }
 
-    //    @RolesAllowed(ADMIN_ROLE)
     @DeleteMapping(value = "/users/{id}", produces = {"application/json"})
     public ResponseEntity<String> deleteUser(@Valid @PathVariable String id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User was deleted");
     }
 
-    //    @RolesAllowed(ADMIN_ROLE)
     @PutMapping(value = "/users/{id}", produces = {"application/json"})
     public ResponseEntity<String> updateUser(@Valid @PathVariable String id, @Valid @RequestBody UserDto userDto) {
         userService.updateUser(id, userDto);

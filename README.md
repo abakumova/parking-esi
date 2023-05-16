@@ -1,20 +1,48 @@
 # Parking Management (Team 7)
 
 ### Stack:
+
 - Java 17
-- Spring Boot
+- Spring Boot (Hibernate, Security)
+- VueJs
+
+### Technologies:
+
+- Eureka
+- API Gateway
+- Load balancing
+- Kafka
+- JWT
+- PostgreSQL
+- Docker
+- Resilient microservices pattern - Circuit Breaker in Booking service
 
 ### Services:
-- Eureka             - 8086 - http://localhost:8761/
-- User Management    - 8083 - http://localhost:8083/swagger-ui/index.html#/
-- Booking            - 8086 - http://localhost:8086/swagger-ui/index.html#/
-- Location           - 8082 - http://localhost:8082/swagger-ui/index.html#/  (Update API key)
-- Parking Management - 8084 - http://localhost:8084/swagger-ui/index.html#/
-- Analytics          - 8085 - http://localhost:8085/swagger-ui/index.html#/
-- Payment            - 8087 - http://localhost:8087/swagger-ui/index.html#/
-- Kafka              - 9092
+
+- Eureka - http://localhost:8761/
+- User Management
+- Booking
+- Location             (Update API key in application.properties)
+- Parking Management
+- Analytics
+- Payment
+- Kafka - 9092
+
+#### Swagger (OpenAPI) available for each service:
+
+- http://localhost:{port}/swagger-ui/index.html#/
+- Some services need jwt token for making requests - Use User Management first - (auth-controller register or
+  authenticate endpoints to receive token) - copy access_token and paste it to Authentication field in Swagger
+
+### Run:
+
+- Docker compose `docker-compose up`
+- Run Eureka
+- Run all other services
+- Run VueJs (install dependencies) - npm run serve
 
 Contributors:
+
 - Viktoriia Abakumova [abakumova](https://github.com/abakumova)
 - Maksym Avramenko [PowerMaxZ](https://github.com/PowerMaxZ)
 - Serhii Murashko [SimpleSquirrelz](https://github.com/SimpleSquirrelz)

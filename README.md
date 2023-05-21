@@ -29,7 +29,6 @@
 - Kafka - 9092
 
 #### Swagger (OpenAPI) available for each service:
-
 - http://localhost:{port}/swagger-ui/index.html#/
 - Some services need jwt token for making requests - Use User Management first - (auth-controller register or
   authenticate endpoints to receive token) - copy access_token and paste it to Authentication field in Swagger
@@ -40,6 +39,15 @@
 - Run Eureka
 - Run all other services
 - Run VueJs (install dependencies) - npm run serve
+
+### Kafka
+- booking-topic\
+ `docker exec --interactive --tty broker kafka-console-consumer --bootstrap-server broker:9092  --topic booking-topic --from-beginning`
+
+| Topic Name    | Producer | Consumer  | Object Exchanged | Action    |
+| ------------- | -------- | --------- | ---------------- | --------- |
+| booking-topic | Booking  | Analytics | BookingDto       | No action |
+
 
 Contributors:
 
